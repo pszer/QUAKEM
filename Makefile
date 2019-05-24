@@ -11,7 +11,7 @@ LIBS=-lSDL2 -lm -lpthread
 _DEPS = 
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ = 
+_OBJ = main.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 OUTPUT = quakem
