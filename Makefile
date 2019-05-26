@@ -8,10 +8,10 @@ LDIR =../lib
 
 LIBS=-lSDL2 -lm -lpthread
 
-_DEPS = 
+_DEPS = Core.hpp 
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ = main.o
+_OBJ = main.o Core.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 OUTPUT = quakem
