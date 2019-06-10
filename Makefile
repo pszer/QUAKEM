@@ -6,12 +6,12 @@ ODIR=src/obj
 SDIR=src
 LDIR =../lib
 
-LIBS=-lSDL2 -lstdc++fs -lm -lpthread
+LIBS=-lSDL2 -lSDL2_ttf -lSDL2_image -lstdc++fs -lm -lpthread
 
-_DEPS = Core.hpp Filesys.hpp 
+_DEPS = Core.hpp Filesys.hpp Media.hpp Render.hpp  
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ = main.o Core.o Filesys.o
+_OBJ = main.o Core.o Media.o Filesys.o Render.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 OUTPUT = quakem

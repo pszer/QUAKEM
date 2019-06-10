@@ -17,10 +17,35 @@ std::vector<std::string> FilesInDir(const std::string& dir_name) {
 
 std::vector<std::string> FilesInSubdirs(const std::string& base_dir, const std::vector<std::string>& sub_dirs) {
 	std::vector<std::string> result;
-	fs::directory_iterator dir(path);
+	fs::directory_iterator dir(base_dir);
 
 	/*
 	 *
 	 * do this
 	*/
+
+	for (auto f : dir) {
+		if (fs::is_directory(f)) {
+			std::string fname = f.path().filename();
+			auto sdir = sub_dirs.begin();
+			for (;sdir != sub_dirs.end(); ++sdir) {
+				if (*sdir == fname)
+					break;
+			}
+
+			if (sdir == sub_dirs.end()) continue;
+
+			auto files = FilesInDir(f.path());
+			result.insert(result.begin(), files.begin(), files.end());
+		}
+	}
+
+	return result;
+}
+
+std::string CleanFilename(const std::string& file) {
+	if (file.length() < 2) return file;
+	if (file.substr(0,2) == "./")
+		return file.substr(2);
+	return file;
 }
