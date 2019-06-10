@@ -4,6 +4,8 @@
 
 #include <SDL2/SDL.h>
 
+#include "Filesys.hpp"
+
 #define DEF_WIN_W 800
 #define DEF_WIN_H 600
 #define DEF_WIN_TITLE "QUAKEM"

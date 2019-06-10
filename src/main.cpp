@@ -3,7 +3,12 @@
 #include <iostream>
 
 int main(int argc, char ** argv) {
-	if (Core.Init()) {
+	auto files = FilesInDir("."); 
+	for (auto str : files) {
+		std::cout << str << std::endl;
+	}
+
+	/*if (Core.Init()) {
 		std::cerr << "ERROR: " << Core.err_msg << std::endl;
 		Core.Quit();
 		return -1;
@@ -11,5 +16,5 @@ int main(int argc, char ** argv) {
 		Core.MainLoop();
 		Core.Quit();
 		return 0;
-	}
+	}*/
 }
