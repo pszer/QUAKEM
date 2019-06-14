@@ -9,6 +9,8 @@
 #include "Filesys.hpp"
 
 extern struct Media {
+	const std::vector<std::string> IMG_EXTS = {".jpg",".png",".bmp"};
+
 	std::map<std::string, SDL_Texture*> textures;
 
 	int LoadMedia(); // returns amount of files loaded
@@ -16,4 +18,6 @@ extern struct Media {
 
 	// returns amount of textures loaded
 	int LoadTextures(const std::vector<std::string>& files);
+
+	SDL_Texture * LoadTexture(const std::string& path);
 } Media;

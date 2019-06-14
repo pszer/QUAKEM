@@ -21,10 +21,13 @@ int Core::Init(InitParameters init) {
 		return -1;
 	}
 
+	Media.LoadMedia();
+
 	return 0;
 }
 
 void Core::Quit() {
+	Media.FreeMedia();
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
