@@ -61,3 +61,9 @@ SDL_Texture * Media::LoadTexture(const std::string& path) {
 	SDL_FreeSurface(surface);
 	return texture;
 }
+
+SDL_Texture * Media::GetTexture(const std::string& str) {
+	auto f = textures.find(str);
+	if (f == textures.end()) return nullptr;
+	return f->second;
+}

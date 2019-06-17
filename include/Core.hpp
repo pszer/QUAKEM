@@ -4,7 +4,7 @@
 
 #include <SDL2/SDL.h>
 
-#include "Media.hpp"
+#include "Render.hpp"
 
 #define DEF_WIN_W 800
 #define DEF_WIN_H 600

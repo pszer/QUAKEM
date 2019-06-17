@@ -12,6 +12,7 @@ extern struct Media {
 	const std::vector<std::string> IMG_EXTS = {".jpg",".png",".bmp"};
 
 	std::map<std::string, SDL_Texture*> textures;
+	SDL_Texture * GetTexture(const std::string& str);
 
 	int LoadMedia(); // returns amount of files loaded
 	void FreeMedia();

@@ -52,5 +52,7 @@ void Core::MainLoop() {
 }
 
 void Core::MainRender() {
-
+	Render.Clear();
+	Render.RenderTexture("img/scrung.jpg");
+	Render.Update();
 }

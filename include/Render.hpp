@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SDL2/SDL.h>
+#include "Media.hpp"
 
 extern struct Render {
 	void SetColor(const SDL_Color& c);
@@ -8,4 +8,6 @@ extern struct Render {
 
 	void Clear(const SDL_Color c = {0x00,0x00,0x00,0xff});
 	void Update();
+
+	void RenderTexture(const std::string& img_name, SDL_Rect* src=nullptr, SDL_Rect* dest=nullptr);
 } Render;
