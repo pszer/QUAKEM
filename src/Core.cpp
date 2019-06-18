@@ -4,20 +4,20 @@ struct Core Core;
 
 int Core::Init(InitParameters init) {
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
-		err_msg = std::string(SDL_GetError());
+		Log::ErrorSDL();
 		return -1;
 	}
 
 	window = SDL_CreateWindow(init.win_title.c_str(), SDL_WINDOWPOS_UNDEFINED,
 	  SDL_WINDOWPOS_UNDEFINED, init.win_w, init.win_h, init.win_flags);
 	if (window == nullptr) {
-		err_msg = std::string(SDL_GetError());
+		Log::ErrorSDL();
 		return -1;
 	}
 
 	renderer = SDL_CreateRenderer(window, -1, init.render_flags);
 	if (renderer == nullptr) {
-		err_msg = std::string(SDL_GetError());
+		Log::ErrorSDL();
 		return -1;
 	}
 

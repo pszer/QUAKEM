@@ -4,7 +4,7 @@
 
 int main(int argc, char ** argv) {
 	if (Core.Init()) {
-		std::cerr << "ERROR: " << Core.err_msg << std::endl;
+		Log::Error("QUITTING");
 		Core.Quit();
 		return -1;
 	} else {

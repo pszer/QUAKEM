@@ -48,9 +48,6 @@ struct Command {
 	std::vector<Argument> args;
 };
 
-typename
-extern
-
 // CONSOLE VARIABLES
 extern std::map<std::string, Argument> CVARS;
 // GET CONSOLVE VARIABLES
@@ -58,3 +55,9 @@ Argument * GetCVar(const std::string& id);
 long long GetCVarInt(const std::string& id);
 double    GetCVarFloat(const std::string& id);
 std::string GetCVarString(const std::string& id);
+
+// COMMANDS
+using COM_FUNC = std::string(*)(const std::vector<Argument>&);
+extern std::map<std::string, COM_FUNC> COMMANDS;
+COM_FUNC GetCommand(const std::string& id); // returns nullptr if no command found
+std::string ExecuteCommand(const struct Command& com);

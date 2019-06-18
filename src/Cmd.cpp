@@ -1,6 +1,8 @@
 #include "Cmd.hpp"
 
+std::map<std::string, COM_FUNC> COMMANDS;
 std::map<std::string, Argument> CVARS;
+
 Argument * GetCVar(const std::string& id) {
 	auto f = CVARS.find(id);
 	if (f == CVARS.end()) return nullptr;
@@ -76,4 +78,16 @@ std::string Argument::ToString() {
 		return std::to_string(num.__int__);
 	else
 		return std::to_string(num.__double__);
+}
+
+COM_FUNC GetCommand(const std::string& id) {
+	auto f = COMMANDS.find(id);
+	if (f == COMMANDS.end()) return nullptr; // command not found
+	else return f->second;
+} 
+
+std::string ExecuteCommand(const struct Command& com) {
+	auto func = GetCommand(com.command);
+	if (func == nullptr) return "ERR";	
+	return func(com.args);
 }

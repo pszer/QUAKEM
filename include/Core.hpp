@@ -4,6 +4,7 @@
 
 #include <SDL2/SDL.h>
 
+#include "Log.hpp"
 #include "Render.hpp"
 
 #define DEF_WIN_W 800
@@ -22,8 +23,6 @@ struct InitParameters {
 
 extern struct Core {
 	Core() { ; }
-
-	std::string err_msg = "";
 
 	int  Init(InitParameters p = InitParameters()); // returns 0 on success, -1 for error
 	void Quit();
