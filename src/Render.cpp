@@ -68,3 +68,23 @@ void Render::RenderTexture(const std::string& img_name, SDL_Rect* src, SDL_Rect*
 	if (texture == nullptr) return;
 	SDL_RenderCopyEx(Core.renderer, texture, src, dest, angle, rot_centre, flip);
 }
+
+void Render::RenderText(const std::string& font_name, const std::string& text, int x, int y, 
+  FONT_SIZE size, SDL_Color c)
+{
+	auto font = Media.GetFont(font_name);
+	if (font == nullptr) return;
+
+	if (font->type == FONT_TTF) {
+		SDL_Surface * surface = TTF_RenderUTF8_Blended(font->GetTTFSize(size), text.c_str(), c);
+		SDL_Texture * t = SDL_CreateTextureFromSurface(Core.renderer, surface);
+
+		int w,h;
+		TTF_SizeText(font->GetTTFSize(size), text.c_str(), &w, &h);
+
+		SDL_Rect r = {x,y,w,h};
+		SDL_RenderCopy(Core.renderer, t, nullptr, &r);
+	} else {
+
+	}
+}

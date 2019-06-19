@@ -8,6 +8,11 @@ int Core::Init(InitParameters init) {
 		return -1;
 	}
 
+	if (TTF_Init() == -1) {
+		Log::ErrorTTF();
+		return -1;
+	}
+
 	window = SDL_CreateWindow(init.win_title.c_str(), SDL_WINDOWPOS_UNDEFINED,
 	  SDL_WINDOWPOS_UNDEFINED, init.win_w, init.win_h, init.win_flags);
 	if (window == nullptr) {
@@ -28,6 +33,9 @@ int Core::Init(InitParameters init) {
 
 void Core::Quit() {
 	Media.FreeMedia();
+
+	TTF_Quit();
+
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
@@ -53,8 +61,6 @@ void Core::MainLoop() {
 
 void Core::MainRender() {
 	Render.Clear();
-
-
 
 	Render.Update();
 }

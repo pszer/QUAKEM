@@ -9,7 +9,12 @@ int Media::LoadMedia() {
 	textures_loaded = LoadTextures(img_files);
 	Log::Log(std::to_string(textures_loaded) + " texture(s) loaded");
 
-	return textures_loaded;
+	int fonts_loaded;
+	auto font_files = FilesInSubdirs(".", {"fnt"});
+	fonts_loaded = LoadFonts(font_files);
+	Log::Log(std::to_string(fonts_loaded) + " font(s) loaded");
+
+	return textures_loaded + fonts_loaded;
 }
 
 void Media::FreeMedia() {
@@ -18,17 +23,24 @@ void Media::FreeMedia() {
 			SDL_DestroyTexture(t.second);
 	}
 	textures.clear();
+
+	for (auto f : fonts) {
+		delete f.second;
+	}
 }
 
 #define TO_LOWER(s) for (auto c=s.begin();c!=s.end();++c) if(*c>='A'&&*c<='Z')*c+=32;
 
-bool CheckExtension(const std::string& f, const std::vector<std::string>& exts) {
+bool Media::CheckExtension(const std::string& f, const std::vector<std::string>& exts) {
 	std::filesystem::path path(f);
 	std::string ext = path.extension();
 	TO_LOWER(ext);
 
-	for (auto i = exts.begin(); i != exts.end(); ++i)
-		if (*i == ext) return true;
+	for (auto i = exts.begin(); i != exts.end(); ++i) {
+		if (*i == ext) {
+			return true;
+		}
+	}
 	return false;
 }
 
@@ -50,13 +62,22 @@ int Media::LoadTextures(const std::vector<std::string>& files) {
 	return count;
 }
 
-int LoadFonts(const std::vector<std::string>& files) {
+int Media::LoadFonts(const std::vector<std::string>& files) {
 	int count = 0;
 	for (auto f : files) {
-		if (!CheckExtension(f, TTF_EXTS)) continue;
-		
-		// todo
+		if (!CheckExtension(f, FNT_EXTS)) continue;
+
+		Font * font = LoadFont(f);
+		if (font == nullptr) {
+			Log::Error("Error loading font \"" + f + "\"");
+		} else {
+			std::string clean = CleanFilename(f);
+			fonts[clean] = font;
+			Log::Log("Font \"" + clean + "\" loaded");
+			++count;
+		}
 	}
+	return count;
 }
 
 SDL_Texture * Media::LoadTexture(const std::string& path) {
@@ -69,6 +90,35 @@ SDL_Texture * Media::LoadTexture(const std::string& path) {
 	texture = SDL_CreateTextureFromSurface(Core.renderer, surface);
 	SDL_FreeSurface(surface);
 	return texture;
+}
+
+Font * Media::LoadFont(const std::string& path) {
+	std::filesystem::path p(path);
+	std::string ext = p.extension();
+	TO_LOWER(ext);
+	if (ext == ".ttf") {
+		TTF_Font ** ttfs = new TTF_Font*[5];
+
+		const int sizes[5] = {10,12,16,32,48};
+		for (int s = 0; s < 5; ++s) {
+			ttfs[s] = TTF_OpenFont(path.c_str(), sizes[s]);
+			if (ttfs[s] == nullptr) {
+				Log::ErrorTTF();
+				delete[] ttfs;
+				return nullptr;
+			}
+		}
+
+		Font * font = new Font(ttfs);
+		return font;
+	} else if (ext == ".png") {
+		SDL_Texture * glyph = LoadTexture(path);
+		if (glyph == nullptr) return nullptr;
+
+		Font * font = new Font(glyph);
+		return font;
+	}
+	return nullptr;
 }
 
 SDL_Texture * Media::GetTexture(const std::string& str) {
