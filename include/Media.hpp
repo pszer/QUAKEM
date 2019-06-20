@@ -13,12 +13,16 @@ extern struct Media {
 	const std::vector<std::string> IMG_EXTS = {".jpg",".png",".bmp"};
 	const std::vector<std::string> FNT_EXTS = {".ttf",".png"};
 
+	// f : filename
+	// exts : list of acceptable extensions
+	bool CheckExtension(const std::string& f, const std::vector<std::string>& exts);
+
 	// Textures
 	std::map<std::string, SDL_Texture*> textures;
 	SDL_Texture * GetTexture(const std::string& str);
 
 	// Fonts
-	std::map<std::string, Font> fonts;
+	std::map<std::string, Font*> fonts;
 	Font * GetFont(const std::string& str);
 
 	int LoadMedia(); // returns amount of files loaded
@@ -29,5 +33,5 @@ extern struct Media {
 	int LoadFonts(const std::vector<std::string>& files);
 
 	SDL_Texture * LoadTexture(const std::string& path);
-	Font LoadFont(const std::string& path);
+	Font * LoadFont(const std::string& path);
 } Media;

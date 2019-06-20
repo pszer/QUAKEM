@@ -11,7 +11,7 @@ LIBS=-lSDL2 -lSDL2_ttf -lSDL2_image -lstdc++fs -lm -lpthread
 _DEPS = Core.hpp Filesys.hpp Media.hpp Render.hpp Vec2.hpp Cmd.hpp Log.hpp Font.hpp
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ = main.o Core.o Media.o Filesys.o Render.o Vec2.o Cmd.o Log.o
+_OBJ = main.o Core.o Media.o Filesys.o Render.o Vec2.o Cmd.o Log.o Font.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 OUTPUT = quakem
