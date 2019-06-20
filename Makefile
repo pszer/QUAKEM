@@ -6,7 +6,7 @@ ODIR=src/obj
 SDIR=src
 LDIR =../lib
 
-LIBS=-lSDL2 -lSDL2_ttf -lSDL2_image -lstdc++fs -lm -lpthread
+LIBS=-lSDL2 -lSDL2_ttf -lSDL2_image -lSDL2_mixer -lstdc++fs -lm -lpthread
 
 _DEPS = Core.hpp Filesys.hpp Media.hpp Render.hpp Vec2.hpp Cmd.hpp Log.hpp Font.hpp
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))

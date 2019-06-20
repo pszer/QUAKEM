@@ -84,6 +84,9 @@ void Render::RenderText(const std::string& font_name, const std::string& text, i
 
 		SDL_Rect r = {x,y,w,h};
 		SDL_RenderCopy(Core.renderer, t, nullptr, &r);
+
+		SDL_FreeSurface(surface);
+		SDL_DestroyTexture(t);
 	} else {
 
 	}

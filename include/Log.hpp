@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
 
 #include <iostream>
 #include <string>
@@ -13,4 +14,5 @@ namespace Log {
 	void ErrorSDL();                    // shows up as [SDL]: SDL_GetError();
 	void ErrorTTF();                    // shows up as [TTF]: TTF_GetError();
 	void ErrorIMG();                    // shows up as [IMG]: IMG_GetError();
+	void ErrorMix();                    // shows up as [Mix]: Mix_GetError();
 };

@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 
 #include <map>
 
@@ -10,8 +11,9 @@
 #include "Font.hpp"
 
 extern struct Media {
-	const std::vector<std::string> IMG_EXTS = {".jpg",".png",".bmp"};
-	const std::vector<std::string> FNT_EXTS = {".ttf",".png"};
+	const std::vector<std::string> IMG_EXTS = { ".jpg",".png",".bmp" };
+	const std::vector<std::string> FNT_EXTS = { ".ttf",".png" };
+	const std::vector<std::string> SFX_EXTS = { ".wav" };
 
 	// f : filename
 	// exts : list of acceptable extensions
@@ -25,13 +27,19 @@ extern struct Media {
 	std::map<std::string, Font*> fonts;
 	Font * GetFont(const std::string& str);
 
+	// SFX chunks
+	std::map<std::string, Mix_Chunk*> chunks;
+	Mix_Chunk * GetChunk(const std::string& str);
+
 	int LoadMedia(); // returns amount of files loaded
 	void FreeMedia();
 
 	// returns amount of files loaded
 	int LoadTextures(const std::vector<std::string>& files);
 	int LoadFonts(const std::vector<std::string>& files);
+	int LoadChunks(const std::vector<std::string>& files);
 
 	SDL_Texture * LoadTexture(const std::string& path);
 	Font * LoadFont(const std::string& path);
+	Mix_Chunk * LoadChunk(const std::string& path);
 } Media;

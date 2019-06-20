@@ -14,7 +14,12 @@ int Media::LoadMedia() {
 	fonts_loaded = LoadFonts(font_files);
 	Log::Log(std::to_string(fonts_loaded) + " font(s) loaded");
 
-	return textures_loaded + fonts_loaded;
+	int chunks_loaded;
+	auto sfx_files = FilesInSubdirs(".", {"sfx"});
+	chunks_loaded = LoadChunks(sfx_files);
+	Log::Log(std::to_string(chunks_loaded) + " chunk(s) loaded");
+
+	return textures_loaded + fonts_loaded + chunks_loaded;
 }
 
 void Media::FreeMedia() {
@@ -26,6 +31,10 @@ void Media::FreeMedia() {
 
 	for (auto f : fonts) {
 		delete f.second;
+	}
+
+	for (auto c : chunks) {
+		Mix_FreeChunk(c.second);
 	}
 }
 
@@ -80,12 +89,35 @@ int Media::LoadFonts(const std::vector<std::string>& files) {
 	return count;
 }
 
+int Media::LoadChunks(const std::vector<std::string>& files) {
+	int count = 0;
+	for (auto f : files) {
+		if (!CheckExtension(f, SFX_EXTS)) continue;
+
+		auto chunk = LoadChunk(f);
+		if (chunk == nullptr) {
+				Log::Error("Error loading chunk \"" + f + "\"");
+		} else {
+			std::string clean = CleanFilename(f);
+			chunks[clean] = chunk;
+			Log::Log("Font \"" + clean +"\" loaded");
+			++count;
+		}
+	}
+	return count;
+}
+
+// LOAD FUNCTIONS
+//
 SDL_Texture * Media::LoadTexture(const std::string& path) {
 	SDL_Surface * surface;
 	SDL_Texture * texture;
 
 	surface = IMG_Load(path.c_str());
-	if (surface == nullptr) return nullptr;
+	if (surface == nullptr) {
+		Log::ErrorIMG();
+		return nullptr;
+	}
 
 	texture = SDL_CreateTextureFromSurface(Core.renderer, surface);
 	SDL_FreeSurface(surface);
@@ -121,6 +153,18 @@ Font * Media::LoadFont(const std::string& path) {
 	return nullptr;
 }
 
+Mix_Chunk * Media::LoadChunk(const std::string& path) {
+	Mix_Chunk * chunk = Mix_LoadWAV(path.c_str());
+	if (chunk == nullptr) {
+		Log::ErrorMix();
+		return nullptr;
+	}
+	return chunk;
+}
+
+
+// GET FUNCTIONS
+//
 SDL_Texture * Media::GetTexture(const std::string& str) {
 	auto f = textures.find(str);
 	if (f == textures.end()) return nullptr;
@@ -130,5 +174,11 @@ SDL_Texture * Media::GetTexture(const std::string& str) {
 Font * Media::GetFont(const std::string& str) {
 	auto f = fonts.find(str);
 	if (f == fonts.end()) return nullptr;
+	return f->second;
+}
+
+Mix_Chunk * Media::GetChunk(const std::string& str) {
+	auto f = chunks.find(str);
+	if (f == chunks.end()) return nullptr;
 	return f->second;
 }
