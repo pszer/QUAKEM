@@ -35,21 +35,33 @@ extern struct Core {
 	void MainLoop();
 	void MainRender();
 
+	void Command(const std::string& command);
+
 	bool going = true; // set to false to exit game main loop
 
-	SDL_Window   * window   = nullptr;
+	SDL_Window * window   = nullptr;
 
 	struct Console {
 		std::string font = DEF_CONSOLE_FONT;
 		SDL_Color bg = {0x08,0x08,0x08,0xFF},
 		          fg = {0xFF,0xFF,0xFF,0xFF};
 		bool open = true;
-		std::string text = "";
 		int bottom_offset = 100; // how many pixels from the bottom
 		                         // of the screen console is offset
+
+		int cursor = 0;
+		std::string text = "";
+
+		void Enter();
+		void Reset();
+		void Backspace();
+		void TextInput(const std::string& input);
+		void Left();
+		void Right();
 	} Console;
 
 	void ConsoleUpdate();
 	void ConsoleRender();
+	void ConsoleEnter();
 } Core;
 

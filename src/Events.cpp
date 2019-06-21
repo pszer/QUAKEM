@@ -9,6 +9,16 @@ void Event::Init() {
 	SDL_GetRelativeMouseState(&mouse_dx, &mouse_dy);
 }
 
+void Event::EnableTextInput() {
+	text_input_enabled = true;
+	SDL_StartTextInput();
+}
+
+void Event::DisableTextInput() {
+	text_input_enabled = false;
+	SDL_StopTextInput();
+}
+
 void Event::HandleEvents() {
 	while (SDL_PollEvent(&event)) {
 		switch (event.type) {
@@ -49,11 +59,26 @@ void Event::HandleWindowEvent() {
 }
 
 void Event::HandleKeyDownEvent() {
-	//
+	switch (event.key.keysym.sym) {
+	case SDLK_RETURN:
+		Core.ConsoleEnter();
+		break;
+	case SDLK_BACKSPACE:
+		Core.Console.Backspace();
+		break;
+	case SDLK_LEFT:
+		Core.Console.Left();
+		break;
+	case SDLK_RIGHT:
+		Core.Console.Right();
+		break;
+	}
 }
 
 void Event::HandleKeyUpEvent() {
-	//
+	switch (event.key.keysym.sym) {
+
+	}
 }
 
 void Event::HandleMouseDownEvent() {
@@ -69,7 +94,6 @@ void Event::HandleMouseMotionEvent() {
 	SDL_GetRelativeMouseState(&mouse_dx, &mouse_dy);
 }
 
-
 void Event::HandleTextInputEvent() {
-	Core.Console.text += event.text.text;
+	Core.Console.TextInput(std::string(event.text.text));
 }

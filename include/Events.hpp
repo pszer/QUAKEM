@@ -25,4 +25,7 @@ extern struct Event {
 
 	void HandleTextInputEvent();
 
+	bool text_input_enabled = false;
+	void EnableTextInput();
+	void DisableTextInput();
 } Event;

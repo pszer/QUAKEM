@@ -79,11 +79,21 @@ void Core::MainRender() {
 	Renderer.Update();
 }
 
+void Core::Command(const std::string& command) {
+	struct Command com;
+	if (!Parser::ParseCommand(command, com)) {
+		Log::Add(Parser::ErrorMsg);
+	} else {
+		std::string str = Commands::Execute(com); 
+		Log::Add(str);
+	}
+}
+
 void Core::ConsoleUpdate() {
 	if (Console.open)
-		SDL_StartTextInput();
+		Event.EnableTextInput();
 	else
-		SDL_StopTextInput();
+		Event.DisableTextInput();
 }
 
 void Core::ConsoleRender() {
@@ -91,7 +101,7 @@ void Core::ConsoleRender() {
 
 	Font * font_struct = Media.GetFont(Console.font);
 	if (font_struct == nullptr || font_struct->type != FONT_TTF) return;
-	TTF_Font * font = font_struct->GetTTFSize(FONT_P12);
+	TTF_Font * font = font_struct->GetTTFSize(FONT_P16);
 
 	Rect bg_rect = { 0 , 0 , Event.win_w , Event.win_h - Console.bottom_offset };
 	SDL_Rect rect = { 5, Event.win_h - Console.bottom_offset, 0, 0 };
@@ -114,13 +124,55 @@ void Core::ConsoleRender() {
 		--i;
 	}
 
+	int width;
 	// render text being typed
 	TTF_SizeText(font, Console.text.c_str(), &rect.w, &rect.h);
+	TTF_SizeText(font, "H", &width, nullptr);
 	rect.x = 2;
 	rect.y = Event.win_h - Console.bottom_offset - rect.h - 2;
 	Renderer.RenderText(font, Console.text, rect.x, rect.y, Console.fg);
 
-	rect.x += rect.w + 1;
+	rect.x += (Console.cursor) * width + 1;
 	rect.w = 2;
 	Renderer.RenderFillRect(Rect(rect.x,rect.y,rect.w,rect.h), Console.fg);
+}
+
+void Core::ConsoleEnter() {
+	if (!Console.open) return;
+	Log::Add(Console.text);
+	Command(Console.text);
+	Console.Reset();
+}
+
+void Core::Console::Reset() {
+	text = "";
+	cursor = 0;
+}
+
+void Core::Console::Backspace() {
+	if (!open) return;
+	if (!text.empty()) {
+		int _cursor = cursor-1;
+		if (cursor == 0) _cursor = 0;
+		text.erase(text.begin() + _cursor);
+		Left();
+	}
+}
+
+void Core::Console::TextInput(const std::string& input) {
+	if (!open) return;
+	text = text.insert(cursor, input);
+	cursor += input.length();
+}
+
+void Core::Console::Left() {
+	if (!open) return;
+	cursor--;
+	if (cursor < 0) cursor = 0;
+}
+
+void Core::Console::Right() {
+	if (!open) return;
+	cursor++;
+	if (cursor > text.length()) cursor = text.length();
 }
