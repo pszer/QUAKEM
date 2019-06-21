@@ -1,4 +1,4 @@
-#include "Core.hpp"
+#include "Render.hpp"
 #include "Media.hpp"
 
 struct Media Media;
@@ -119,7 +119,7 @@ SDL_Texture * Media::LoadTexture(const std::string& path) {
 		return nullptr;
 	}
 
-	texture = SDL_CreateTextureFromSurface(Core.renderer, surface);
+	texture = SDL_CreateTextureFromSurface(Renderer.renderer, surface);
 	SDL_FreeSurface(surface);
 	return texture;
 }

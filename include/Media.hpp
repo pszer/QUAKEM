@@ -7,6 +7,7 @@
 
 #include <map>
 
+#include "Log.hpp"
 #include "Filesys.hpp"
 #include "Font.hpp"
 

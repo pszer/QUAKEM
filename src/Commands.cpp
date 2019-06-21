@@ -20,7 +20,9 @@ CMD_FUNC Commands::GetCommand(const std::string& id) {
 std::string Commands::Execute(const struct Command& com) {
 	auto cmd = GetCommand(com.command);
 	if (cmd == nullptr) return "Command \"" + com.command + "\" not found";
-	return cmd(com.args);
+	auto result = cmd(com.args);
+	if (result != "") Log::Add(result);
+	return result;
 }
 
 // COMMANDS

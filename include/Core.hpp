@@ -7,11 +7,14 @@
 #include "Log.hpp"
 #include "Render.hpp"
 #include "Commands.hpp"
+#include "Events.hpp"
 
 #define DEF_WIN_W 800
 #define DEF_WIN_H 600
 #define DEF_WIN_TITLE "QUAKEM"
 #define DEF_RENDER_FLAG SDL_RENDERER_ACCELERATED
+
+#define DEF_CONSOLE_FONT "fnt/inconsolata.ttf"
 
 struct InitParameters {
 	int win_w = DEF_WIN_W,
@@ -34,8 +37,19 @@ extern struct Core {
 
 	bool going = true; // set to false to exit game main loop
 
-	SDL_Renderer * renderer = nullptr;
 	SDL_Window   * window   = nullptr;
-	SDL_Event      event;
+
+	struct Console {
+		std::string font = DEF_CONSOLE_FONT;
+		SDL_Color bg = {0x08,0x08,0x08,0xFF},
+		          fg = {0xFF,0xFF,0xFF,0xFF};
+		bool open = true;
+		std::string text = "";
+		int bottom_offset = 100; // how many pixels from the bottom
+		                         // of the screen console is offset
+	} Console;
+
+	void ConsoleUpdate();
+	void ConsoleRender();
 } Core;
 

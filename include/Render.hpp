@@ -3,7 +3,9 @@
 #include "Media.hpp"
 #include "Vec2.hpp"
 
-extern struct Render {
+extern struct Renderer {
+	SDL_Renderer * renderer = nullptr;
+
 	void SetColor(const SDL_Color& c);
 	void SetColor(const int r, const int g, const int b, const int a);
 
@@ -29,4 +31,5 @@ extern struct Render {
 
 	void RenderText(const std::string& font_name, const std::string& text, int x, int y,
 	  FONT_SIZE, SDL_Color);
-} Render;
+	void RenderText(TTF_Font * font, const std::string& text, int x, int y, SDL_Color);
+} Renderer;
