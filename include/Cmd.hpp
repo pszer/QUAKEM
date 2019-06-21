@@ -10,7 +10,7 @@ enum ARG_TYPE { ARG_STRING , ARG_NUMBER , ARG_CVAR };
 enum NUM_TYPE { NUM_INT , NUM_FLOAT };
 // intermediate number
 struct INumber {
-	INumber();
+	INumber() { }
 	INumber(long long i): type(NUM_INT), __int__(i) { }
 	INumber(double d): type(NUM_FLOAT), __double__(d) { }
 
@@ -25,11 +25,13 @@ struct INumber {
 };
 
 struct Argument {
+	Argument() { }
 	Argument(long long i, std::string _label=""): type(ARG_NUMBER), num(i), label(_label) { }
 	Argument(double d, std::string _label=""): type(ARG_NUMBER), num(d), label(_label) { }
+	Argument(INumber n, std::string _label=""): type(ARG_NUMBER), num(n), label(_label) { }
 	Argument(ARG_TYPE type, const std::string& str, std::string _label="");
 
-	ARG_TYPE type;
+	ARG_TYPE type = -1;
 
 	union {
 		char * string;
@@ -47,6 +49,7 @@ struct Argument {
 };
 
 struct Command {
+	Command() { }
 	Command(const std::string& _command, const std::vector<Argument>& _args):
 	  command(_command), args(_args) { }
 	std::string command;
@@ -73,8 +76,10 @@ namespace Parser {
 	// - on success Argument& arg is set as the constructed command
 	int ParseCommand(const std::string& string, Command& com);
 
+	extern std::string ErrorMsg;
+
 	extern INumber l_number;
-	extern std::string l_identifier;
+	extern std::string l_string; // string for identifier and strings
 
 	enum TOKEN {
 		TOK_EOF = -1,
@@ -82,10 +87,23 @@ namespace Parser {
 		TOK_NUMBER = -3,
 		TOK_STRING = -4,
 
-		ERROR = -127;
+		ERROR = -127
 	};
 
 	void SetupLexer(std::string str);
 	int GetNextToken();
+	int __GetNextToken();
+	int GetCurrentToken();
+	extern int last_tok;
 
+	int LexIdentifier();
+	int LexNumber();
+	int LexString();
+
+	extern bool error_flag;
+	Argument ParseArgument();
+	Argument ParseNumber();
+	Argument ParseString();
+	Argument ParseIdentifier();
+	Argument ParseCVar();
 }

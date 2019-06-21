@@ -1,6 +1,6 @@
 IDIR =include
 CC=clang++
-CFLAGS=-I$(IDIR) -std=c++17 -O2
+CFLAGS=-I$(IDIR) -std=c++17 -O2 -MD -MP
 
 ODIR=src/obj
 SDIR=src
@@ -28,3 +28,5 @@ debug: $(OBJ)
 
 clean:
 	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~
+
+-include $(OBJ:.o=.d)

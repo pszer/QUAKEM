@@ -6,6 +6,7 @@
 
 #include "Log.hpp"
 #include "Render.hpp"
+#include "Cmd.hpp"
 
 #define DEF_WIN_W 800
 #define DEF_WIN_H 600
