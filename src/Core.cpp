@@ -71,13 +71,6 @@ void Core::MainLoop() {
 	while (going) {
 		HandleEvents();
 
-		if (intro) {
-			intro=false;
-			auto chunk = Media.GetChunk("sfx/notification.wav");
-			if (chunk != nullptr)
-				Mix_PlayChannel(-1, chunk, 0);
-		}
-
 		MainRender();
 	}
 }

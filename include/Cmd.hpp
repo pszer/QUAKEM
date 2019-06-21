@@ -1,13 +1,16 @@
 #pragma once
 
 #include <string>
+#include <sstream>
 #include <vector>
 #include <map>
+#include <cctype>
 
 enum ARG_TYPE { ARG_STRING , ARG_NUMBER , ARG_CVAR };
 enum NUM_TYPE { NUM_INT , NUM_FLOAT };
 // intermediate number
 struct INumber {
+	INumber();
 	INumber(long long i): type(NUM_INT), __int__(i) { }
 	INumber(double d): type(NUM_FLOAT), __double__(d) { }
 
@@ -22,9 +25,9 @@ struct INumber {
 };
 
 struct Argument {
-	Argument(long long i): type(ARG_NUMBER), num(i) { }
-	Argument(double d): type(ARG_NUMBER), num(d) { }
-	Argument(ARG_TYPE type, const std::string& str);
+	Argument(long long i, std::string _label=""): type(ARG_NUMBER), num(i), label(_label) { }
+	Argument(double d, std::string _label=""): type(ARG_NUMBER), num(d), label(_label) { }
+	Argument(ARG_TYPE type, const std::string& str, std::string _label="");
 
 	ARG_TYPE type;
 
@@ -33,6 +36,8 @@ struct Argument {
 		char * cvar;
 		INumber num;
 	};
+
+	std::string label;
 
 	long long   ToInt();
 	double      ToFloat();
@@ -61,3 +66,26 @@ using COM_FUNC = std::string(*)(const std::vector<Argument>&);
 extern std::map<std::string, COM_FUNC> COMMANDS;
 COM_FUNC GetCommand(const std::string& id); // returns nullptr if no command found
 std::string ExecuteCommand(const struct Command& com);
+
+namespace Parser {
+
+	// returns 1 on success, 0 on error
+	// - on success Argument& arg is set as the constructed command
+	int ParseCommand(const std::string& string, Command& com);
+
+	extern INumber l_number;
+	extern std::string l_identifier;
+
+	enum TOKEN {
+		TOK_EOF = -1,
+		TOK_IDENTIFIER = -2,
+		TOK_NUMBER = -3,
+		TOK_STRING = -4,
+
+		ERROR = -127;
+	};
+
+	void SetupLexer(std::string str);
+	int GetNextToken();
+
+}

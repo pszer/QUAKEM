@@ -39,7 +39,9 @@ double INumber::ToFloat() {
 	return __double__;
 }
 
-Argument::Argument(ARG_TYPE _type, const std::string& str) {
+Argument::Argument(ARG_TYPE _type, const std::string& str, std::string _label)
+  : label(_label)
+{
 	if (_type == ARG_STRING) {
 		type = ARG_STRING;
 	} else type = ARG_CVAR;
@@ -90,4 +92,81 @@ std::string ExecuteCommand(const struct Command& com) {
 	auto func = GetCommand(com.command);
 	if (func == nullptr) return "ERR";	
 	return func(com.args);
+}
+
+INumber Parser::l_number;
+std::string Parser::l_string;
+
+std::stringstream l_sstr;
+int l_char;
+void Parser::SetupLexer(std::string str) {
+	l_sstr = std::stringstream(str);
+	l_char = sstr.get();
+}
+
+int Parser::GetNextToken() {
+	// ignore whitespaces
+	while (std::isspace(l_char)) {
+		l_char = l_sstr.get();
+	}
+
+	// eof
+	if (l_sstr.eof()) return TOK_EOF;
+	
+	// if identifier
+	if (std::isalpha(l_char)) {
+		Parser::l_string = "";
+
+		while (std::isalnum(l_char)
+		       || l_char = '_' || l_char == '-')
+		{
+			Parser::l_string += l_char;
+			l_char = l_sstr.get();
+		}
+
+		return TOK_IDENTIFIER;
+	}
+
+	// if number
+	if (std::isdigit(l_char) || l_char == '-') {
+		std::string str;
+
+		bool is_int = true;
+		do {
+			str += l_char;
+			l_char = l_sstr.get();	
+			if (l_char == '.') is_int = false;
+		} while (std::isdigit(l_char) || l_char == '.');
+
+		try {
+			if (is_int)
+				l_number = INumber(std::stoll(str));
+			else
+				l_number = INumber(std::stod(str));
+		} catch (...) {
+			return ERROR;
+		}
+
+		return TOK_NUMBER;
+	}
+
+	// if string
+	if (l_char == '"') {
+		Parser::l_string = "";
+
+		do {
+			Parser::l_string += l_char;
+			l_char == l_sstr.get();
+			if (l_sstr.eof()) return ERROR;
+		} while (l_char != '"') // matching "
+
+		return TOK_STRING;
+	}
+
+	// return any characters not recognised as tokens
+	return l_char;
+}
+
+int Parser::ParseCommand(const std::string& string, Command& com) {
+	return 1;	
 }
