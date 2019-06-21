@@ -6,7 +6,7 @@
 #include <map>
 #include <cctype>
 
-enum ARG_TYPE { ARG_STRING , ARG_NUMBER , ARG_CVAR };
+enum ARG_TYPE { ARG_STRING , ARG_NUMBER , ARG_CVAR , ARG_UNDEF };
 enum NUM_TYPE { NUM_INT , NUM_FLOAT };
 // intermediate number
 struct INumber {
@@ -29,23 +29,18 @@ struct Argument {
 	Argument(long long i, std::string _label=""): type(ARG_NUMBER), num(i), label(_label) { }
 	Argument(double d, std::string _label=""): type(ARG_NUMBER), num(d), label(_label) { }
 	Argument(INumber n, std::string _label=""): type(ARG_NUMBER), num(n), label(_label) { }
-	Argument(ARG_TYPE type, const std::string& str, std::string _label="");
+	Argument(ARG_TYPE _type, const std::string& _str, std::string _label=""):
+	  type(_type), str(_str), label(_label) { }
 
-	ARG_TYPE type = -1;
+	ARG_TYPE type = ARG_UNDEF;
 
-	union {
-		char * string;
-		char * cvar;
-		INumber num;
-	};
-
+	INumber num;
+	std::string str = "";
 	std::string label;
 
 	long long   ToInt();
 	double      ToFloat();
 	std::string ToString();
-	
-	~Argument();
 };
 
 struct Command {
@@ -63,12 +58,6 @@ Argument * GetCVar(const std::string& id);
 long long GetCVarInt(const std::string& id);
 double    GetCVarFloat(const std::string& id);
 std::string GetCVarString(const std::string& id);
-
-// COMMANDS
-using COM_FUNC = std::string(*)(const std::vector<Argument>&);
-extern std::map<std::string, COM_FUNC> COMMANDS;
-COM_FUNC GetCommand(const std::string& id); // returns nullptr if no command found
-std::string ExecuteCommand(const struct Command& com);
 
 namespace Parser {
 
@@ -106,4 +95,4 @@ namespace Parser {
 	Argument ParseString();
 	Argument ParseIdentifier();
 	Argument ParseCVar();
-}
+};

@@ -40,6 +40,9 @@ int Core::Init(InitParameters init) {
 
 	Media.LoadMedia();
 
+	Commands::Init();
+	CVARS["CVARS"] = Argument(ARG_STRING, "Fetched console variable");
+
 	return 0;
 }
 

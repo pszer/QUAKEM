@@ -1,6 +1,5 @@
 #include "Cmd.hpp"
 
-std::map<std::string, COM_FUNC> COMMANDS;
 std::map<std::string, Argument> CVARS;
 
 Argument * GetCVar(const std::string& id) {
@@ -39,59 +38,25 @@ double INumber::ToFloat() {
 	return __double__;
 }
 
-Argument::Argument(ARG_TYPE _type, const std::string& str, std::string _label)
-  : label(_label)
-{
-	if (_type == ARG_STRING) {
-		type = ARG_STRING;
-	} else type = ARG_CVAR;
-
-	// copies str into string pointer
-	std::size_t length = str.length();
-	string = new char[length + 1];
-	string[length] = '\0';
-	for (char * c = string; c != string + length; ++c) {
-		*c = str[c - string];
-	}
-}
-
-Argument::~Argument() {
-	if (type != ARG_NUMBER) {
-		delete string;
-	}
-}
-
 long long Argument::ToInt() {
 	if (type == ARG_NUMBER) return num.ToInt();
-	else if (type == ARG_CVAR) return GetCVarInt(std::string(cvar));
+	else if (type == ARG_CVAR) return GetCVarInt(str);
 	else return 0.0;
 }
 
 double Argument::ToFloat() {
 	if (type == ARG_NUMBER) return num.ToFloat();
-	else if (type == ARG_CVAR) return GetCVarFloat(std::string(cvar));
+	else if (type == ARG_CVAR) return GetCVarFloat(str);
 	else return 0.0;
 }
 
 std::string Argument::ToString() {
-	if (type == ARG_STRING) return std::string(string);
-	else if (type == ARG_CVAR) return GetCVarString(std::string(cvar)); 
+	if (type == ARG_STRING) return str;
+	else if (type == ARG_CVAR) return GetCVarString(str); 
 	else if (num.type == NUM_INT)
 		return std::to_string(num.__int__);
 	else
 		return std::to_string(num.__double__);
-}
-
-COM_FUNC GetCommand(const std::string& id) {
-	auto f = COMMANDS.find(id);
-	if (f == COMMANDS.end()) return nullptr; // command not found
-	else return f->second;
-} 
-
-std::string ExecuteCommand(const struct Command& com) {
-	auto func = GetCommand(com.command);
-	if (func == nullptr) return "ERR";	
-	return func(com.args);
 }
 
 using namespace Parser;
@@ -99,6 +64,7 @@ using namespace Parser;
 INumber Parser::l_number;
 std::string Parser::l_string;
 std::string Parser::ErrorMsg = "";
+bool Parser::error_flag = false;
 
 std::stringstream l_sstr;
 int l_char, last_token;
@@ -159,7 +125,6 @@ int Parser::LexIdentifier() {
 		l_char = l_sstr.get();
 	}
 
-	l_char = l_sstr.get();
 	return TOK_IDENTIFIER;
 }
 
@@ -182,7 +147,6 @@ int Parser::LexNumber() {
 		return ERROR;
 	}
 
-	l_char = l_sstr.get();
 	return TOK_NUMBER;
 }
 
@@ -202,6 +166,7 @@ int Parser::LexString() {
 }
 
 int Parser::ParseCommand(const std::string& string, Command& _com) {
+	SetupLexer(string);
 	Command command; // do not overwrite _com in case of error
 
 	ErrorMsg = "";
@@ -230,14 +195,17 @@ int Parser::ParseCommand(const std::string& string, Command& _com) {
 bool error_flag = false;;
 Argument Parser::ParseArgument() {
 	switch (GetCurrentToken()) {
+	case ERROR:
+		return Argument();
+
 	case TOK_NUMBER:
 		return ParseNumber();
 	case TOK_STRING:
-		return ParserString();
+		return ParseString();
 	case TOK_IDENTIFIER:
 		return ParseIdentifier();
 	case '$':
-		return ParserCVar();
+		return ParseCVar();
 	default:
 		ErrorMsg = "Unexpected token in command";
 		error_flag = true;
@@ -257,6 +225,7 @@ Argument Parser::ParseString() {
 	return arg;
 }
 
+#include <iostream>
 Argument Parser::ParseIdentifier() {
 	std::string id = Parser::l_string;
 	if (GetNextToken() != ':') {
@@ -278,11 +247,13 @@ Argument Parser::ParseIdentifier() {
 
 Argument Parser::ParseCVar() {
 	GetNextToken(); // eat '$'
-	if (GetNextToken() != TOK_IDENTIFIER) {
+	if (GetCurrentToken() != TOK_IDENTIFIER) {	
 		ErrorMsg = "A CVar name can only be a string";
 		error_flag = true;
 		return Argument();
 	}
 
-	return Argument(ARG_CVAR, Parser::l_string);
+	Argument arg(ARG_CVAR, Parser::l_string);
+	GetNextToken();
+	return arg;
 }
