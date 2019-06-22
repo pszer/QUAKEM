@@ -20,8 +20,8 @@ struct INumber {
 		double    __double__;
 	};
 
-	long long ToInt();
-	double    ToFloat();
+	long long ToInt() const;
+	double    ToFloat() const;
 };
 
 struct Argument {
@@ -38,9 +38,9 @@ struct Argument {
 	std::string str = "";
 	std::string label;
 
-	long long   ToInt();
-	double      ToFloat();
-	std::string ToString();
+	long long   ToInt() const;
+	double      ToFloat() const;
+	std::string ToString() const;
 };
 
 struct Command {

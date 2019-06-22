@@ -26,31 +26,31 @@ std::string GetCVarString(const std::string& id) {
 	else return a->ToString();
 }
 
-long long INumber::ToInt() {
+long long INumber::ToInt() const {
 	if (type == NUM_INT)
 		return __int__;
 	return static_cast<long long>(__double__);
 }
 
-double INumber::ToFloat() {
+double INumber::ToFloat() const {
 	if (type == NUM_INT)
 		return static_cast<double>(__int__);
 	return __double__;
 }
 
-long long Argument::ToInt() {
+long long Argument::ToInt() const {
 	if (type == ARG_NUMBER) return num.ToInt();
 	else if (type == ARG_CVAR) return GetCVarInt(str);
 	else return 0.0;
 }
 
-double Argument::ToFloat() {
+double Argument::ToFloat() const {
 	if (type == ARG_NUMBER) return num.ToFloat();
 	else if (type == ARG_CVAR) return GetCVarFloat(str);
 	else return 0.0;
 }
 
-std::string Argument::ToString() {
+std::string Argument::ToString() const {
 	if (type == ARG_STRING) return str;
 	else if (type == ARG_CVAR) return GetCVarString(str); 
 	else if (num.type == NUM_INT)

@@ -18,6 +18,9 @@ namespace Commands {
 	// echo ...
 	std::string _echo(const std::vector<Argument>&); 
 
+	// clears log history
+	std::string _clear(const std::vector<Argument>&);
+
 	// quits game
 	std::string _quit(const std::vector<Argument>&);
 
@@ -27,4 +30,7 @@ namespace Commands {
 
 	// prints current tick
 	std::string _tick(const std::vector<Argument>&);
+
+	// plays loaded audio chunk
+	std::string _playwav(const std::vector<Argument>&);
 };

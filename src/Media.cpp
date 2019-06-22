@@ -100,7 +100,7 @@ int Media::LoadChunks(const std::vector<std::string>& files) {
 		} else {
 			std::string clean = CleanFilename(f);
 			chunks[clean] = chunk;
-			Log::Log("Font \"" + clean +"\" loaded");
+			Log::Log("SFX chunk \"" + clean +"\" loaded");
 			++count;
 		}
 	}

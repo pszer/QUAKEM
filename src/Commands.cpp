@@ -9,9 +9,11 @@ std::map<std::string, CMD_FUNC> Commands::COMMANDS;
 
 void Commands::Init() {
 	COMMANDS["echo"] = _echo;
+	COMMANDS["clear"] = _clear;
 	COMMANDS["quit"] = _quit;
 	COMMANDS["set"] = _set;
 	COMMANDS["tick"] = _tick;
+	COMMANDS["playwav"] = _playwav;
 }
 
 CMD_FUNC Commands::GetCommand(const std::string& id) {
@@ -28,7 +30,10 @@ std::string Commands::Execute(const struct Command& com) {
 }
 
 // COMMANDS
-std::string Commands::_echo(const std::vector<Argument>& args) {
+
+namespace Commands {
+
+std::string _echo(const std::vector<Argument>& args) {
 	std::string str = "";
 	for (auto arg : args) {
 		str += arg.ToString();
@@ -36,12 +41,17 @@ std::string Commands::_echo(const std::vector<Argument>& args) {
 	return str;
 }
 
-std::string Commands::_quit(const std::vector<Argument>& args) {
+std::string _clear(const std::vector<Argument>& args) {
+	Log::History.clear();
+	return "";
+}
+
+std::string _quit(const std::vector<Argument>& args) {
 	Core.going = false;
 	return "Quitting";
 }
 
-std::string Commands::_set(const std::vector<Argument>& args) {
+std::string _set(const std::vector<Argument>& args) {
 	const std::string USE_MSG = "set cvar value - set a console variable to some value";
 	if (args.size() < 2) return USE_MSG;
 	if (args.at(0).type != ARG_CVAR) return USE_MSG;
@@ -49,6 +59,22 @@ std::string Commands::_set(const std::vector<Argument>& args) {
 	return "";
 }
 
-std::string Commands::_tick(const std::vector<Argument>& args) {
+std::string _tick(const std::vector<Argument>& args) {
 	return std::to_string(SDL_GetTicks());
+}
+
+std::string _playwav(const std::vector<Argument>& args) {
+	const std::string USE_MSG = "playwav [chunkname]";
+
+	if (args.size() < 1) return USE_MSG;
+	std::string chunk_str = args.at(0).ToString();
+
+	auto chunk = Media.GetChunk(chunk_str);
+	if (chunk == nullptr) return "sfx chunk \"" + chunk_str + "\" not found";
+
+	Mix_PlayChannel(-1, chunk, 0);
+
+	return "";
+}
+
 }
