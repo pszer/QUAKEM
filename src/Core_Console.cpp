@@ -64,6 +64,7 @@ void Core::ConsoleEnter() {
 	Console.History.insert(Console.History.begin(), Console.text);
 	if (Console.History.size() > Console.HISTORY_MAX)
 		Console.History.pop_back();
+	Console.history_scroll = 0;
 
 	Console.Reset();
 }

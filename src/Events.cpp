@@ -112,7 +112,6 @@ void Event::HandleKeyDownEvent() {
 void Event::HandleKeyUpEvent() {
 	for (auto k = Keypresses.begin(); k != Keypresses.end(); ++k) {
 		if (k->code == event.key.keysym.sym) {
-			std::cout << "found" << std::endl;
 			k->state = KEY_UP;
 			break;
 		}
