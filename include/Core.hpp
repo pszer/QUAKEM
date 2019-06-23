@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <algorithm>
 
 #include <SDL2/SDL.h>
 
@@ -41,7 +42,10 @@ extern struct Core {
 
 	SDL_Window * window   = nullptr;
 
+	// CONSOLE
 	struct Console {
+		void Toggle();
+
 		std::string font = DEF_CONSOLE_FONT;
 		SDL_Color bg = {0x08,0x08,0x08,0xFF},
 		          fg = {0xFF,0xFF,0xFF,0xFF};
@@ -52,12 +56,20 @@ extern struct Core {
 		int cursor = 0;
 		std::string text = "";
 
+		const int HISTORY_MAX = 64;
+		int history_scroll = 0;
+		void SetHistoryText();
+		std::vector<std::string> History;
+
 		void Enter();
 		void Reset();
 		void Backspace();
 		void TextInput(const std::string& input);
+
 		void Left();
 		void Right();
+		void Up();
+		void Down();
 	} Console;
 
 	void ConsoleUpdate();

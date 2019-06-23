@@ -1,5 +1,6 @@
 #include "Font.hpp"
 
+#include <iostream>
 TTF_Font * Font::GetTTFSize(FONT_SIZE size) {
 	return ttfs[size];
 }

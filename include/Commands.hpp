@@ -21,6 +21,9 @@ namespace Commands {
 	// clears log history
 	std::string _clear(const std::vector<Argument>&);
 
+	// prints all command names
+	std::string _help(const std::vector<Argument>&);
+
 	// quits game
 	std::string _quit(const std::vector<Argument>&);
 

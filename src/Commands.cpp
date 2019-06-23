@@ -11,6 +11,7 @@ void Commands::Init() {
 	COMMANDS["echo"] = _echo;
 	COMMANDS["clear"] = _clear;
 	COMMANDS["quit"] = _quit;
+	COMMANDS["help"] = _help;
 	COMMANDS["set"] = _set;
 	COMMANDS["tick"] = _tick;
 	COMMANDS["playwav"] = _playwav;
@@ -49,6 +50,14 @@ std::string _clear(const std::vector<Argument>& args) {
 std::string _quit(const std::vector<Argument>& args) {
 	Core.going = false;
 	return "Quitting";
+}
+
+std::string _help(const std::vector<Argument>&) {
+	std::string help_str = "Available commands:\n";
+	for (auto c = COMMANDS.begin(); c != COMMANDS.end(); ++c) {
+		help_str += c->first + "\n";
+	}
+	return help_str;
 }
 
 std::string _set(const std::vector<Argument>& args) {
