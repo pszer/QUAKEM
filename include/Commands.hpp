@@ -36,6 +36,9 @@ namespace Commands {
 	// ent_create ent_type {args}
 	std::string _ent_create(const std::vector<Argument>&);
 
+	// lists all set cvars
+	std::string _list_cvars(const std::vector<Argument>&);
+
 	// plays loaded audio chunk
 	// play_wav name
 	std::string _play_wav(const std::vector<Argument>&);

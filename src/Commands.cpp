@@ -18,6 +18,7 @@ void Commands::Init() {
 	COMMANDS["play_wav"] = _play_wav;
 	COMMANDS["play_mus"] = _play_mus;
 	COMMANDS["stop_mus"] = _stop_mus;
+	COMMANDS["list_cvars"] = _list_cvars;
 	COMMANDS["list_tex"] = _list_tex;
 	COMMANDS["list_fnt"] = _list_fnt;
 	COMMANDS["list_wav"] = _list_wav;
@@ -210,6 +211,34 @@ std::string _list_mus(const std::vector<Argument>& args) {
 	if (args.size() != 0)
 		find = args.at(0).ToString();
 	return __search__(Media.music, find);
+}
+
+std::string _list_cvars(const std::vector<Argument>& args) {
+	std::string str = "", find = "";
+	if (args.size() > 0) find = args.at(0).ToString();
+	bool filter = !find.empty();
+
+	for (auto c : CVARS) {
+		std::string name = c.first;
+
+		if (filter) {
+			if (name.length() < find.length()) continue;
+
+			for (int i = 0; i <= name.length() - find.length(); ++i) {
+				if (name.substr(i, find.length()) == find) {
+					str += name + " = " + c.second.ToString() + "\n";
+					continue;
+				}
+			}
+
+		} else {
+			str += name + " = " + c.second.ToString() + "\n";
+		}
+
+	}
+
+	return str;
+
 }
 
 std::string _exec(const std::vector<Argument>& args) {
