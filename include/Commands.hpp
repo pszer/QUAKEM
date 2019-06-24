@@ -61,4 +61,8 @@ namespace Commands {
 	// lists loaded music files
 	// listmus {search}
 	std::string _listmus(const std::vector<Argument>&);
+
+	// executes config file
+	// exec [file]
+	std::string _exec(const std::vector<Argument>&);
 };

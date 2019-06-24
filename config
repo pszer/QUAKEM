@@ -1,0 +1,3 @@
+set $maxfps 121
+set $showfps 1
+set $console 1

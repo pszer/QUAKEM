@@ -6,6 +6,8 @@
 #include <map>
 #include <cctype>
 
+#include "Log.hpp"
+
 enum ARG_TYPE { ARG_STRING , ARG_NUMBER , ARG_CVAR , ARG_UNDEF };
 enum NUM_TYPE { NUM_INT , NUM_FLOAT };
 // intermediate number

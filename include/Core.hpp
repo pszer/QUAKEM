@@ -54,9 +54,10 @@ extern struct Core {
 		                         // of the screen console is offset
 
 		int cursor = 0;
+		int page_scroll = 0; // how many lines to scroll up
 		std::string text = "";
 
-		const int HISTORY_MAX = 64;
+		const int HISTORY_MAX = 256;
 		int history_scroll = 0;
 		void SetHistoryText();
 		std::vector<std::string> History;
@@ -72,6 +73,8 @@ extern struct Core {
 		void Right();
 		void Up();
 		void Down();
+		void PageUp();
+		void PageDown();
 
 		void Render();
 		void Update();

@@ -1,6 +1,11 @@
 #pragma once
 
+#include <iostream>
+#include <fstream>
+
 #include "Commands.hpp"
+
+#define CONFIG_PATH "config"
 
 namespace Config {
 
@@ -8,5 +13,8 @@ namespace Config {
 
 	// maxfps 121
 	void DefaultValues();
+
+	// returns 1 on success, 0 on error
+	int ExecFile(const std::string& filename);
 
 };

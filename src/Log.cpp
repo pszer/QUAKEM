@@ -9,6 +9,10 @@ void Log::Add(const std::string& str) {
 	const std::size_t lim = str.length();
 	std::size_t b = 0;
 
+	if (lim==1) {
+		History.push_back(str);
+	} else {
+
 	// splits str into individual lines
 	for (std::size_t i = 0; i < lim; ++i) {
 		if (str[i] == '\n' || i == lim-1) {
@@ -20,6 +24,8 @@ void Log::Add(const std::string& str) {
 			}
 			b = i+1;
 		}
+	}
+
 	}
 
 	// shrink History to size

@@ -17,11 +17,11 @@ void Commands::Init() {
 	COMMANDS["playwav"] = _playwav;
 	COMMANDS["playmus"] = _playmus;
 	COMMANDS["stopmus"] = _stopmus;
-
 	COMMANDS["listtex"] = _listtex;
 	COMMANDS["listfnt"] = _listfnt;
 	COMMANDS["listwav"] = _listwav;
 	COMMANDS["listmus"] = _listmus;
+	COMMANDS["exec"] = _exec;
 }
 
 CMD_FUNC Commands::GetCommand(const std::string& id) {
@@ -61,6 +61,7 @@ std::string _echo(const std::vector<Argument>& args) {
 
 std::string _clear(const std::vector<Argument>& args) {
 	Log::History.clear();
+	Core.Console.Reset();
 	return "";
 }
 
@@ -194,6 +195,18 @@ std::string _listmus(const std::vector<Argument>& args) {
 	if (args.size() != 0)
 		find = args.at(0).ToString();
 	return __search__(Media.music, find);
+}
+
+std::string _exec(const std::vector<Argument>& args) {
+	const std::string USE_MSG = "exec [path]";
+	std::string path;
+	if (args.size() == 0) return USE_MSG;
+	path = args.at(0).ToString();
+
+	if (!Config::ExecFile(path))
+		return "Config file \"" + path + "\" not found";
+	else
+		return "Loaded config file \"" + path + "\"";
 }
 
 }

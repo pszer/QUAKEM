@@ -3,6 +3,14 @@
 struct Core Core;
 
 int Core::Init(InitParameters init) {
+	Commands::Init();
+	
+	if (!Config::ExecFile(CONFIG_PATH)) {
+		Log::Error("Config file \"" CONFIG_PATH "\" not found");
+	} else {
+		Log::Log("Loaded config file \"" CONFIG_PATH "\"");
+	}
+
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
 		Log::ErrorSDL();
 		return -1;
@@ -40,7 +48,6 @@ int Core::Init(InitParameters init) {
 
 	Media.LoadMedia();
 	Event.Init();
-	Commands::Init();
 
 	return 0;
 }
@@ -102,5 +109,5 @@ void Core::RenderFPS() {
 	else if (fps < 150) c = {0x00,0xff,0x00,0xff};
 	else                c = {0x00,0xff,0xff,0xff};
 
-	Renderer.RenderText(Console.font, fps_str, Event.win_w, 0, FONT_P12, c, ALIGN_RIGHT);
+	Renderer.RenderText(Console.font, fps_str, Event.win_w, 0, FONT_P16, c, ALIGN_RIGHT);
 }

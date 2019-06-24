@@ -26,7 +26,7 @@ void Core::Console::Render() {
 	Renderer.RenderFillRect(bg_rect, bg);
 
 	// render text
-	int i = Log::History.size()-1;
+	int i = Log::History.size() - 1 - page_scroll;
 	while (rect.y >= 0 && i >= 0) {
 		const std::string& str = Log::History.at(i);
 
@@ -70,6 +70,11 @@ void Core::Console::HandleKeypresses() {
 		Backspace();
 	if (Event.GetKey(SDLK_RETURN) == KEY_DOWN)
 		Enter();
+
+	if (Event.GetKey(SDLK_PAGEUP) == KEY_DOWN)
+		PageUp();
+	if (Event.GetKey(SDLK_PAGEDOWN) == KEY_DOWN)
+		PageDown();
 }
 
 void Core::Console::Toggle() {
@@ -104,6 +109,7 @@ void Core::Console::Reset() {
 	text = "";
 	cursor = 0;
 	history_scroll = 0;
+	page_scroll = 0;
 }
 
 void Core::Console::Backspace() {
@@ -148,6 +154,17 @@ void Core::Console::Down() {
 	history_scroll--;
 	if (history_scroll < 0) history_scroll = 0;
 	SetHistoryText();
+}
+
+void Core::Console::PageUp() {
+	page_scroll += 5;
+	if (page_scroll > History.size() + 5)
+		page_scroll = History.size() + 5;
+}
+
+void Core::Console::PageDown() {
+	page_scroll -= 5;
+	if (page_scroll < 0) page_scroll = 0;
 }
 
 void Core::Console::SetHistoryText() {
