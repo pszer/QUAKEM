@@ -18,6 +18,10 @@ void Rect::SetSize(const Vec2& s) {
 	h = s.y;
 }
 
+SDL_Rect Rect::ToSDLRect() {
+	return {(int)x,(int)y,(int)w,(int)h};
+}
+
 Vec2 operator+(const Vec2& a, const Vec2& b) {
 	return Vec2(a.x + b.x, a.y + b.y);
 }

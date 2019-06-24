@@ -16,7 +16,7 @@ namespace Commands {
 	void CallCommand(const std::string& str);
 
 	// echos its arguments as strings
-	// echo ...
+	// echo {args}
 	std::string _echo(const std::vector<Argument>&); 
 
 	// clears log history
@@ -32,37 +32,38 @@ namespace Commands {
 	// set $var val
 	std::string _set(const std::vector<Argument>&);
 
-	// prints current tick
-	std::string _tick(const std::vector<Argument>&);
+	// creates entity
+	// ent_create ent_type {args}
+	std::string _ent_create(const std::vector<Argument>&);
 
 	// plays loaded audio chunk
-	// playwav [name]
-	std::string _playwav(const std::vector<Argument>&);
+	// play_wav name
+	std::string _play_wav(const std::vector<Argument>&);
 
 	// plays loaded music file
-	// playmus [name] {volume} {loops}
-	std::string _playmus(const std::vector<Argument>&);
+	// play_mus name [volume] [loops]
+	std::string _play_mus(const std::vector<Argument>&);
 
 	// stops music
-	std::string _stopmus(const std::vector<Argument>&);
+	std::string _stop_mus(const std::vector<Argument>&);
 
 	// lists loaded textures
-	// listtex {search}
-	std::string _listtex(const std::vector<Argument>&);
+	// list_tex [search]
+	std::string _list_tex(const std::vector<Argument>&);
 
 	// lists loaded fonts
-	// listfnt {search}
-	std::string _listfnt(const std::vector<Argument>&);
+	// list_fnt [search]
+	std::string _list_fnt(const std::vector<Argument>&);
 
 	// lists loaded sfx chunks
-	// listwav {search}
-	std::string _listwav(const std::vector<Argument>&);
+	// list_wav [search]
+	std::string _list_wav(const std::vector<Argument>&);
 
 	// lists loaded music files
-	// listmus {search}
-	std::string _listmus(const std::vector<Argument>&);
+	// list_mus [search]
+	std::string _list_mus(const std::vector<Argument>&);
 
 	// executes config file
-	// exec [file]
+	// exec file
 	std::string _exec(const std::vector<Argument>&);
 };

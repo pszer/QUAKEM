@@ -2,6 +2,7 @@
 
 #include "Commands.hpp"
 #include "Core.hpp"
+#include "Game.hpp"
 
 using namespace Commands;
 
@@ -13,14 +14,14 @@ void Commands::Init() {
 	COMMANDS["quit"] = _quit;
 	COMMANDS["help"] = _help;
 	COMMANDS["set"] = _set;
-	COMMANDS["tick"] = _tick;
-	COMMANDS["playwav"] = _playwav;
-	COMMANDS["playmus"] = _playmus;
-	COMMANDS["stopmus"] = _stopmus;
-	COMMANDS["listtex"] = _listtex;
-	COMMANDS["listfnt"] = _listfnt;
-	COMMANDS["listwav"] = _listwav;
-	COMMANDS["listmus"] = _listmus;
+	COMMANDS["ent_create"] = _ent_create;
+	COMMANDS["play_wav"] = _play_wav;
+	COMMANDS["play_mus"] = _play_mus;
+	COMMANDS["stop_mus"] = _stop_mus;
+	COMMANDS["list_tex"] = _list_tex;
+	COMMANDS["list_fnt"] = _list_fnt;
+	COMMANDS["list_wav"] = _list_wav;
+	COMMANDS["list_mus"] = _list_mus;
 	COMMANDS["exec"] = _exec;
 }
 
@@ -71,7 +72,7 @@ std::string _quit(const std::vector<Argument>& args) {
 }
 
 std::string _help(const std::vector<Argument>&) {
-	std::string help_str = "\nAvailable commands:\n";
+	std::string help_str = "Available commands:\n";
 	for (auto c = COMMANDS.begin(); c != COMMANDS.end(); ++c) {
 		help_str += c->first + "\n";
 	}
@@ -86,12 +87,26 @@ std::string _set(const std::vector<Argument>& args) {
 	return "";
 }
 
-std::string _tick(const std::vector<Argument>& args) {
-	return std::to_string(SDL_GetTicks());
+std::string _ent_create(const std::vector<Argument>& args) {
+	const std::string USE_MSG = "ent_create ent_type {args}";
+	if (args.size() < 1) return USE_MSG;
+
+	std::string ent_str = args.at(0).ToString();
+	auto f = Game.STR_TO_ENT_TYPE.find(ent_str);
+	if (f == Game.STR_TO_ENT_TYPE.end()) {
+		return "Unknown entity type \"" + ent_str + "\"";
+	}
+
+	std::vector<Argument> cut_args;
+	cut_args.insert(cut_args.begin(), args.begin()+1, args.end());
+	if (!Game.CreateEntity(f->second, cut_args)) {
+		return "Error creating entity \"" + ent_str + "\"";
+	}
+	return "";
 }
 
-std::string _playwav(const std::vector<Argument>& args) {
-	const std::string USE_MSG = "playwav [chunkname]";
+std::string _play_wav(const std::vector<Argument>& args) {
+	const std::string USE_MSG = "play_wav chunkname";
 
 	if (args.size() < 1) return USE_MSG;
 	std::string chunk_str = args.at(0).ToString();
@@ -104,8 +119,8 @@ std::string _playwav(const std::vector<Argument>& args) {
 	return "";
 }
 
-std::string _playmus(const std::vector<Argument>& args) {
-	const std::string USE_MSG = "playmus [name] {volume} {loops}";
+std::string _play_mus(const std::vector<Argument>& args) {
+	const std::string USE_MSG = "play_mus name [volume] [loops]";
 
 	std::string mus_str;
 	float volume = 1.0;
@@ -138,7 +153,7 @@ std::string _playmus(const std::vector<Argument>& args) {
 
 template <typename T>
 std::string __search__(const std::map<std::string, T>& v, std::string& find) {
-	std::string str = "\n";
+	std::string str = "";
 	bool filter = !find.empty();
 
 	for (auto f : v) {
@@ -147,7 +162,7 @@ std::string __search__(const std::map<std::string, T>& v, std::string& find) {
 		if (filter) {
 			if (name.length() < find.length()) continue;
 
-			for (int i = 0; i < name.length() - find.length(); ++i) {
+			for (int i = 0; i <= name.length() - find.length(); ++i) {
 				if (name.substr(i, find.length()) == find) {
 					str += name + "\n";
 					continue;
@@ -163,19 +178,19 @@ std::string __search__(const std::map<std::string, T>& v, std::string& find) {
 	return str;
 }
 
-std::string _stopmus(const std::vector<Argument>&) {
+std::string _stop_mus(const std::vector<Argument>&) {
 	Music.Stop();
 	return "";
 }
 
-std::string _listtex(const std::vector<Argument>& args) {
+std::string _list_tex(const std::vector<Argument>& args) {
 	std::string find = "";
 	if (args.size() != 0)
 		find = args.at(0).ToString();
 	return __search__(Media.textures, find);
 }
 
-std::string _listfnt(const std::vector<Argument>& args) {
+std::string _list_fnt(const std::vector<Argument>& args) {
 	std::string find = "";
 	if (args.size() != 0)
 		find = args.at(0).ToString();
@@ -183,14 +198,14 @@ std::string _listfnt(const std::vector<Argument>& args) {
 
 }
 
-std::string _listwav(const std::vector<Argument>& args) {
+std::string _list_wav(const std::vector<Argument>& args) {
 	std::string find = "";
 	if (args.size() != 0)
 		find = args.at(0).ToString();
 	return __search__(Media.chunks, find);
 }
 
-std::string _listmus(const std::vector<Argument>& args) {
+std::string _list_mus(const std::vector<Argument>& args) {
 	std::string find = "";
 	if (args.size() != 0)
 		find = args.at(0).ToString();

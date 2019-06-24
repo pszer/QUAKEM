@@ -48,6 +48,7 @@ int Core::Init(InitParameters init) {
 
 	Media.LoadMedia();
 	Event.Init();
+	Game.Init();
 
 	return 0;
 }
@@ -73,6 +74,8 @@ void Core::MainLoop() {
 		Event.HandleEvents();
 		HandleEvents();
 
+		Game.Update();
+
 		Console.Update();
 
 		MainRender();
@@ -87,8 +90,9 @@ void Core::MainLoop() {
 void Core::MainRender() {
 	Renderer.Clear();
 
-	Console.Render();
+	Game.Render();
 
+	Console.Render();
 	RenderFPS();
 
 	Renderer.Update();

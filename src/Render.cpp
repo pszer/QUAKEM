@@ -94,7 +94,7 @@ void Renderer::RenderText(const std::string& font_name, const std::string& text,
 		SDL_FreeSurface(surface);
 		SDL_DestroyTexture(t);
 	} else {
-
+	
 	}
 }
 

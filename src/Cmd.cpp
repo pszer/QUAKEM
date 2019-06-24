@@ -118,8 +118,7 @@ int Parser::__GetNextToken() {
 
 int Parser::LexIdentifier() {
 	Parser::l_string = "";
-	while (std::isalnum(l_char) 
-	       || l_char == '_' || l_char == '-')
+	while (!std::isspace(l_char) && l_char != ':' && !l_sstr.eof())
 	{
 		Parser::l_string += l_char;
 		l_char = l_sstr.get();
@@ -225,13 +224,11 @@ Argument Parser::ParseString() {
 	return arg;
 }
 
-#include <iostream>
 Argument Parser::ParseIdentifier() {
 	std::string id = Parser::l_string;
 	if (GetNextToken() != ':') {
-		ErrorMsg = "Expected ':' after argument label";
-		error_flag = true;
-		return Argument();
+		Argument arg(ARG_STRING, id);
+		return arg;
 	}
 
 	if (GetNextToken() == TOK_IDENTIFIER) {
