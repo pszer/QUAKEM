@@ -56,6 +56,8 @@ int Core::Init(InitParameters init) {
 void Core::Quit() {
 	Media.FreeMedia();
 
+	IMG_Quit();
+
 	Mix_CloseAudio();
 	Mix_Quit();
 
