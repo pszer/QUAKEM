@@ -55,6 +55,7 @@ extern struct Core {
 
 		int cursor = 0;
 		int page_scroll = 0; // how many lines to scroll up
+		const int page_scroll_step = 5;
 		std::string text = "";
 
 		const int MAX_COMMAND_HISTORY = 64;

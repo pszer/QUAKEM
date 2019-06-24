@@ -161,13 +161,14 @@ void Core::Console::Down() {
 }
 
 void Core::Console::PageUp() {
-	page_scroll += 5;
-	if (page_scroll > Log::History.size() - 5)
-		page_scroll = Log::History.size() - 5;
+	if (Log::History.size() < page_scroll_step) return;
+	page_scroll += page_scroll_step;
+	if (page_scroll > Log::History.size() - page_scroll_step)
+		page_scroll = Log::History.size() - page_scroll_step;
 }
 
 void Core::Console::PageDown() {
-	page_scroll -= 5;
+	page_scroll -= page_scroll_step;
 	if (page_scroll < 0) page_scroll = 0;
 }
 
