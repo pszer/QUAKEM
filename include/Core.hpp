@@ -9,6 +9,7 @@
 #include "Render.hpp"
 #include "Commands.hpp"
 #include "Events.hpp"
+#include "Music.hpp"
 
 #define DEF_WIN_W 800
 #define DEF_WIN_H 600

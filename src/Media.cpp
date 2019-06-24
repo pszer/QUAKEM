@@ -19,7 +19,12 @@ int Media::LoadMedia() {
 	chunks_loaded = LoadChunks(sfx_files);
 	Log::Log(std::to_string(chunks_loaded) + " chunk(s) loaded");
 
-	return textures_loaded + fonts_loaded + chunks_loaded;
+	int music_loaded;
+	auto music_files = FilesInSubdirs(".", {"mus"});
+	music_loaded = LoadMusic(music_files);
+	Log::Log(std::to_string(music_loaded) + " music file(s) loaded");
+
+	return textures_loaded + fonts_loaded + chunks_loaded + music_loaded;
 }
 
 void Media::FreeMedia() {
@@ -27,7 +32,6 @@ void Media::FreeMedia() {
 		if (t.second != nullptr)
 			SDL_DestroyTexture(t.second);
 	}
-	textures.clear();
 
 	for (auto f : fonts) {
 		delete f.second;
@@ -36,6 +40,15 @@ void Media::FreeMedia() {
 	for (auto c : chunks) {
 		Mix_FreeChunk(c.second);
 	}
+
+	for (auto m : music) {
+		Mix_FreeMusic(m.second);
+	}
+
+	textures.clear();
+	fonts.clear();
+	chunks.clear();
+	music.clear();
 }
 
 #define TO_LOWER(s) for (auto c=s.begin();c!=s.end();++c) if(*c>='A'&&*c<='Z')*c+=32;
@@ -107,6 +120,24 @@ int Media::LoadChunks(const std::vector<std::string>& files) {
 	return count;
 }
 
+int Media::LoadMusic(const std::vector<std::string>& files) {
+	int count;
+	for (auto f : files) {
+		if (!CheckExtension(f, MUS_EXTS)) continue;
+
+		auto mus = LoadMusicFile(f);
+		if (mus == nullptr) {
+				Log::Error("Error loading music \"" + f + "\"");
+		} else {
+			std::string clean = CleanFilename(f);
+			music[clean] = mus;
+			Log::Log("Music file \"" + clean +"\" loaded");
+			++count;
+		}
+	}
+	return count;
+}
+
 // LOAD FUNCTIONS
 //
 SDL_Texture * Media::LoadTexture(const std::string& path) {
@@ -162,6 +193,14 @@ Mix_Chunk * Media::LoadChunk(const std::string& path) {
 	return chunk;
 }
 
+Mix_Music * Media::LoadMusicFile(const std::string& path) {
+	Mix_Music * mus = Mix_LoadMUS(path.c_str());
+	if (mus == nullptr) {
+		Log::ErrorMix();
+		return nullptr;
+	}
+	return mus;
+}
 
 // GET FUNCTIONS
 //
@@ -180,5 +219,11 @@ Font * Media::GetFont(const std::string& str) {
 Mix_Chunk * Media::GetChunk(const std::string& str) {
 	auto f = chunks.find(str);
 	if (f == chunks.end()) return nullptr;
+	return f->second;
+}
+
+Mix_Music * Media::GetMusic(const std::string& str) { 
+	auto f = music.find(str);
+	if (f == music.end()) return nullptr;
 	return f->second;
 }

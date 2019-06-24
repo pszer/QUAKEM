@@ -36,5 +36,13 @@ namespace Commands {
 	std::string _tick(const std::vector<Argument>&);
 
 	// plays loaded audio chunk
+	// playwav [name]
 	std::string _playwav(const std::vector<Argument>&);
+
+	// plays loaded music file
+	// playmus [name] {volume} {loops}
+	std::string _playmus(const std::vector<Argument>&);
+
+	// stops music
+	std::string _stopmus(const std::vector<Argument>&);
 };

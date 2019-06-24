@@ -8,10 +8,10 @@ LDIR =../lib
 
 LIBS=-lSDL2 -lSDL2_ttf -lSDL2_image -lSDL2_mixer -lstdc++fs -lm -lpthread
 
-_DEPS = Core.hpp Filesys.hpp Media.hpp Render.hpp Vec2.hpp Cmd.hpp Log.hpp Font.hpp Commands.hpp Events.hpp
+_DEPS = Core.hpp Filesys.hpp Media.hpp Render.hpp Vec2.hpp Cmd.hpp Log.hpp Font.hpp Commands.hpp Events.hpp Music.hpp
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ = main.o Core.o Core_Console.o Media.o Filesys.o Render.o Vec2.o Cmd.o Log.o Font.o Commands.o Events.o
+_OBJ = main.o Core.o Core_Console.o Media.o Filesys.o Render.o Vec2.o Cmd.o Log.o Font.o Commands.o Events.o Music.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 OUTPUT = quakem
