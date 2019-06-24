@@ -21,4 +21,6 @@ struct Entity {
 
 	Entity_Team team;
 	Vec2 pos, vel;
+
+	bool destroy = false;
 };
