@@ -3,6 +3,8 @@
 #include <iostream>
 
 int main(int argc, char ** argv) {
+	Config::DefaultValues();
+
 	if (Core.Init()) {
 		Log::Error("QUITTING");
 		Core.Quit();

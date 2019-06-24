@@ -73,6 +73,8 @@ void Core::Console::HandleKeypresses() {
 }
 
 void Core::Console::Toggle() {
+	if (!GetCVarInt("console")) return;
+
 	if (open)
 		Event.DisableTextInput();
 	else

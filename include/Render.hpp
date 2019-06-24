@@ -3,6 +3,8 @@
 #include "Media.hpp"
 #include "Vec2.hpp"
 
+enum TEXT_ALIGN { ALIGN_LEFT, ALIGN_MIDDLE , ALIGN_RIGHT };
+
 extern struct Renderer {
 	SDL_Renderer * renderer = nullptr;
 
@@ -30,6 +32,6 @@ extern struct Renderer {
   	  double angle, SDL_RendererFlip flip = SDL_FLIP_NONE, SDL_Point * rot_centre = nullptr);
 
 	void RenderText(const std::string& font_name, const std::string& text, int x, int y,
-	  FONT_SIZE, SDL_Color);
+	  FONT_SIZE, SDL_Color, TEXT_ALIGN align=ALIGN_LEFT);
 	void RenderText(TTF_Font * font, const std::string& text, int x, int y, SDL_Color);
 } Renderer;

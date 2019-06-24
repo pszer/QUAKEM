@@ -10,6 +10,8 @@
 #include "Commands.hpp"
 #include "Events.hpp"
 #include "Music.hpp"
+#include "Config.hpp"
+#include "Timer.hpp"
 
 #define DEF_WIN_W 800
 #define DEF_WIN_H 600
@@ -23,7 +25,6 @@ struct InitParameters {
 	    win_h = DEF_WIN_H;
 	std::string win_title = DEF_WIN_TITLE;
 	SDL_WindowFlags win_flags = SDL_WINDOW_SHOWN; 
-
 	SDL_RendererFlags render_flags = DEF_RENDER_FLAG;
 };
 
@@ -48,7 +49,7 @@ extern struct Core {
 		std::string font = DEF_CONSOLE_FONT;
 		SDL_Color bg = {0x08,0x08,0x08,0xFF},
 		          fg = {0xFF,0xFF,0xFF,0xFF};
-		bool open = true;
+		bool open = false;
 		int bottom_offset = 100; // how many pixels from the bottom
 		                         // of the screen console is offset
 
@@ -75,6 +76,8 @@ extern struct Core {
 		void Render();
 		void Update();
 	} Console;
+
+	void RenderFPS();
 
 } Core;
 

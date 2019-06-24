@@ -70,7 +70,7 @@ void Renderer::RenderTexture(const std::string& img_name, SDL_Rect* src, SDL_Rec
 }
 
 void Renderer::RenderText(const std::string& font_name, const std::string& text, int x, int y, 
-  FONT_SIZE size, SDL_Color c)
+  FONT_SIZE size, SDL_Color c, TEXT_ALIGN align)
 {
 	auto font = Media.GetFont(font_name);
 	if (font == nullptr) return;
@@ -83,6 +83,12 @@ void Renderer::RenderText(const std::string& font_name, const std::string& text,
 		TTF_SizeText(font->GetTTFSize(size), text.c_str(), &w, &h);
 
 		SDL_Rect r = {x,y,w,h};
+
+		if (align == ALIGN_RIGHT)
+			r.x -= w;
+		else if (align == ALIGN_MIDDLE)
+			r.x -= w/2;
+
 		SDL_RenderCopy(renderer, t, nullptr, &r);
 
 		SDL_FreeSurface(surface);

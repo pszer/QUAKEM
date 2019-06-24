@@ -42,8 +42,6 @@ int Core::Init(InitParameters init) {
 	Event.Init();
 	Commands::Init();
 
-	CVARS["CVARS"] = Argument(ARG_STRING, "Fetched console variable");
-
 	return 0;
 }
 
@@ -61,8 +59,10 @@ void Core::Quit() {
 }
 
 void Core::MainLoop() {
-	bool intro = true;
 	while (going) {
+		FrameLimit.SetLimit(GetCVarInt("maxfps"));
+		FrameLimit.FrameStart();
+
 		Event.HandleEvents();
 		HandleEvents();
 
@@ -71,6 +71,9 @@ void Core::MainLoop() {
 		MainRender();
 
 		Event.Update();
+
+		FrameLimit.FrameEnd();
+		FrameLimit.Sleep();
 	}
 }
 
@@ -79,9 +82,25 @@ void Core::MainRender() {
 
 	Console.Render();
 
+	RenderFPS();
+
 	Renderer.Update();
 }
 
 void Core::HandleEvents() {
 	Console.HandleKeypresses();
+}
+
+void Core::RenderFPS() {
+	if (!GetCVarInt("showfps")) return;
+	int fps = FrameLimit.FPS();
+	std::string fps_str = std::to_string(fps);
+
+	SDL_Color c;
+	if      (fps < 30 ) c = {0xff,0x00,0x00,0xff};
+	else if (fps < 90 ) c = {0xff,0xff,0x00,0xff};
+	else if (fps < 150) c = {0x00,0xff,0x00,0xff};
+	else                c = {0x00,0xff,0xff,0xff};
+
+	Renderer.RenderText(Console.font, fps_str, Event.win_w, 0, FONT_P12, c, ALIGN_RIGHT);
 }

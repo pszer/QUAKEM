@@ -1,0 +1,62 @@
+#include "Timer.hpp"
+
+void Timer::Start() {
+	if (state == TIMER_STOPPED) {
+		start = ch::high_resolution_clock::now();
+		pause_offset = ch::nanoseconds(0);
+	} else {
+		pause_offset += ch::high_resolution_clock::now() - pause_time;	
+	}
+
+	state = TIMER_GOING;
+}
+
+void Timer::Pause() {
+	pause_time = ch::high_resolution_clock::now();
+}
+
+void Timer::Stop() {
+	state = TIMER_STOPPED;
+}
+
+ch::nanoseconds Timer::GetTime() {
+	switch (state) {
+	case TIMER_STOPPED:
+		return ch::nanoseconds(0);
+	case TIMER_GOING:
+		return ch::high_resolution_clock::now() - start - pause_offset;
+	case TIMER_PAUSED:
+		return (pause_time - start) - pause_offset;
+	}
+}
+
+struct FrameLimit FrameLimit;
+
+void FrameLimit::SetLimit(const int fps) {
+	frame_duration = ch::nanoseconds(1000000000ll / fps);
+}
+
+void FrameLimit::FrameStart() {
+	if (t.state != TIMER_STOPPED) {
+		deltatime_n = ch::high_resolution_clock::now() - t.start;
+		deltatime = deltatime_n.count() / 1000000000.0;
+	}
+
+	t.Stop();
+	t.Start();
+}
+
+void FrameLimit::FrameEnd() {
+	computation_duration = t.GetTime();
+}
+
+void FrameLimit::Sleep() {
+	auto diff = frame_duration - computation_duration;
+	if (diff.count() < 0) return;
+	std::this_thread::sleep_for(diff);
+}
+
+int FrameLimit::FPS() {
+	if (deltatime_n.count() == 0) return 0;
+	else return 1000000000ll / deltatime_n.count();
+}
