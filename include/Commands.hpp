@@ -45,4 +45,20 @@ namespace Commands {
 
 	// stops music
 	std::string _stopmus(const std::vector<Argument>&);
+
+	// lists loaded textures
+	// listtex {search}
+	std::string _listtex(const std::vector<Argument>&);
+
+	// lists loaded fonts
+	// listfnt {search}
+	std::string _listfnt(const std::vector<Argument>&);
+
+	// lists loaded sfx chunks
+	// listwav {search}
+	std::string _listwav(const std::vector<Argument>&);
+
+	// lists loaded music files
+	// listmus {search}
+	std::string _listmus(const std::vector<Argument>&);
 };

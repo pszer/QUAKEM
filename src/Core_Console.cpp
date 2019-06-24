@@ -149,9 +149,14 @@ void Core::Console::Down() {
 }
 
 void Core::Console::SetHistoryText() {
+	std::size_t old_length = text.length();
 	if (history_scroll == 0)
 		text = "";
 	else
 		text = History.at(history_scroll-1);
-	cursor = std::min((int)cursor, (int)text.length());
+
+	if (cursor == old_length)
+		cursor = text.length();
+	else
+		cursor = std::min((int)cursor, (int)text.length());
 }

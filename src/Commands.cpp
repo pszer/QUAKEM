@@ -17,6 +17,11 @@ void Commands::Init() {
 	COMMANDS["playwav"] = _playwav;
 	COMMANDS["playmus"] = _playmus;
 	COMMANDS["stopmus"] = _stopmus;
+
+	COMMANDS["listtex"] = _listtex;
+	COMMANDS["listfnt"] = _listfnt;
+	COMMANDS["listwav"] = _listwav;
+	COMMANDS["listmus"] = _listmus;
 }
 
 CMD_FUNC Commands::GetCommand(const std::string& id) {
@@ -65,7 +70,7 @@ std::string _quit(const std::vector<Argument>& args) {
 }
 
 std::string _help(const std::vector<Argument>&) {
-	std::string help_str = "Available commands:\n";
+	std::string help_str = "\nAvailable commands:\n";
 	for (auto c = COMMANDS.begin(); c != COMMANDS.end(); ++c) {
 		help_str += c->first + "\n";
 	}
@@ -130,9 +135,65 @@ std::string _playmus(const std::vector<Argument>& args) {
 	return "";
 }
 
+template <typename T>
+std::string __search__(const std::map<std::string, T>& v, std::string& find) {
+	std::string str = "\n";
+	bool filter = !find.empty();
+
+	for (auto f : v) {
+		std::string name = f.first;
+
+		if (filter) {
+			if (name.length() < find.length()) continue;
+
+			for (int i = 0; i < name.length() - find.length(); ++i) {
+				if (name.substr(i, find.length()) == find) {
+					str += name + "\n";
+					continue;
+				}
+			}
+
+		} else {
+			str += name + "\n";
+		}
+
+	}
+
+	return str;
+}
+
 std::string _stopmus(const std::vector<Argument>&) {
 	Music.Stop();
 	return "";
+}
+
+std::string _listtex(const std::vector<Argument>& args) {
+	std::string find = "";
+	if (args.size() != 0)
+		find = args.at(0).ToString();
+	return __search__(Media.textures, find);
+}
+
+std::string _listfnt(const std::vector<Argument>& args) {
+	std::string find = "";
+	if (args.size() != 0)
+		find = args.at(0).ToString();
+	return __search__(Media.fonts, find);
+
+}
+
+std::string _listwav(const std::vector<Argument>& args) {
+	std::string find = "";
+	if (args.size() != 0)
+		find = args.at(0).ToString();
+	return __search__(Media.chunks, find);
+}
+
+std::string _listmus(const std::vector<Argument>& args) {
+	std::string find = "";
+	if (args.size() != 0)
+		find = args.at(0).ToString();
+	return __search__(Media.music, find);
 }
 
 }
