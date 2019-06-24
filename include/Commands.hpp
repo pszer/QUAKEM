@@ -13,6 +13,7 @@ namespace Commands {
 
 	CMD_FUNC GetCommand(const std::string& id); // returns nullptr if no command found
 	std::string Execute(const struct Command& com);
+	void CallCommand(const std::string& str);
 
 	// echos its arguments as strings
 	// echo ...

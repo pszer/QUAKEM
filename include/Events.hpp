@@ -22,6 +22,9 @@ extern struct Event {
 
 	std::vector<Keypress> Keypresses;
 	Keypress_State GetKey(SDL_Keycode c);
+	void EnableRepeatedKeys();
+	void DisableRepeatedKeys();
+	bool repeated_keys = false;
 
 	int win_w, win_h;
 	int mouse_x, mouse_y,

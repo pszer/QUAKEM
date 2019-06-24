@@ -41,6 +41,14 @@ void Event::DisableTextInput() {
 	SDL_StopTextInput();
 }
 
+void Event::EnableRepeatedKeys() {
+	repeated_keys = true;
+}
+
+void Event::DisableRepeatedKeys() {
+	repeated_keys = false;
+}
+
 void Event::HandleEvents() {
 	while (SDL_PollEvent(&event)) {
 		switch (event.type) {
@@ -81,29 +89,13 @@ void Event::HandleWindowEvent() {
 }
 
 void Event::HandleKeyDownEvent() {
-	// CONSOLE HANDLES
-	switch (event.key.keysym.sym) {
-	case SDLK_RETURN:
-		Core.ConsoleEnter();
-		break;
-	case SDLK_BACKSPACE:
-		Core.Console.Backspace();
-		break;
-	case SDLK_LEFT:
-		Core.Console.Left();
-		break;
-	case SDLK_RIGHT:
-		Core.Console.Right();
-		break;
-	case SDLK_UP:
-		Core.Console.Up();
-		break;
-	case SDLK_DOWN:
-		Core.Console.Down();
-		break;
-	case SDLK_BACKQUOTE:
-		Core.Console.Toggle();
-		break;
+	// check for repeated input
+	for (auto k = Keypresses.begin(); k != Keypresses.end(); ++k) { 
+		if (k->code == event.key.keysym.sym) {
+			if (repeated_keys)
+				k->state = KEY_DOWN;
+			return;
+		}
 	}
 
 	Keypresses.emplace_back(event.key.keysym.sym, KEY_DOWN);

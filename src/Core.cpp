@@ -64,8 +64,9 @@ void Core::MainLoop() {
 	bool intro = true;
 	while (going) {
 		Event.HandleEvents();
+		HandleEvents();
 
-		ConsoleUpdate();
+		Console.Update();
 
 		MainRender();
 
@@ -76,19 +77,11 @@ void Core::MainLoop() {
 void Core::MainRender() {
 	Renderer.Clear();
 
-	ConsoleRender();
+	Console.Render();
 
 	Renderer.Update();
 }
 
-void Core::Command(const std::string& command) {
-	struct Command com;
-	if (!Parser::ParseCommand(command, com)) {
-		Log::Add(Parser::ErrorMsg);
-	} else {
-		std::string str = Commands::Execute(com); 
-		Log::Add(str);
-	}
+void Core::HandleEvents() {
+	Console.HandleKeypresses();
 }
-
-

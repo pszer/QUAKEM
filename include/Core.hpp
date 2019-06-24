@@ -36,8 +36,6 @@ extern struct Core {
 	void MainLoop();
 	void MainRender();
 
-	void Command(const std::string& command);
-
 	bool going = true; // set to false to exit game main loop
 
 	SDL_Window * window   = nullptr;
@@ -61,6 +59,8 @@ extern struct Core {
 		void SetHistoryText();
 		std::vector<std::string> History;
 
+		void HandleKeypresses();
+
 		void Enter();
 		void Reset();
 		void Backspace();
@@ -70,10 +70,10 @@ extern struct Core {
 		void Right();
 		void Up();
 		void Down();
+
+		void Render();
+		void Update();
 	} Console;
 
-	void ConsoleUpdate();
-	void ConsoleRender();
-	void ConsoleEnter();
 } Core;
 

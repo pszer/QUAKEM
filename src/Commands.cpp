@@ -30,6 +30,16 @@ std::string Commands::Execute(const struct Command& com) {
 	return result;
 }
 
+void Commands::CallCommand(const std::string& str) {
+	struct Command com;
+	if (!Parser::ParseCommand(str, com)) {
+		Log::Add(Parser::ErrorMsg);
+	} else {
+		std::string result = Commands::Execute(com); 
+		Log::Add(result);
+	}
+}
+
 // COMMANDS
 
 namespace Commands {

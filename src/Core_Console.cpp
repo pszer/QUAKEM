@@ -1,26 +1,29 @@
 #include "Core.hpp"
 
-void Core::ConsoleUpdate() {
-	if (Console.open)
+void Core::Console::Update() {
+	if (open) {
 		Event.EnableTextInput();
-	else
+		Event.EnableRepeatedKeys();
+	} else {
 		Event.DisableTextInput();
+		Event.DisableRepeatedKeys();
+	}
 }
 
-void Core::ConsoleRender() {
-	if (!Console.open) return;
+void Core::Console::Render() {
+	if (!open) return;
 
-	Font * font_struct = Media.GetFont(Console.font);
+	Font * font_struct = Media.GetFont(font);
 	if (font_struct == nullptr || font_struct->type != FONT_TTF) return;
 	TTF_Font * font = font_struct->GetTTFSize(FONT_P16);
 
-	Rect bg_rect = { 0 , 0 , Event.win_w , Event.win_h - Console.bottom_offset };
-	SDL_Rect rect = { 5, Event.win_h - Console.bottom_offset, 0, 0 };
+	Rect bg_rect = { 0 , 0 , Event.win_w , Event.win_h - bottom_offset };
+	SDL_Rect rect = { 5, Event.win_h - bottom_offset, 0, 0 };
 	TTF_SizeText(font, " ", &rect.w, &rect.h);
 	rect.y -= rect.h*2 + 5;
 
 	// background
-	Renderer.RenderFillRect(bg_rect, Console.bg);
+	Renderer.RenderFillRect(bg_rect, bg);
 
 	// render text
 	int i = Log::History.size()-1;
@@ -29,7 +32,7 @@ void Core::ConsoleRender() {
 
 		TTF_SizeText(font, str.c_str(), &rect.w, &rect.h);
 
-		Renderer.RenderText(font, str, rect.x, rect.y, Console.fg);
+		Renderer.RenderText(font, str, rect.x, rect.y, fg);
 
 		rect.y -= (rect.h+1);
 		--i;
@@ -37,15 +40,36 @@ void Core::ConsoleRender() {
 
 	int width;
 	// render text being typed
-	TTF_SizeText(font, Console.text.c_str(), &rect.w, &rect.h);
+	TTF_SizeText(font, text.c_str(), &rect.w, &rect.h);
 	TTF_SizeText(font, "H", &width, nullptr);
 	rect.x = 2;
-	rect.y = Event.win_h - Console.bottom_offset - rect.h - 2;
-	Renderer.RenderText(font, Console.text, rect.x, rect.y, Console.fg);
+	rect.y = Event.win_h - bottom_offset - rect.h - 2;
+	Renderer.RenderText(font, text, rect.x, rect.y, fg);
 
-	rect.x += (Console.cursor) * width + 1;
+	rect.x += (cursor) * width + 1;
 	rect.w = 2;
-	Renderer.RenderFillRect(Rect(rect.x,rect.y,rect.w,rect.h), Console.fg);
+	Renderer.RenderFillRect(Rect(rect.x,rect.y,rect.w,rect.h), fg);
+}
+
+void Core::Console::HandleKeypresses() {
+	if (Event.GetKey(SDLK_BACKQUOTE) == KEY_DOWN)
+		Toggle();
+
+	if (!open) return;
+
+	if (Event.GetKey(SDLK_LEFT) == KEY_DOWN)
+		Left();
+	if (Event.GetKey(SDLK_RIGHT) == KEY_DOWN)
+		Right();
+	if (Event.GetKey(SDLK_UP) == KEY_DOWN)
+		Up();
+	if (Event.GetKey(SDLK_DOWN) == KEY_DOWN)
+		Down();
+
+	if (Event.GetKey(SDLK_BACKSPACE) == KEY_DOWN)
+		Backspace();
+	if (Event.GetKey(SDLK_RETURN) == KEY_DOWN)
+		Enter();
 }
 
 void Core::Console::Toggle() {
@@ -56,22 +80,28 @@ void Core::Console::Toggle() {
 	open = !open;
 }
 
-void Core::ConsoleEnter() {
-	if (!Console.open) return;
-	Log::Add(Console.text);
-	Command(Console.text);
+void Core::Console::Enter() {
+	if (!open) return;
 
-	Console.History.insert(Console.History.begin(), Console.text);
-	if (Console.History.size() > Console.HISTORY_MAX)
-		Console.History.pop_back();
-	Console.history_scroll = 0;
+	if (!text.empty()) {
+		Log::Add(text);
+		Commands::CallCommand(text);
 
-	Console.Reset();
+		History.insert(History.begin(), text);
+		if (History.size() > HISTORY_MAX)
+			History.pop_back();
+
+	} else {
+		Log::Add(" ");
+	}
+
+	Reset();
 }
 
 void Core::Console::Reset() {
 	text = "";
 	cursor = 0;
+	history_scroll = 0;
 }
 
 void Core::Console::Backspace() {
