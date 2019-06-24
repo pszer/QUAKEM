@@ -75,6 +75,11 @@ void Core::Console::HandleKeypresses() {
 		PageUp();
 	if (Event.GetKey(SDLK_PAGEDOWN) == KEY_DOWN)
 		PageDown();
+
+	if (Event.GetKey(SDLK_END) == KEY_DOWN)
+		End();
+	if (Event.GetKey(SDLK_HOME) == KEY_DOWN)
+		Home();
 }
 
 void Core::Console::Toggle() {
@@ -94,10 +99,9 @@ void Core::Console::Enter() {
 		Log::Add(text);
 		Commands::CallCommand(text);
 
-		History.insert(History.begin(), text);
-		if (History.size() > HISTORY_MAX)
-			History.pop_back();
-
+		CommandHistory.insert(CommandHistory.begin(), text);
+		if (CommandHistory.size() > MAX_COMMAND_HISTORY)
+			CommandHistory.pop_back();
 	} else {
 		Log::Add(" ");
 	}
@@ -144,8 +148,8 @@ void Core::Console::Right() {
 void Core::Console::Up() {
 	if (!open) return;
 	history_scroll++;
-	if (history_scroll > History.size())
-		history_scroll = History.size();
+	if (history_scroll > CommandHistory.size())
+		history_scroll = CommandHistory.size();
 	SetHistoryText();
 }
 
@@ -158,8 +162,8 @@ void Core::Console::Down() {
 
 void Core::Console::PageUp() {
 	page_scroll += 5;
-	if (page_scroll > History.size() + 5)
-		page_scroll = History.size() + 5;
+	if (page_scroll > Log::History.size() - 5)
+		page_scroll = Log::History.size() - 5;
 }
 
 void Core::Console::PageDown() {
@@ -167,12 +171,20 @@ void Core::Console::PageDown() {
 	if (page_scroll < 0) page_scroll = 0;
 }
 
+void Core::Console::Home() {
+	cursor = 0;
+}
+
+void Core::Console::End() {
+	cursor = text.length();
+}
+
 void Core::Console::SetHistoryText() {
 	std::size_t old_length = text.length();
 	if (history_scroll == 0)
 		text = "";
 	else
-		text = History.at(history_scroll-1);
+		text = CommandHistory.at(history_scroll-1);
 
 	if (cursor == old_length)
 		cursor = text.length();

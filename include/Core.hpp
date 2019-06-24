@@ -57,10 +57,10 @@ extern struct Core {
 		int page_scroll = 0; // how many lines to scroll up
 		std::string text = "";
 
-		const int HISTORY_MAX = 256;
+		const int MAX_COMMAND_HISTORY = 64;
+		std::vector<std::string> CommandHistory;
 		int history_scroll = 0;
 		void SetHistoryText();
-		std::vector<std::string> History;
 
 		void HandleKeypresses();
 
@@ -75,6 +75,8 @@ extern struct Core {
 		void Down();
 		void PageUp();
 		void PageDown();
+		void Home();
+		void End();
 
 		void Render();
 		void Update();
