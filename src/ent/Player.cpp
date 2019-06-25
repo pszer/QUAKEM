@@ -3,6 +3,8 @@
 namespace Ents {
 
 void Player::Update() {
+	HandleInput();
+
 	if (hitpoints < 0)
 		destroy = true;
 }
@@ -17,6 +19,27 @@ Rect Player::Hitbox() {
 
 Rect Player::Hull() {
 	return Hitbox();
+}
+
+void Player::HandleInput() {
+	int k = Event.GetKey(SDLK_a);
+	if (k == KEY_DOWN || k == KEY_HELD)
+		MoveLeft();
+	 k = Event.GetKey(SDLK_d);
+	if (k == KEY_DOWN || k == KEY_HELD)
+		MoveRight();
+}
+
+void Player::MoveLeft() {
+	pos.x -= 100 * FrameLimit.deltatime;
+}
+
+void Player::MoveRight() {
+	pos.x += 100 * FrameLimit.deltatime;
+}
+
+void Player::Jump() {
+
 }
 
 int Player::Construct(const std::vector<Argument>& args) {

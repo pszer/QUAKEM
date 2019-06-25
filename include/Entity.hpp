@@ -5,6 +5,8 @@
 #include "Render.hpp"
 #include "Cmd.hpp"
 #include "Vec2.hpp"
+#include "Timer.hpp"
+#include "Events.hpp"
 
 enum Entity_Team { TEAM_NULL , TEAM_PLAYER , TEAM_ENEMY , TEAM_ENEMY2 , TEAM_OBJECT };
 
@@ -26,6 +28,11 @@ struct Entity {
 
 	// entity will be destroyed in the UpdateEntities() function
 	bool destroy = false;
+
+	bool on_ground = false,
+	     on_ceiling = false,
+	     on_leftwall = false,
+	     on_rightwall = false;
 
 	virtual ~Entity() { }
 };
