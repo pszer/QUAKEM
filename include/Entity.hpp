@@ -7,6 +7,7 @@
 #include "Vec2.hpp"
 #include "Timer.hpp"
 #include "Events.hpp"
+#include "Keys.hpp"
 
 enum Entity_Team { TEAM_NULL , TEAM_PLAYER , TEAM_ENEMY , TEAM_ENEMY2 , TEAM_OBJECT };
 

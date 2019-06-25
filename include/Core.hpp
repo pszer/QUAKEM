@@ -8,10 +8,8 @@
 #include "Log.hpp"
 #include "Render.hpp"
 #include "Commands.hpp"
-#include "Events.hpp"
 #include "Music.hpp"
 #include "Config.hpp"
-#include "Timer.hpp"
 #include "Game.hpp"
 
 #define DEF_WIN_W 800

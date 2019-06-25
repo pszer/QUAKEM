@@ -3,6 +3,7 @@
 #include "Commands.hpp"
 #include "Core.hpp"
 #include "Game.hpp"
+#include "Keys.hpp"
 
 using namespace Commands;
 
@@ -14,6 +15,7 @@ void Commands::Init() {
 	COMMANDS["quit"] = _quit;
 	COMMANDS["help"] = _help;
 	COMMANDS["set"] = _set;
+	COMMANDS["bind"] = _bind;
 	COMMANDS["ent_create"] = _ent_create;
 	COMMANDS["play_wav"] = _play_wav;
 	COMMANDS["play_mus"] = _play_mus;
@@ -23,6 +25,7 @@ void Commands::Init() {
 	COMMANDS["list_fnt"] = _list_fnt;
 	COMMANDS["list_wav"] = _list_wav;
 	COMMANDS["list_mus"] = _list_mus;
+	COMMANDS["list_binds"] = _list_binds;
 	COMMANDS["exec"] = _exec;
 }
 
@@ -85,6 +88,17 @@ std::string _set(const std::vector<Argument>& args) {
 	if (args.size() < 2) return USE_MSG;
 	if (args.at(0).type != ARG_CVAR) return USE_MSG;
 	CVARS[args.at(0).str] = args.at(1);
+	return "";
+}
+
+std::string _bind(const std::vector<Argument>& args) {
+	const std::string USE_MSG = "bind keyname action";
+	if (args.size() < 2) return USE_MSG;
+	std::string keyname = args.at(0).ToString(),
+	            action = args.at(1).ToString();
+	if (!Keys.SetBoundKeyFromString(action, keyname)) {
+		return "Unknown key \"" + keyname + "\"";
+	}
 	return "";
 }
 
@@ -238,7 +252,35 @@ std::string _list_cvars(const std::vector<Argument>& args) {
 	}
 
 	return str;
+}
 
+std::string _list_binds(const std::vector<Argument>& args) {
+	std::string str = "", find = "";
+	if (args.size() > 0) find = args.at(0).ToString();
+	bool filter = !find.empty();
+
+	for (auto c : Keys.Bindings) {
+		std::string name = c.first;
+
+		if (filter) {
+			if (name.length() < find.length()) continue;
+
+			for (int i = 0; i <= name.length() - find.length(); ++i) {
+				if (name.substr(i, find.length()) == find) {
+					std::string codename(SDL_GetKeyName(c.second));
+					str += name + " = " + codename + "\n";
+					continue;
+				}
+			}
+
+		} else {
+			std::string codename(SDL_GetKeyName(c.second));
+			str += name + " = " + codename + "\n";
+		}
+
+	}
+
+	return str;
 }
 
 std::string _exec(const std::vector<Argument>& args) {

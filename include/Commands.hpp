@@ -32,6 +32,14 @@ namespace Commands {
 	// set $var val
 	std::string _set(const std::vector<Argument>&);
 
+	// binds action to a key
+	// bind keyname action
+	std::string _bind(const std::vector<Argument>&);
+
+	// lists binds
+	// list_binds [search]
+	std::string _list_binds(const std::vector<Argument>& args);
+
 	// creates entity
 	// ent_create ent_type {args}
 	std::string _ent_create(const std::vector<Argument>&);

@@ -30,7 +30,6 @@ extern struct Event {
 	int mouse_x, mouse_y,
 	    mouse_dx, mouse_dy;
 
-
 	void HandleQuitEvent();
 	void HandleWindowEvent();
 

@@ -4,6 +4,7 @@ struct Core Core;
 
 int Core::Init(InitParameters init) {
 	Commands::Init();
+	Keys.DefaultBindings();
 	
 	if (!Config::ExecFile(CONFIG_PATH)) {
 		Log::Error("Config file \"" CONFIG_PATH "\" not found");

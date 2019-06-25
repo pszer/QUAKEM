@@ -22,10 +22,11 @@ Rect Player::Hull() {
 }
 
 void Player::HandleInput() {
-	int k = Event.GetKey(SDLK_a);
+	auto k = Keys.GetKeyState(PLAYER_LEFT); 
 	if (k == KEY_DOWN || k == KEY_HELD)
 		MoveLeft();
-	 k = Event.GetKey(SDLK_d);
+
+	k = Keys.GetKeyState(PLAYER_RIGHT);
 	if (k == KEY_DOWN || k == KEY_HELD)
 		MoveRight();
 }
