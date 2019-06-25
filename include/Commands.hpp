@@ -36,6 +36,10 @@ namespace Commands {
 	// bind keyname action
 	std::string _bind(const std::vector<Argument>&);
 
+	// unbinds a key
+	// unbind keyname
+	std::string _unbind(const std::vector<Argument>&);
+
 	// lists binds
 	// list_binds [search]
 	std::string _list_binds(const std::vector<Argument>& args);

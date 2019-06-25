@@ -25,12 +25,29 @@ SDL_Keycode Keys::GetBoundKey(const std::string& str) {
 }
 
 void Keys::SetBoundKey(const std::string& str, SDL_Keycode code) {
+	UnbindBoundKey(code); // stops key being bound multiple times
 	Bindings[str] = code;
+}
+
+void Keys::UnbindBoundKey(SDL_Keycode code) {
+	for (auto b = Bindings.begin(); b != Bindings.end(); ++b) {
+		if (b->second == code) {
+			Bindings.erase(b);
+			return;
+		}
+	}
 }
 
 int Keys::SetBoundKeyFromString(const std::string& str, const std::string& keyname) {
 	SDL_Keycode code = GetKeyFromString(keyname);
 	if (code == SDLK_UNKNOWN) return 0;
 	SetBoundKey(str, code);
+	return 1;
+}
+
+int Keys::UnbindBoundKeyFromString(const std::string& keyname) {
+	SDL_Keycode code = GetKeyFromString(keyname);
+	if (code == SDLK_UNKNOWN) return 0;
+	UnbindBoundKey(code);
 	return 1;
 }

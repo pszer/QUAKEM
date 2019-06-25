@@ -25,7 +25,9 @@ extern struct Keys {
 	SDL_Keycode GetBoundKey(const std::string& str);
 
 	void SetBoundKey(const std::string& str, SDL_Keycode code);
+	void UnbindBoundKey(SDL_Keycode code);
 
 	// returns 1 for success, 0 if keyname is an invalid key
 	int SetBoundKeyFromString(const std::string& str, const std::string& keyname);
+	int UnbindBoundKeyFromString(const std::string& keyname);
 } Keys;

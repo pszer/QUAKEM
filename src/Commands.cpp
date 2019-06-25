@@ -16,6 +16,7 @@ void Commands::Init() {
 	COMMANDS["help"] = _help;
 	COMMANDS["set"] = _set;
 	COMMANDS["bind"] = _bind;
+	COMMANDS["unbind"] = _unbind;
 	COMMANDS["ent_create"] = _ent_create;
 	COMMANDS["play_wav"] = _play_wav;
 	COMMANDS["play_mus"] = _play_mus;
@@ -97,6 +98,18 @@ std::string _bind(const std::vector<Argument>& args) {
 	std::string keyname = args.at(0).ToString(),
 	            action = args.at(1).ToString();
 	if (!Keys.SetBoundKeyFromString(action, keyname)) {
+		return "Unknown key \"" + keyname + "\"";
+	}
+	return "";
+}
+
+
+std::string _unbind(const std::vector<Argument>& args) {
+	const std::string USE_MSG = " unbind keyname";
+	std::string keyname;
+	if (args.size() == 0) return USE_MSG;
+	keyname = args.at(0).ToString();
+	if (!Keys.UnbindBoundKeyFromString(keyname)) {
 		return "Unknown key \"" + keyname + "\"";
 	}
 	return "";
