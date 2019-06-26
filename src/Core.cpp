@@ -95,6 +95,10 @@ void Core::MainRender() {
 
 	Game.Render();
 
+	Renderer.RenderTiledTexture("img/scrung.jpg", Rect(100,100,600,400),
+		Vec2(0.2, 0.2), 
+		Vec2(20.0,20.0));
+
 	Console.Render();
 	RenderFPS();
 

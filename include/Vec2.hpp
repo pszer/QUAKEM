@@ -23,6 +23,8 @@ struct Rect {
 	void SetPos(const Vec2& v);
 	void SetSize(const Vec2& s);
 
+	Rect Absolute();
+
 	SDL_Rect ToSDLRect();
 };
 

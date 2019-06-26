@@ -69,9 +69,11 @@ void Renderer::RenderTexture(const std::string& img_name, SDL_Rect* src, SDL_Rec
 	SDL_RenderCopyEx(renderer, texture, src, dest, angle, rot_centre, flip);
 }
 
-void Renderer::RenderTiledTexture(const std::string& tex_name, Rect rect, Vec2 scale, Vec offset) {
-	auto texture = Media.GetTexture(img_name);
+void Renderer::RenderTiledTexture(const std::string& tex_name, Rect _rect, Vec2 scale, Vec2 offset) {
+	auto texture = Media.GetTexture(tex_name);
 	if (texture == nullptr) return;
+
+	Rect rect = _rect.Absolute();
 
 	int tex_w, tex_h;
 	SDL_QueryTexture(texture, nullptr, nullptr, &tex_w, &tex_h);
@@ -82,17 +84,19 @@ void Renderer::RenderTiledTexture(const std::string& tex_name, Rect rect, Vec2 s
 	// make scale absolute but flip texture as appropiate
 	SDL_RendererFlip flip = SDL_FLIP_NONE;
 	if (scale.x < 0.0) {
-		flip = flip | SDL_FLIP_HORIZONTAL;
+		flip = (SDL_RendererFlip)(flip | SDL_FLIP_HORIZONTAL);
 		scale.x *= -1.0;
 	}
 	if (scale.y < 0.0) {
-		flip = flip | SDL_FLIP_VERTICAL;
+		flip = (SDL_RendererFlip)(flip | SDL_FLIP_VERTICAL);
 		scale.y *= -1.0;
 	}
 
 	double tile_w = tex_w * scale.x,
 	       tile_h = tex_h * scale.y;
 
+	offset.x -= rect.x;
+	offset.y -= rect.y;
 	// wrap offset around and make negative
 	offset.x = std::fmod(offset.x, tile_w);
 	if (offset.x > 0.0) offset.x -= tile_w;
@@ -101,17 +105,23 @@ void Renderer::RenderTiledTexture(const std::string& tex_name, Rect rect, Vec2 s
 	if (offset.y > 0.0) offset.y -= tile_h;
 
 	SDL_Rect viewport = rect.ToSDLRect();
-	SDL_SetRenderViewport(renderer, &viewport);
+	SDL_RenderSetViewport(renderer, &viewport);
 
-	SDL_Rect draw_rect = { 0, 0, tile_w, tile_h };
+	SDL_Rect draw_rect = { 0, 0, (int)(tile_w+0.5), (int)(tile_h+0.5) };
 
 	double edge_x = rect.x + rect.w,
-	       edge;
+	       edge_y = rect.y + rect.h;
 
-	for (double x = offset.x; x)
+	for (double x = offset.x; x < edge_x; x += tile_w) {
+		for (double y = offset.y; y < edge_y; y += tile_h) {
+			draw_rect.x = x;
+			draw_rect.y = y;
+			SDL_RenderCopyEx(renderer, texture, nullptr, &draw_rect,
+			  0.0, nullptr, flip);
+		}
+	}
 
-
-	SDL_SetRenderViewport(renderer, nullptr);
+	SDL_RenderSetViewport(renderer, nullptr);
 }
 
 void Renderer::RenderText(const std::string& font_name, const std::string& text, int x, int y, 

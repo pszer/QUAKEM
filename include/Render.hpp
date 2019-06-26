@@ -33,7 +33,7 @@ extern struct Renderer {
 	void RenderTexture(const std::string& img_name, SDL_Rect* src, SDL_Rect* dest,
   	  double angle, SDL_RendererFlip flip = SDL_FLIP_NONE, SDL_Point * rot_centre = nullptr);
 
-	void RenderTiledTexture(const std::string& tex_name, Rect rect, Vec2 scale, Vec offset);
+	void RenderTiledTexture(const std::string& tex_name, Rect rect, Vec2 scale, Vec2 offset);
 
 	void RenderText(const std::string& font_name, const std::string& text, int x, int y,
 	  FONT_SIZE, SDL_Color, TEXT_ALIGN align=ALIGN_LEFT);
