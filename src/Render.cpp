@@ -69,6 +69,51 @@ void Renderer::RenderTexture(const std::string& img_name, SDL_Rect* src, SDL_Rec
 	SDL_RenderCopyEx(renderer, texture, src, dest, angle, rot_centre, flip);
 }
 
+void Renderer::RenderTiledTexture(const std::string& tex_name, Rect rect, Vec2 scale, Vec offset) {
+	auto texture = Media.GetTexture(img_name);
+	if (texture == nullptr) return;
+
+	int tex_w, tex_h;
+	SDL_QueryTexture(texture, nullptr, nullptr, &tex_w, &tex_h);
+
+	// scale cant be 0
+	if (scale.x == 0.0 || scale.y == 0.0) return;
+
+	// make scale absolute but flip texture as appropiate
+	SDL_RendererFlip flip = SDL_FLIP_NONE;
+	if (scale.x < 0.0) {
+		flip = flip | SDL_FLIP_HORIZONTAL;
+		scale.x *= -1.0;
+	}
+	if (scale.y < 0.0) {
+		flip = flip | SDL_FLIP_VERTICAL;
+		scale.y *= -1.0;
+	}
+
+	double tile_w = tex_w * scale.x,
+	       tile_h = tex_h * scale.y;
+
+	// wrap offset around and make negative
+	offset.x = std::fmod(offset.x, tile_w);
+	if (offset.x > 0.0) offset.x -= tile_w;
+
+	offset.y = std::fmod(offset.y, tile_h);
+	if (offset.y > 0.0) offset.y -= tile_h;
+
+	SDL_Rect viewport = rect.ToSDLRect();
+	SDL_SetRenderViewport(renderer, &viewport);
+
+	SDL_Rect draw_rect = { 0, 0, tile_w, tile_h };
+
+	double edge_x = rect.x + rect.w,
+	       edge;
+
+	for (double x = offset.x; x)
+
+
+	SDL_SetRenderViewport(renderer, nullptr);
+}
+
 void Renderer::RenderText(const std::string& font_name, const std::string& text, int x, int y, 
   FONT_SIZE size, SDL_Color c, TEXT_ALIGN align)
 {
