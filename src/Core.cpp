@@ -56,6 +56,7 @@ int Core::Init(InitParameters init) {
 
 void Core::Quit() {
 	Media.FreeMedia();
+	Game.Quit();
 
 	IMG_Quit();
 
@@ -94,13 +95,6 @@ void Core::MainRender() {
 	Renderer.Clear();
 
 	Game.Render();
-
-	Renderer.RenderTiledTexture("img/scrung.jpg", Rect(100,100,290,400),
-		Vec2(0.2, 0.2), 
-		Vec2(70.0,20.0));
-	Renderer.RenderTiledTexture("img/scrung.jpg", Rect(400,100,300,400),
-		Vec2(0.2, 0.2), 
-		Vec2(70.0,20.0));
 
 	Console.Render();
 	RenderFPS();

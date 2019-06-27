@@ -5,10 +5,16 @@ struct Game Game;
 
 void Game::Update() {
 	UpdateEntities();
+
+	World.CollideWithEntities();
+	World.Update();
 }
 
 void Game::Render() {
+	World.RenderBackground();
+	World.RenderMiddle();
 	RenderEntities();
+	World.RenderForeground();
 }
 
 void Game::UpdateEntities() {
@@ -30,6 +36,13 @@ void Game::RenderEntities() {
 
 void Game::Init() {
 	STR_TO_ENT_TYPE["ENT_PLAYER"] = ENT_PLAYER;
+
+	World.Brushes.push_back(std::make_unique<Brush>(
+	  Rect(100.0,500.0,600.0,50.0), BRUSH_SOLID, "img/scrung.jpg", Vec2(0.1,0.1)));
+}
+
+void Game::Quit() {
+	World.Clear();
 }
 
 int Game::CreateEntity(ENT_TYPE ent_type, std::vector<Argument>& args) {
