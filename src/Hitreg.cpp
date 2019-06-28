@@ -18,14 +18,16 @@ bool CheckCollision(const Rect& rect, const Line& line) {
 
 bool CheckCollision(const Line& _a, const Line& _b) {
 	Vec2 a = _a.a, b = _a.b, c = _b.a, d = _b.b;
-	double denominator = ((b.x - a.y) * (d.y - c.y)) - ((b.y - a.y) * (d.x - c.x));
-	double numerator1 = ((a.y - c.y) * (d.y - c.x)) - ((a.x - c.x) * (d.y - c.y));
-	double numerator2 = ((a.y - c.y) * (b.y - a.x)) - ((a.x - c.x) * (b.y - a.y));
+	if ((a == c) || (a == d) || (b == c) || (b == d))
+		return true;
 
-	if (denominator == 0.0) return (numerator1 == 0.0) && (numerator2 == 0.0);
+	double uA, uB;
+	uA = ((d.x-c.x)*(a.y-c.y) - (d.y-c.y)*(a.x-c.x)) / ((d.y-c.y)*(b.x-a.x) - (d.x-c.x)*(b.y-a.y));
+	uB = ((b.x-a.x)*(a.y-c.y) - (b.y-a.y)*(a.x-c.x)) / ((d.y-c.y)*(b.x-a.x) - (d.x-c.x)*(b.y-a.y)); 
 
-	double r = numerator1 / denominator;
-	double s = numerator2 / denominator;
+	if (uA >= 0.0 && uA <= 1.0 && uB >= 0.0 && uB <= 0.0) {
+		return true;
+	}
 
-	return (r >= 0.0 && r <= 1.0) && (s >= 0.0 && s <= 1.0);
+	return false;
 }
