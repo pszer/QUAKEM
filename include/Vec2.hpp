@@ -8,6 +8,14 @@ struct Vec2 {
 	double x,y;
 };
 
+struct Line {
+	Line(): a(0.0,0.0), b(0.0,0.0) { }
+	Line(const double& x1, const double& y1, const double& x2,const double& y2):
+		a(x1,y1), b(x2,y2) { }
+	Line(const Vec2& _a, const Vec2& _b): a(_a), b(_b) { }
+	Vec2 a,b;
+};
+
 struct Rect {
 	Rect(): x(0.0),y(0.0),w(0.0),h(0.0) { }
 	Rect(const double& _x,const double& _y,

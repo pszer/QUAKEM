@@ -3,6 +3,7 @@
 #include <vector>
 #include <memory>
 
+#include "Hitreg.hpp"
 #include "Commands.hpp"
 #include "Entity.hpp"
 #include "World.hpp"

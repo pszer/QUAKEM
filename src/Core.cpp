@@ -94,7 +94,17 @@ void Core::MainLoop() {
 void Core::MainRender() {
 	Renderer.Clear();
 
-	Game.Render();
+	//Game.Render();
+	//Rect a(350.0,250.0,100.0,100.0);
+	//Rect b((double)Event.mouse_x,(double)Event.mouse_y,66.0,66.0);
+	Line a(100.0,100.0,Event.mouse_x,Event.mouse_y);
+	Line b(500.0,300.0,300.0,400.0);
+	bool collide = CheckCollision(a,b);
+	SDL_Color green={0x00,0xff,0x00,0xff}, white={0xff,0xff,0xff,0xff};
+	//Renderer.RenderFillRect(a, collide ? green:white);
+	//Renderer.RenderFillRect(b, white);
+	Renderer.RenderLine(a, collide ? green:white);
+	Renderer.RenderLine(b, white);
 
 	Console.Render();
 	RenderFPS();

@@ -39,7 +39,7 @@ void Game::Init() {
 
 	World.Brushes.push_back(std::make_unique<Brush>(
 	  //Rect(64.0,384.0,672.0,128.0), BRUSH_SOLID, "img/dev.jpg", Vec2(1.0,1.0)));
-	  Rect(112.0,384.0,576.0,192.0), BRUSH_SOLID, "img/dev.jpg", Vec2(1.0,1.0), Vec2(112.0,0.0)));
+	  Rect(112.0,384.0,576.0,192.0), BRUSH_SOLID, "img/64.png", Vec2(1.0,1.0), Vec2(112.0,0.0)));
 }
 
 void Game::Quit() {

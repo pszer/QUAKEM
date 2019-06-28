@@ -21,6 +21,8 @@ extern struct Renderer {
 
 	void RenderLine(Vec2 a, Vec2 b);
 	void RenderLine(Vec2 a, Vec2 b, const SDL_Color&);
+	void RenderLine(Line line);
+	void RenderLine(Line line, const SDL_Color&);
 
 	void RenderRect(Rect rect);
 	void RenderRect(Rect, const SDL_Color&);

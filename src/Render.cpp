@@ -34,6 +34,12 @@ void Renderer::RenderLine(Vec2 a, Vec2 b, const SDL_Color& c) {
 	SetColor(c);
 	SDL_RenderDrawLine(renderer, (int)a.x, (int)a.y, (int)b.x, (int)b.y);
 }
+void Renderer::RenderLine(Line line) {
+	RenderLine(line.a, line.b);
+}
+void Renderer::RenderLine(Line line, const SDL_Color& c){
+	RenderLine(line.a, line.b, c);
+}
 
 void Renderer::RenderRect(Rect rect) {
 	SDL_Rect r = {(int)rect.x, (int)rect.y, (int)rect.w, (int)rect.h};
