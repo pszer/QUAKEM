@@ -26,8 +26,8 @@ struct Rect {
 
 	double x,y,w,h;
 
-	Vec2 Pos();
-	Vec2 Size();
+	Vec2 Pos() const;
+	Vec2 Size() const;
 	void SetPos(const Vec2& v);
 	void SetSize(const Vec2& s);
 

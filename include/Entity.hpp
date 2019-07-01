@@ -17,7 +17,7 @@ struct Entity {
 	virtual void Update() = 0;
 	virtual void Render() { }
 	virtual Rect Hitbox() { return Rect(0.0,0.0,0.0,0.0); }
-	virtual Rect Hull() { return Rect(0.0,0.0,0.0,0.0); }
+	Rect Hull(); 
 	
 	// construct from a list of labelled arguments
 	// returns 1 for success, 0 for error
@@ -30,6 +30,7 @@ struct Entity {
 	// entity will be destroyed in the UpdateEntities() function
 	bool destroy = false;
 
+	void ResetFlags();
 	bool on_ground = false,
 	     on_ceiling = false,
 	     on_leftwall = false,

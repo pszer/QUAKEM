@@ -4,9 +4,12 @@ namespace Ents {
 
 void Player::Update() {
 	HandleInput();
+	vel.y += 1.0;
 
 	if (hitpoints < 0)
 		destroy = true;
+
+	pos = pos + vel * FrameLimit.deltatime;
 }
 
 void Player::Render() {

@@ -1,10 +1,10 @@
 #include "Vec2.hpp"
 
-Vec2 Rect::Pos() {
+Vec2 Rect::Pos() const {
 	return Vec2(x,y);
 }
 
-Vec2 Rect::Size() {
+Vec2 Rect::Size() const {
 	return Vec2(w,h);
 }
 

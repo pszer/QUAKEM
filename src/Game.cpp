@@ -25,6 +25,10 @@ void Game::UpdateEntities() {
 		} else {
 			Entities.erase(ent);
 		}
+
+		for (auto b = World.Brushes.begin(); b != World.Brushes.end(); ++b) {
+			//if (EntityRectCollision(*ent, (*b)->rect, true)) break;	
+		}
 	}
 }
 
