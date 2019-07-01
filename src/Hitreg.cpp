@@ -102,6 +102,52 @@ int EntityRectCollision(Entity* ent, const Rect rect, bool collide) {
 			ent->on_ground = true;
 		}
 	}
+	// collision with bottom of the brush.
+	else if (CheckCollision(
+	  // bottom-left velocity line of entity, extended top of brush
+	  Line(e_topleft, e_topleft + dvel), Line(r_bottomleft - Vec2(hull.w, 0.0), r_bottomright)) ||
+	    CheckCollision(
+	  // bottom-right velocity line of entity, extended top of brush
+	  Line(e_topright, e_topright + dvel), Line(r_bottomleft, r_bottomright + Vec2(hull.w, 0.0) ))
+	) {
+		double collision_depth = hull.y + dvel.y - r_pos.y - r_size.y;
+		if (collision_depth <= 0.0) {
+			ent->pos.y = r_pos.y + r_size.y;
+			ent->vel.y = 0.0;
+			ent->on_ceiling = true;
+		}
+	}
+
+	// collision with left of the brush.
+	if (CheckCollision(
+	  // top-right velocity line of entity, extended side of brush
+	  Line(e_topright, e_topright + dvel), Line(r_topleft - Vec2(0.0, hull.h), r_bottomleft)) ||
+	    CheckCollision(
+	  // bottom-right velocity line of entity, extended side of brush
+	  Line(e_bottomright, e_bottomright + dvel), Line(r_topleft, r_bottomleft + Vec2(0.0, hull.h) ))
+	) {
+		double collision_depth = hull.x + hull.w + dvel.x - r_pos.x;
+		if (collision_depth >= 0.0) {
+			ent->pos.x = r_pos.x - hull.w;
+			ent->vel.x = 0.0;
+			ent->on_leftwall = true;
+		}
+	}
+	// collision with right of the brush.
+	else if (CheckCollision(
+	  // top-left velocity line of entity, extended side of brush
+	  Line(e_topleft, e_topleft + dvel), Line(r_topright - Vec2(0.0, hull.h), r_bottomright)) ||
+	    CheckCollision(
+	  // bottom-left velocity line of entity, extended side of brush
+	  Line(e_bottomleft, e_bottomleft + dvel), Line(r_topright, r_bottomright + Vec2(0.0, hull.h) ))
+	) {
+		double collision_depth = hull.x + dvel.x - r_pos.x - r_size.x;
+		if (collision_depth <= 0.0) {
+			ent->pos.x = r_pos.x + r_size.x;
+			ent->vel.x = 0.0;
+			ent->on_rightwall = true;
+		}
+	}
 
 	return 1;
 }

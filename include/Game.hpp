@@ -18,6 +18,11 @@ extern struct Game {
 	void UpdateEntities();
 	void RenderEntities();
 
+	void UpdatePhysics();
+	void ApplyGravity(Entity* ent);
+
+	double gravity=0.0, friction=5.0;
+
 	std::map<std::string, ENT_TYPE> STR_TO_ENT_TYPE;
 	// 1 for success, 0 for error
 	int CreateEntity(ENT_TYPE ent, std::vector<Argument>& args);

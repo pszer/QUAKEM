@@ -18,6 +18,8 @@ struct Player : public Entity {
 
 	int hitpoints=100;
 
+	bool move_left = false, move_right = true;
+
 	~Player() { }
 
 private:

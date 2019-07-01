@@ -3,9 +3,15 @@
 namespace Ents {
 
 void Player::Update() {
-	vel.x /= 1.0 + (5.0 * FrameLimit.deltatime);
+	move_left = false;
+	move_right = false;
 	HandleInput();
-	vel.y += 400.0 * FrameLimit.deltatime;
+
+	if (!move_left || !move_right) {
+		double speed = GetCVarFloat("player_speed");
+		if (move_left && vel.x > -speed) vel.x = -speed;
+		else if (move_right && vel.x < speed) vel.x = speed;
+	}
 
 	if (hitpoints < 0)
 		destroy = true;
@@ -34,16 +40,17 @@ void Player::HandleInput() {
 }
 
 void Player::MoveLeft() {
-	vel.x = -250;
+	move_left = true;
 }
 
 void Player::MoveRight() {
-	vel.x = 250;
+	move_right = true;
 }
 
 void Player::Jump() {
 	if (!on_ground) return;
-	vel.y -= 250;
+	double jump = GetCVarFloat("player_jump");
+	vel.y -= jump;
 }
 
 int Player::Construct(const std::vector<Argument>& args) {

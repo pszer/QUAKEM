@@ -13,8 +13,9 @@ enum Entity_Team { TEAM_NULL , TEAM_PLAYER , TEAM_ENEMY , TEAM_ENEMY2 , TEAM_OBJ
 
 struct Entity {
 	Entity(Vec2 _pos=Vec2(0.0,0.0), Vec2 _size=Vec2(0.0,0.0),
-	       Vec2 _vel=Vec2(0.0,0.0), Entity_Team _team=TEAM_NULL)
-	: pos(_pos), size(_size), vel(_vel), team(_team) { }
+	       Vec2 _vel=Vec2(0.0,0.0), Entity_Team _team=TEAM_NULL,
+	       bool _collide=true, bool _physics = true)
+	: pos(_pos), size(_size), vel(_vel), team(_team), collide(_collide), physics(_physics) { }
 
 	virtual void Update() = 0;
 	virtual void Render() { }
@@ -30,6 +31,8 @@ struct Entity {
 	Vec2 pos, size, vel;
 
 	void UpdatePos();
+
+	bool collide = true, physics = true;
 
 	// entity will be destroyed in the UpdateEntities() function
 	bool destroy = false;
