@@ -5,12 +5,11 @@
 namespace Ents {
 
 struct Player : public Entity {
-	Player(): team(TEAM_PLAYER), vel(0.0,0.0) { }
+	Player(): Entity(Vec2(0.0,0.0), Vec2(25.0,50.0), Vec2(0.0,0.0), TEAM_PLAYER) { }
 
 	void Update();
 	void Render();
 	Rect Hitbox();
-	Rect Hull();
 
 	void HandleInput();
 
@@ -18,9 +17,6 @@ struct Player : public Entity {
 	int Construct(const std::vector<Argument>& args);
 
 	int hitpoints=100;
-	Entity_Team team;
-
-	Vec2 pos,size=Vec2(25,50),vel;
 
 	~Player() { }
 

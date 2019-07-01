@@ -21,13 +21,13 @@ void Game::UpdateEntities() {
 	for (auto ent = Entities.begin(); ent != Entities.end();) {
 		if (!(*ent)->destroy) {
 			(*ent)->Update();
+			for (auto b = World.Brushes.begin(); b != World.Brushes.end(); ++b) {
+				EntityRectCollision(ent->get(), (*b)->rect, true);	
+			}
+			(*ent)->UpdatePos();
 			++ent;
 		} else {
 			Entities.erase(ent);
-		}
-
-		for (auto b = World.Brushes.begin(); b != World.Brushes.end(); ++b) {
-			//if (EntityRectCollision(*ent, (*b)->rect, true)) break;	
 		}
 	}
 }

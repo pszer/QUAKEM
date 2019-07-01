@@ -10,4 +10,4 @@ bool CheckCollision(const Line& a, const Line& b);
 
 // returns 1 if there is a collision, 0 if not
 // set collide to false to not clip the entities position
-int EntityRectCollision(const std::unique_ptr<Entity>& ent, const Rect& rect, bool collide = true);
+int EntityRectCollision(Entity* ent, const Rect rect, bool collide = true);

@@ -50,7 +50,7 @@ bool CheckCollision(const Line& _a, const Line& _b) {
 	return false;
 }
 
-int EntityRectCollision(const std::unique_ptr<Entity>& ent, const Rect& rect, bool collide) {
+int EntityRectCollision(Entity* ent, const Rect rect, bool collide) {
 	const Rect hull = ent->Hull();	
 	Rect guaranteed_rect = Rect();
 	Vec2 dvel = ent->vel * FrameLimit.deltatime;

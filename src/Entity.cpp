@@ -11,3 +11,7 @@ void Entity::ResetFlags() {
 	on_leftwall = false;
 	on_rightwall = false;
 }
+
+void Entity::UpdatePos() {
+	pos = pos + (vel * FrameLimit.deltatime);
+}
