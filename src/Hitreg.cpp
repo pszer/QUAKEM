@@ -36,8 +36,18 @@ bool CheckCollision(const Rect& rect, const Line& line) {
 
 bool CheckCollision(const Line& _a, const Line& _b) {
 	const Vec2& a = _a.a, &b = _a.b, &c = _b.a, &d = _b.b;
+
+	Rect P = Rect(a.x, a.y, b.x-a.x, b.y-a.y).Absolute(),
+	     Q = Rect(c.x, c.y, d.x-c.x, d.y-c.y).Absolute();
+	if (!CheckCollision(P,Q)) return false;
+
+	// check overlapping points
 	if ((a == c) || (a == d) || (b == c) || (b == d))
 		return true;
+
+	// check parallel
+	if ( ((a.x - b.x) * (c.y - d.y) + (a.y - b.y) * (d.x - c.x) == 0.0) && 
+	     ((a.x - d.x) * (c.y - b.y) + (a.y - d.y) * (b.x - c.x) == 0.0) ) return true;
 
 	double uA, uB;
 	uA = ((d.x-c.x)*(a.y-c.y) - (d.y-c.y)*(a.x-c.x)) / ((d.y-c.y)*(b.x-a.x) - (d.x-c.x)*(b.y-a.y));
