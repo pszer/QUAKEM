@@ -61,12 +61,13 @@ void Game::RenderEntities() {
 }
 
 void Game::Init() {
+	World::Init();
 	STR_TO_ENT_TYPE["ENT_PLAYER"] = ENT_PLAYER;
 
-	CVARS["gravity"] = Argument(600.0);
+	CVARS["gravity"] = Argument(1800.0);
 	CVARS["friction"] = Argument(25.0);
 	CVARS["player_speed"] = Argument(300.0);
-	CVARS["player_jump"] = Argument(350.0);
+	CVARS["player_jump"] = Argument(800.0);
 
 	World.Brushes.push_back(std::make_unique<Brush>(
 	  Rect(112.0,384.0,576.0,192.0), BRUSH_SOLID, "img/64.png", Vec2(1.0,1.0), Vec2(112.0,0.0)));
@@ -78,10 +79,12 @@ void Game::Quit() {
 	World.Clear();
 }
 
-int Game::CreateEntity(ENT_TYPE ent_type, std::vector<Argument>& args) {
-	std::unique_ptr<Entity> ent;
+int Game::CreateEntity(Entity_Type ent_type, std::vector<Argument>& args) {
+	std::unique_ptr<Entity> ent = nullptr;
 	switch (ent_type) {
 	case ENT_PLAYER: ent = std::make_unique<Ents::Player>(); break;
+
+	default: return 0;
 	}
 
 	if (!ent->Construct(args)) return 0;

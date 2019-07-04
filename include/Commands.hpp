@@ -48,6 +48,10 @@ namespace Commands {
 	// ent_create ent_type {args}
 	std::string _ent_create(const std::vector<Argument>&);
 
+	// creates standard brush
+	// brush_create brush_type x y w h texture [scalex] [scaley] [offsetx] [offsety]
+	std::string _brush_create(const std::vector<Argument>&);
+
 	// lists all set cvars
 	std::string _list_cvars(const std::vector<Argument>&);
 

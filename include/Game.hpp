@@ -8,7 +8,6 @@
 #include "Entity.hpp"
 #include "World.hpp"
 
-enum ENT_TYPE { ENT_PLAYER };
 
 extern struct Game {
 	void Init();
@@ -23,9 +22,9 @@ extern struct Game {
 
 	double gravity=0.0, friction=5.0;
 
-	std::map<std::string, ENT_TYPE> STR_TO_ENT_TYPE;
+	std::map<std::string, Entity_Type> STR_TO_ENT_TYPE;
 	// 1 for success, 0 for error
-	int CreateEntity(ENT_TYPE ent, std::vector<Argument>& args);
+	int CreateEntity(Entity_Type ent, std::vector<Argument>& args);
 
 	bool world_loaded = false;
 	struct World World;

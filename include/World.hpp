@@ -19,6 +19,7 @@
 //
 // std::map keys is used to specify properties for special brushes like push brushes
 enum BRUSH_TYPE { BRUSH_SOLID , BRUSH_NONSOLID , BRUSH_BACKGROUND , BRUSH_FOREGROUND };
+extern std::map<std::string, BRUSH_TYPE> STR_TO_BRUSH_TYPE;
 
 struct Brush {
 	// Rect BRUSH_TYPE texture scale offset
@@ -38,10 +39,12 @@ struct Brush {
 
 	virtual void Render();
 	virtual void CollideFunc(Entity * ent) { }
-	virtual void Update() { }
+	virtual void Update() { texture_offset.x-=1.0;}
 };
 
 struct World {
+	static void Init();
+
 	void Update();
 	void CollideWithEntities();
 	void Clear();

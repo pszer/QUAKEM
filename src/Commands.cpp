@@ -18,6 +18,7 @@ void Commands::Init() {
 	COMMANDS["bind"] = _bind;
 	COMMANDS["unbind"] = _unbind;
 	COMMANDS["ent_create"] = _ent_create;
+	COMMANDS["brush_create"] = _brush_create;
 	COMMANDS["play_wav"] = _play_wav;
 	COMMANDS["play_mus"] = _play_mus;
 	COMMANDS["stop_mus"] = _stop_mus;
@@ -130,6 +131,34 @@ std::string _ent_create(const std::vector<Argument>& args) {
 	if (!Game.CreateEntity(f->second, cut_args)) {
 		return "Error creating entity \"" + ent_str + "\"";
 	}
+	return "";
+}
+
+std::string _brush_create(const std::vector<Argument>& args) {
+	const std::string USE_MSG = "brush_create brush_type x y w h"
+		"texture [scalex] [scaley] [offsetx] [offsety]";
+	if (args.size() < 6) return USE_MSG;
+	if (args.size() == 7 || args.size() == 9) return USE_MSG;
+
+	BRUSH_TYPE type;
+	Rect rect;
+	std::string texture = "";
+	Vec2 scale = Vec2(1.0,1.0);
+	Vec2 offset = Vec2(0.0,0.0);
+
+	auto bt = STR_TO_BRUSH_TYPE.find(args.at(0).ToString());
+	if (bt == STR_TO_BRUSH_TYPE.end()) return "Invalid brush type";
+	type = bt->second;
+
+	rect.x = args.at(1).ToFloat();
+	rect.y = args.at(2).ToFloat();
+	rect.w = args.at(3).ToFloat();
+	rect.h = args.at(4).ToFloat();
+	texture = args.at(5).ToString();
+
+	rect = rect.Absolute();
+	Game.World.Brushes.push_back(std::make_unique<Brush>(rect, type,
+	                                                     texture, scale, offset));
 	return "";
 }
 

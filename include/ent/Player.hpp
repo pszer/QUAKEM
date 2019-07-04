@@ -5,7 +5,8 @@
 namespace Ents {
 
 struct Player : public Entity {
-	Player(): Entity(Vec2(0.0,0.0), Vec2(25.0,50.0), Vec2(0.0,0.0), TEAM_PLAYER) { }
+	Player(): Entity(ENT_PLAYER,
+	  Vec2(0.0,0.0), Vec2(25.0,50.0), Vec2(0.0,0.0), TEAM_PLAYER) { }
 
 	void Update();
 	void Render();
