@@ -49,3 +49,14 @@ std::string CleanFilename(const std::string& file) {
 		return file.substr(2);
 	return file;
 }
+
+std::string StripFolder(const std::string& file) {
+	std::string str = file;
+	for (auto c = str.begin(); c != str.end(); ++c) {
+		if (*c == '/') {
+			str.erase(str.begin(), c+1);
+			break;
+		}
+	}
+	return str;
+}

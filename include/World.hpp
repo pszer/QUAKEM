@@ -39,7 +39,7 @@ struct Brush {
 
 	virtual void Render();
 	virtual void CollideFunc(Entity * ent) { }
-	virtual void Update() { texture_offset.x-=1.0;}
+	virtual void Update() { }
 };
 
 struct World {

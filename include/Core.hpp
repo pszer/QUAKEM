@@ -17,7 +17,7 @@
 #define DEF_WIN_TITLE "QUAKEM"
 #define DEF_RENDER_FLAG SDL_RENDERER_ACCELERATED
 
-#define DEF_CONSOLE_FONT "fnt/inconsolata.ttf"
+#define DEF_CONSOLE_FONT "inconsolata.ttf"
 
 struct InitParameters {
 	int win_w = DEF_WIN_W,

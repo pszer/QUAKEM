@@ -70,9 +70,9 @@ void Game::Init() {
 	CVARS["player_jump"] = Argument(800.0);
 
 	World.Brushes.push_back(std::make_unique<Brush>(
-	  Rect(112.0,384.0,576.0,192.0), BRUSH_SOLID, "img/64.png", Vec2(1.0,1.0), Vec2(112.0,0.0)));
+	  Rect(112.0,384.0,576.0,192.0), BRUSH_SOLID, "64.png", Vec2(1.0,1.0), Vec2(112.0,0.0)));
 	World.Brushes.push_back(std::make_unique<Brush>(
-	  Rect(368.0,256.0,128.0,64.0), BRUSH_SOLID, "img/64.png", Vec2(1.0,1.0), Vec2(112.0,0.0)));
+	  Rect(368.0,256.0,128.0,64.0), BRUSH_SOLID, "64.png", Vec2(1.0,1.0), Vec2(112.0,0.0)));
 }
 
 void Game::Quit() {

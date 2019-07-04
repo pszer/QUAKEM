@@ -136,7 +136,7 @@ std::string _ent_create(const std::vector<Argument>& args) {
 
 std::string _brush_create(const std::vector<Argument>& args) {
 	const std::string USE_MSG = "brush_create brush_type x y w h"
-		"texture [scalex] [scaley] [offsetx] [offsety]";
+		" texture [scalex] [scaley] [offsetx] [offsety]";
 	if (args.size() < 6) return USE_MSG;
 	if (args.size() == 7 || args.size() == 9) return USE_MSG;
 
@@ -155,6 +155,17 @@ std::string _brush_create(const std::vector<Argument>& args) {
 	rect.w = args.at(3).ToFloat();
 	rect.h = args.at(4).ToFloat();
 	texture = args.at(5).ToString();
+
+	// if scale arg present
+	if (args.size() > 7) {
+		scale.x = args.at(6).ToFloat();
+		scale.y = args.at(7).ToFloat();
+
+		if (args.size() > 9) {
+			offset.x = args.at(8).ToFloat();
+			offset.y = args.at(9).ToFloat();
+		}
+	}
 
 	rect = rect.Absolute();
 	Game.World.Brushes.push_back(std::make_unique<Brush>(rect, type,

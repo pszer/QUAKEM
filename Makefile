@@ -16,7 +16,7 @@ OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 OUTPUT = quakem
 
-$(ODIR)/%.o: $(SDIR)/%.cpp $(DEPS)
+$(ODIR)/%.o: $(SDIR)/%.cpp
 	$(CC) $(CFLAGS) -MD -MP -c -o $@ $<
 make: $(OBJ)
 	$(CC) -o $(OUTPUT) $^ $(CFLAGS) $(LIBS)

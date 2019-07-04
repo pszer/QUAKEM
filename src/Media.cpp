@@ -75,7 +75,7 @@ int Media::LoadTextures(const std::vector<std::string>& files) {
 		if (t == nullptr) {
 			Log::Error("Error loading textures \"" + f + "\"");
 		} else {
-			std::string clean = CleanFilename(f);
+			std::string clean = StripFolder(CleanFilename(f));
 			textures[clean] = t;
 			Log::Log("Texture \"" + clean + "\" loaded");
 			++count;
@@ -93,7 +93,7 @@ int Media::LoadFonts(const std::vector<std::string>& files) {
 		if (font == nullptr) {
 			Log::Error("Error loading font \"" + f + "\"");
 		} else {
-			std::string clean = CleanFilename(f);
+			std::string clean = StripFolder(CleanFilename(f));
 			fonts[clean] = font;
 			Log::Log("Font \"" + clean + "\" loaded");
 			++count;
@@ -111,7 +111,7 @@ int Media::LoadChunks(const std::vector<std::string>& files) {
 		if (chunk == nullptr) {
 				Log::Error("Error loading chunk \"" + f + "\"");
 		} else {
-			std::string clean = CleanFilename(f);
+			std::string clean = StripFolder(CleanFilename(f));
 			chunks[clean] = chunk;
 			Log::Log("SFX chunk \"" + clean +"\" loaded");
 			++count;
@@ -129,7 +129,7 @@ int Media::LoadMusic(const std::vector<std::string>& files) {
 		if (mus == nullptr) {
 				Log::Error("Error loading music \"" + f + "\"");
 		} else {
-			std::string clean = CleanFilename(f);
+			std::string clean = StripFolder(CleanFilename(f));
 			music[clean] = mus;
 			Log::Log("Music file \"" + clean +"\" loaded");
 			++count;
