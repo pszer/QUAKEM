@@ -49,6 +49,7 @@ int Core::Init(InitParameters init) {
 	}
 
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
+	SDL_SetRenderDrawBlendMode(Renderer.renderer, SDL_BLENDMODE_BLEND);
 
 	Media.LoadMedia();
 	Event.Init();

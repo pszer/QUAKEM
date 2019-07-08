@@ -60,6 +60,10 @@ namespace Commands {
 	// ent_del unique_id
 	std::string _ent_del(const std::vector<Argument>&);
 
+	// set camera mode
+	// camera [static pos zoom] [player zoom] [ent id zoom] [path start end dur zoom]
+	std::string _camera(const std::vector<Argument>&);
+
 	// creates standard brush
 	// brush_create brush_type x y w h texture [scalex] [scaley] [offsetx] [offsety]
 	std::string _brush_create(const std::vector<Argument>&);

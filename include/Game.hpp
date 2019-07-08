@@ -37,7 +37,24 @@ extern struct Game {
 	bool world_loaded = false;
 	struct World World;
 
+	enum GAME_CAMERA_MODE { GAME_CAMERA_DEFAULT , GAME_CAMERA_STATIC , GAME_CAMERA_FOLLOW_PLAYER ,
+	  GAME_CAMERA_FOLLOW_ENT , GAME_CAMERA_PATH };
+	GAME_CAMERA_MODE camera_mode = GAME_CAMERA_DEFAULT;
+	
+	// fill these data to update camera during CameraUpdate
+	unsigned long camera_id = 0;
+	Vec2 camera_pos = Vec2(0.0,0.0);
+	Vec2 camera_start = Vec2(0.0,0.0), camera_end = Vec2(0.0,0.0);
+	double camera_duration = 1.0;
+	double camera_zoom = 1.0;
+
 	Camera camera;
+	void CameraUpdate();
+	void CameraDefault();
+	void CameraFollowEntity(unsigned long ID, double zoom = 1.0);
+	void CameraFollowPlayer(double zoom = 1.0);
+	void CameraStatic(Vec2 pos, double zoom = 1.0);
+	void CameraPath(Vec2 start, Vec2 end, double duration, double zoom = 1.0);
 
 	void Update();
 	void Render();

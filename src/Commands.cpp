@@ -22,6 +22,7 @@ void Commands::Init() {
 	COMMANDS["ent_list"] = _ent_list;
 	COMMANDS["ent_del"] = _ent_del;
 	COMMANDS["brush_create"] = _brush_create;
+	COMMANDS["camera"] = _camera;
 	COMMANDS["play_wav"] = _play_wav;
 	COMMANDS["play_mus"] = _play_mus;
 	COMMANDS["stop_mus"] = _stop_mus;
@@ -205,6 +206,54 @@ std::string _ent_del(const std::vector<Argument>& args) {
 	}
 
 	return "No entity with ID " + std::to_string(ID);
+}
+
+
+std::string _camera(const std::vector<Argument>& args) {
+	const std::string USE_MSG = "camera [default] [static] [player] [ent] [path]";
+
+	if (args.size() < 1) return USE_MSG;
+
+	std::string mode = args.at(0).ToString();
+
+	if (mode == "default") {
+
+		Game.camera_mode = Game::GAME_CAMERA_DEFAULT;
+
+	} else if (mode == "static") {
+
+		if (args.size() < 4) return "camera static x y zoom";
+		Game.camera_mode = Game::GAME_CAMERA_STATIC;
+		Game.camera_pos = Vec2( args.at(1).ToFloat() , args.at(2).ToFloat() );
+		Game.camera_zoom = args.at(3).ToFloat();
+
+	} else if (mode == "player") {
+
+		if (args.size() < 2) return "camera player zoom";
+		Game.camera_mode = Game::GAME_CAMERA_FOLLOW_PLAYER;
+		Game.camera_zoom = args.at(1).ToFloat();
+
+	} else if (mode == "ent") {
+
+		if (args.size() < 3) return "camera ent id zoom";
+		Game.camera_mode = Game::GAME_CAMERA_FOLLOW_ENT;
+		Game.camera_id = args.at(1).ToInt();
+		Game.camera_zoom = args.at(2).ToFloat();
+
+	} else if (mode == "path") {
+
+		if (args.size() < 7) return "path startx starty endx endy dur zoom";
+		Game.camera_mode = Game::GAME_CAMERA_PATH;
+		Game.camera_start = Vec2( args.at(1).ToFloat() , args.at(2).ToFloat() );
+		Game.camera_end   = Vec2( args.at(3).ToFloat() , args.at(4).ToFloat() );
+		Game.camera_duration = args.at(5).ToFloat();
+		Game.camera_zoom = args.at(6).ToFloat();
+
+	} else {
+		return "Available camera modes: default, static, player, ent, path";
+	}
+
+	return "";
 }
 
 std::string _brush_create(const std::vector<Argument>& args) {

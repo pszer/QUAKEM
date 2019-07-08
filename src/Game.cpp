@@ -7,13 +7,7 @@ void Game::Update() {
 	UpdatePhysics();
 	UpdateEntities();
 
-	camera = Camera(Vec2(0.0,0.0), 1.0);
-	for (auto ent = Entities.begin(); ent != Entities.end(); ++ent) {
-		if ((*ent)->type == ENT_PLAYER) {
-			camera = Camera((*ent)->UNIQUE_ID, 1.0 + std::sin(SDL_GetTicks()/1000.0)/4.0);
-		}
-	}
-	Renderer.camera = &camera;
+	CameraUpdate();
 
 	World.CollideWithEntities();
 	World.Update();
@@ -26,6 +20,56 @@ void Game::Render() {
 	RenderEntities();
 	World.RenderForeground();
 }
+
+void Game::CameraUpdate() {
+	switch (camera_mode) {
+	case GAME_CAMERA_DEFAULT:
+		CameraDefault();
+		break;
+	case GAME_CAMERA_STATIC:
+		CameraStatic(camera_pos, camera_zoom);
+		break;
+	case GAME_CAMERA_FOLLOW_PLAYER:
+		CameraFollowPlayer(camera_zoom);
+		break;
+	case GAME_CAMERA_FOLLOW_ENT:
+		CameraFollowEntity(camera_id, camera_zoom);
+		break;
+	case GAME_CAMERA_PATH:
+		CameraPath(camera_start, camera_end, camera_duration, camera_zoom);
+		break;
+	}
+}
+
+void Game::CameraDefault() {
+	Renderer.camera = nullptr;
+}
+
+void Game::CameraFollowEntity(unsigned long ID, double zoom) {
+	camera = Camera(ID, zoom);
+	Renderer.camera = &camera;
+}
+
+void Game::CameraFollowPlayer(double zoom) {
+	for (auto ent = Entities.begin(); ent != Entities.end(); ++ent) {
+		if ((*ent)->type == ENT_PLAYER) {
+			CameraFollowEntity((*ent)->UNIQUE_ID, zoom);
+			return;
+		}
+	}
+	CameraDefault();
+}
+
+void Game::CameraStatic(Vec2 pos, double zoom) {
+	camera = Camera(pos, zoom);	
+	Renderer.camera = &camera;
+}
+
+void Game::CameraPath(Vec2 start, Vec2 end, double duration, double zoom) {
+	camera = Camera(start, end, duration, zoom);
+	Renderer.camera = &camera;
+}
+
 
 void Game::UpdateEntities() {
 	for (auto ent = Entities.begin(); ent != Entities.end();) {

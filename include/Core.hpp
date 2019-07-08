@@ -43,10 +43,13 @@ extern struct Core {
 
 	// CONSOLE
 	struct Console {
+		const std::vector<SDL_Keycode> CONSOLE_KEYS = { SDLK_LEFT, SDLK_RIGHT, SDLK_BACKQUOTE,
+		  SDLK_UP, SDLK_DOWN, SDLK_BACKSPACE, SDLK_RETURN, SDLK_PAGEUP, SDLK_PAGEDOWN,
+		  SDLK_END, SDLK_HOME };
 		void Toggle();
 
 		std::string font = DEF_CONSOLE_FONT;
-		SDL_Color bg = {0x08,0x08,0x08,0xFF},
+		SDL_Color bg = {0x08,0x08,0x08,0xEF},
 		          fg = {0xFF,0xFF,0xFF,0xFF};
 		bool open = false;
 		int bottom_offset = 100; // how many pixels from the bottom
