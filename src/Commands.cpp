@@ -18,6 +18,9 @@ void Commands::Init() {
 	COMMANDS["bind"] = _bind;
 	COMMANDS["unbind"] = _unbind;
 	COMMANDS["ent_create"] = _ent_create;
+	COMMANDS["ent_args"] = _ent_args;
+	COMMANDS["ent_list"] = _ent_list;
+	COMMANDS["ent_del"] = _ent_del;
 	COMMANDS["brush_create"] = _brush_create;
 	COMMANDS["play_wav"] = _play_wav;
 	COMMANDS["play_mus"] = _play_mus;
@@ -132,6 +135,76 @@ std::string _ent_create(const std::vector<Argument>& args) {
 		return "Error creating entity \"" + ent_str + "\"";
 	}
 	return "";
+}
+
+std::string _ent_args(const std::vector<Argument>& args) {
+	const std::string USE_MSG = "ent_args ent_type";
+	if (args.size() < 1) return USE_MSG;
+
+	std::string ent_str = args.at(0).ToString();
+	auto f = Game.STR_TO_ENT_TYPE.find(ent_str);
+	if (f == Game.STR_TO_ENT_TYPE.end()) {
+		return "Unknown entity type \"" + ent_str + "\"";
+	}
+
+	auto m = Game.ENT_CONSTRUCT_MSG.find(f->second);
+	if (m == Game.ENT_CONSTRUCT_MSG.end()) {
+		return "No construct message for entity \"" + ent_str + "\"";
+	}
+
+	return m->second;
+}
+
+
+std::string _ent_list(const std::vector<Argument>&) {
+	std::string str = "ID      |TYPE\n";
+
+	for (auto e = Game.Entities.begin(); e != Game.Entities.end(); ++e) {
+		str += std::to_string( (*e)->UNIQUE_ID );
+
+		// get number of digits in UNIQUE_ID
+		int digits=0, temp = (*e)->UNIQUE_ID;
+		if (!temp) digits=1;
+		else while (temp) {
+			temp /= 10;
+			digits++;
+		}
+
+		for (int i = 6; i >= digits; --i) {
+			str += " ";
+		}
+
+		std::string ent_name = "ENT_UNKNOWN";
+		for (auto s : Game.STR_TO_ENT_TYPE) {
+			if (s.second == (*e)->type) {
+				ent_name = s.first;
+				break;
+			}
+		}
+
+		str += "  " + ent_name;
+
+		if (e != Game.Entities.end()-1) {
+			str += '\n';
+		}
+	}
+
+	return str;
+}
+
+std::string _ent_del(const std::vector<Argument>& args) {
+	const std::string USE_MSG = "ent_del unique_id";
+	if (args.size() < 1) return USE_MSG;
+	int ID = args.at(0).ToInt();
+
+	for (auto e = Game.Entities.begin(); e != Game.Entities.end(); ++e) {
+		if ((*e)->UNIQUE_ID == ID) {
+			(*e)->destroy = true;
+			return "";
+		}
+	}
+
+	return "No entity with ID " + std::to_string(ID);
 }
 
 std::string _brush_create(const std::vector<Argument>& args) {

@@ -3,6 +3,7 @@
 struct Core Core;
 
 int Core::Init(InitParameters init) {
+	World::Init();
 	Commands::Init();
 	Keys.DefaultBindings();
 	

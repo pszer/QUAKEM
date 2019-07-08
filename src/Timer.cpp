@@ -1,4 +1,5 @@
 #include "Timer.hpp"
+#include "Cmd.hpp"
 
 void Timer::Start() {
 	if (state == TIMER_STOPPED) {
@@ -39,7 +40,13 @@ void FrameLimit::SetLimit(const int fps) {
 void FrameLimit::FrameStart() {
 	if (t.state != TIMER_STOPPED) {
 		deltatime_n = ch::high_resolution_clock::now() - t.start;
-		deltatime = deltatime_n.count() / 1000000000.0;
+		deltatime_n_ = deltatime_n;
+		deltatime = deltatime_n.count() / 1000000000.0;		
+
+		double timescale = GetCVarFloat("timescale");
+		if (timescale < 0.0) timescale = -timescale;
+		deltatime *= timescale;
+		deltatime_n *= timescale;
 	}
 
 	t.Stop();
@@ -57,6 +64,6 @@ void FrameLimit::Sleep() {
 }
 
 int FrameLimit::FPS() {
-	if (deltatime_n.count() == 0) return 0;
-	else return 1000000000ll / deltatime_n.count();
+	if (deltatime_n_.count() == 0) return 0;
+	else return 1000000000ll / deltatime_n_.count();
 }

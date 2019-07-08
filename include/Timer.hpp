@@ -37,5 +37,8 @@ extern struct FrameLimit {
 	double deltatime = 0.0; // deltatime in seconds
 private:
 	ch::nanoseconds computation_duration;
+       
+	// deltatime not affected by timescale for FPS calculation
+	ch::nanoseconds deltatime_n_ = ch::nanoseconds(0);
 	Timer t;
 } FrameLimit;

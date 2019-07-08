@@ -14,10 +14,12 @@ struct Player : public Entity {
 
 	void HandleInput();
 
-	const std::string CONSTRUCT_USE = "x y w h hp";
+	static const std::string CONSTRUCT_MSG;
 	int Construct(const std::vector<Argument>& args);
 
-	int hitpoints=100;
+	std::string Info();
+
+	int hitpoints=100, max_hitpoints=100;
 
 	bool move_left = false, move_right = true;
 

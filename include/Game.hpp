@@ -23,6 +23,8 @@ extern struct Game {
 	double gravity=0.0, friction=5.0;
 
 	std::map<std::string, Entity_Type> STR_TO_ENT_TYPE;
+	std::map<Entity_Type, std::string> ENT_CONSTRUCT_MSG;
+
 	// 1 for success, 0 for error
 	int CreateEntity(Entity_Type ent, std::vector<Argument>& args);
 

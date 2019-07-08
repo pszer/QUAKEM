@@ -1,6 +1,8 @@
 #include "Entity.hpp"
 #include "Hitreg.hpp"
 
+unsigned long Entity::ID_COUNT = 0;
+
 Rect Entity::Hull() {
 	return Rect(pos, size);
 }

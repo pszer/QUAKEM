@@ -48,6 +48,18 @@ namespace Commands {
 	// ent_create ent_type {args}
 	std::string _ent_create(const std::vector<Argument>&);
 
+	// lists entity construct arguments
+	// ent_args ent_type
+	std::string _ent_args(const std::vector<Argument>&);
+
+	// lists all spawned entities
+	// ent_list
+	std::string _ent_list(const std::vector<Argument>&);
+
+	// delete spawned entity by unique id
+	// ent_del unique_id
+	std::string _ent_del(const std::vector<Argument>&);
+
 	// creates standard brush
 	// brush_create brush_type x y w h texture [scalex] [scaley] [offsetx] [offsety]
 	std::string _brush_create(const std::vector<Argument>&);

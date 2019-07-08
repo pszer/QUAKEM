@@ -2,6 +2,8 @@
 
 namespace Ents {
 
+const std::string Player::CONSTRUCT_MSG = "x y hp";
+
 void Player::Update() {
 	move_left = false;
 	move_right = false;
@@ -57,11 +59,19 @@ int Player::Construct(const std::vector<Argument>& args) {
 	for (auto arg : args) {
 		if      (arg.label=="x")  pos.x = arg.ToFloat();
 		else if (arg.label=="y")  pos.y = arg.ToFloat();
-		else if (arg.label=="w")  size.x = arg.ToFloat();
-		else if (arg.label=="h")  size.y = arg.ToFloat();
-		else if (arg.label=="hp") hitpoints = arg.ToInt();
+		//else if (arg.label=="w")  size.x = arg.ToFloat();
+		//else if (arg.label=="h")  size.y = arg.ToFloat();
+		else if (arg.label=="hp") {
+			hitpoints = arg.ToInt();
+			max_hitpoints = hitpoints;
+		}
 	}
 	return 1;
 }
 
+std::string Player::Info() {
+	  return "x:" + std::to_string(pos.x) + " y:" + std::to_string(pos.y) +
+		  " hp:" + std::to_string(hitpoints) + "/" + std::to_string(max_hitpoints);
 };
+
+}

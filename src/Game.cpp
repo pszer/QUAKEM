@@ -61,18 +61,15 @@ void Game::RenderEntities() {
 }
 
 void Game::Init() {
-	World::Init();
 	STR_TO_ENT_TYPE["ENT_PLAYER"] = ENT_PLAYER;
+
+	ENT_CONSTRUCT_MSG[ENT_PLAYER] = Ents::Player::CONSTRUCT_MSG;
 
 	CVARS["gravity"] = Argument(1800.0);
 	CVARS["friction"] = Argument(25.0);
 	CVARS["player_speed"] = Argument(300.0);
 	CVARS["player_jump"] = Argument(800.0);
-
-	World.Brushes.push_back(std::make_unique<Brush>(
-	  Rect(112.0,384.0,576.0,192.0), BRUSH_SOLID, "64.png", Vec2(1.0,1.0), Vec2(112.0,0.0)));
-	World.Brushes.push_back(std::make_unique<Brush>(
-	  Rect(368.0,256.0,128.0,64.0), BRUSH_SOLID, "64.png", Vec2(1.0,1.0), Vec2(112.0,0.0)));
+	CVARS["timescale"] = Argument(1.0);
 }
 
 void Game::Quit() {
