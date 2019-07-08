@@ -17,6 +17,7 @@ extern struct Keys {
 	std::map<std::string, SDL_Keycode> Bindings;
 
 	Keypress_State GetKeyState(const std::string& str);
+	double GetKeyDuration(const std::string& str);
 
 	// returns SDLK_UNKNOWN if invalid string
 	SDL_Keycode GetKeyFromString(const std::string& str);

@@ -8,7 +8,6 @@
 #include "Entity.hpp"
 #include "World.hpp"
 
-
 extern struct Game {
 	void Init();
 	void Quit();
@@ -28,8 +27,17 @@ extern struct Game {
 	// 1 for success, 0 for error
 	int CreateEntity(Entity_Type ent, std::vector<Argument>& args);
 
+	// returns true if entity with ID exists
+	bool EntityExists(unsigned long ID);
+
+	// returns nullptr if entity doesnt exist
+	// otherwise returns entity pointer to it
+	Entity* GetEntityByID(unsigned long ID);
+
 	bool world_loaded = false;
 	struct World World;
+
+	Camera camera;
 
 	void Update();
 	void Render();

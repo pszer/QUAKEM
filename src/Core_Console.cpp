@@ -13,6 +13,7 @@ void Core::Console::Update() {
 void Core::Console::Render() {
 	if (!open) return;
 
+
 	Font * font_struct = Media.GetFont(font);
 	if (font_struct == nullptr || font_struct->type != FONT_TTF) return;
 	TTF_Font * font = font_struct->GetTTFSize(FONT_P16);
@@ -22,8 +23,12 @@ void Core::Console::Render() {
 	TTF_SizeText(font, " ", &rect.w, &rect.h);
 	rect.y -= rect.h*2 + 5;
 
+	Renderer.CameraStop();
+
 	// background
-	Renderer.RenderFillRect(bg_rect, bg);
+	SDL_Rect sdl_bg_rect = bg_rect.ToSDLRect();
+	Renderer.SetColor(bg);
+	SDL_RenderFillRect(Renderer.renderer, &sdl_bg_rect);
 
 	// render text
 	int i = Log::History.size() - 1 - page_scroll;
@@ -48,7 +53,10 @@ void Core::Console::Render() {
 
 	rect.x += (cursor) * width + 1;
 	rect.w = 2;
-	Renderer.RenderFillRect(Rect(rect.x,rect.y,rect.w,rect.h), fg);
+	Renderer.SetColor(fg);
+	SDL_RenderFillRect(Renderer.renderer, &rect);
+
+	Renderer.CameraUpdate();
 }
 
 void Core::Console::HandleKeypresses() {

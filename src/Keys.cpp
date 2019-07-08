@@ -14,6 +14,12 @@ Keypress_State Keys::GetKeyState(const std::string& str) {
 	return Event.GetKey(code);
 }
 
+double Keys::GetKeyDuration(const std::string& str) {
+	SDL_Keycode code = GetBoundKey(str);
+	if (code == SDLK_UNKNOWN) return 0.0;
+	return Event.GetKeyDuration(code);
+}
+
 SDL_Keycode Keys::GetKeyFromString(const std::string& str) {
 	return SDL_GetKeyFromName(str.c_str());
 }

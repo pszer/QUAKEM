@@ -3,6 +3,10 @@
 
 struct Event Event;
 
+double Keypress::GetDuration() {
+	return timer.GetTime().count() / 1000000000.0;
+}
+
 void Event::Init() {
 	SDL_GetWindowSize(Core.window, &win_w, &win_h);
 	SDL_GetMouseState(&mouse_x, &mouse_y);
@@ -29,6 +33,14 @@ Keypress_State Event::GetKey(SDL_Keycode c) {
 			return k.state;
 	}
 	return KEY_NULL;
+}
+
+double Event::GetKeyDuration(SDL_Keycode c) {
+	for (auto k : Keypresses) {
+		if (k.code == c)
+			return k.GetDuration();
+	}
+	return 0.0;
 }
 
 void Event::EnableTextInput() {

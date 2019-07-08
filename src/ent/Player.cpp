@@ -37,7 +37,7 @@ void Player::HandleInput() {
 		MoveRight();
 
 	k = Keys.GetKeyState(PLAYER_JUMP);
-	if (k == KEY_DOWN)
+	if (k == KEY_DOWN || k == KEY_HELD)
 		Jump();
 }
 

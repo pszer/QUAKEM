@@ -1,5 +1,6 @@
 #include "Core.hpp"
 #include "Render.hpp"
+#include "Events.hpp"
 
 struct Renderer Renderer;
 
@@ -8,6 +9,26 @@ void Renderer::SetColor(const SDL_Color& c) {
 }
 void Renderer::SetColor(const int r, const int g, const int b, const int a) {
 	SDL_SetRenderDrawColor(renderer, r,g,b,a);
+}
+
+void Renderer::CameraUpdate() {
+	if (camera == nullptr) {
+		SDL_RenderSetScale(renderer, 1.0f, 1.0f);
+		pos = Vec2(0.0, 0.0);
+		zoom = 1.0;
+	} else {
+		SDL_RenderSetScale(renderer, camera->zoom, camera->zoom);
+		pos = camera->GetPos();
+		zoom = camera->zoom;
+	}
+	win_w_mid = Event.win_w/2.0;
+	win_h_mid = Event.win_h/2.0;
+}
+
+void Renderer::CameraStop() {
+	SDL_RenderSetScale(renderer, 1.0f, 1.0f);
+	pos = Vec2(win_w_mid, win_h_mid);
+	zoom = 1.0;
 }
 
 void Renderer::Clear(const SDL_Color c) {
@@ -19,60 +40,92 @@ void Renderer::Update() {
 	SDL_RenderPresent(renderer);
 }
 
-void Renderer::RenderPixel(SDL_Point point) {
-	SDL_RenderDrawPoint(renderer, point.x, point.y);
+Vec2 Renderer::TransformVec2(const Vec2& vec) {
+	return ((vec - pos) * zoom) + Vec2(win_w_mid, win_h_mid) / zoom;
 }
-void Renderer::RenderPixel(SDL_Point point, const SDL_Color& c) {
+
+Line Renderer::TransformLine(const Line& line) {
+	return Line( TransformVec2(line.a) , TransformVec2(line.b) );
+}
+
+Rect Renderer::TransformRect(const Rect& rect) {
+	Vec2 pos = TransformVec2( Vec2(rect.x, rect.y) );
+	Vec2 size = Vec2(rect.w, rect.h) * zoom;
+	return Rect(pos, size);
+}
+
+void Renderer::RenderPixel(Vec2 p) {
+	p = TransformVec2(p);
+	SDL_RenderDrawPoint(renderer, p.x, p.y);
+}
+void Renderer::RenderPixel(Vec2 p, const SDL_Color& c) {
 	SetColor(c);
-	SDL_RenderDrawPoint(renderer, point.x, point.y);
+	RenderPixel(p);
 }
 
 void Renderer::RenderLine(Vec2 a, Vec2 b) {
-	SDL_RenderDrawLine(renderer, (int)a.x, (int)a.y, (int)b.x, (int)b.y);
+	a = TransformVec2(a);
+	b = TransformVec2(b);
+	SDL_RenderDrawLine(renderer, a.x, a.y, b.x, b.y);
 }
 void Renderer::RenderLine(Vec2 a, Vec2 b, const SDL_Color& c) {
 	SetColor(c);
-	SDL_RenderDrawLine(renderer, (int)a.x, (int)a.y, (int)b.x, (int)b.y);
+	RenderLine(a, b);
 }
+
 void Renderer::RenderLine(Line line) {
 	RenderLine(line.a, line.b);
 }
+
 void Renderer::RenderLine(Line line, const SDL_Color& c){
 	RenderLine(line.a, line.b, c);
 }
 
 void Renderer::RenderRect(Rect rect) {
-	SDL_Rect r = {(int)rect.x, (int)rect.y, (int)rect.w, (int)rect.h};
-	SDL_RenderDrawRect(renderer, &r);
+	rect = TransformRect(rect);
+	SDL_Rect sdlrect = rect.ToSDLRect();
+	SDL_RenderDrawRect(renderer, &sdlrect);
 }
 void Renderer::RenderRect(Rect rect, const SDL_Color& c) {
 	SetColor(c);
-	SDL_Rect r = {(int)rect.x, (int)rect.y, (int)rect.w, (int)rect.h};
-	SDL_RenderDrawRect(renderer, &r);
+	RenderRect(rect);
 }
 
 void Renderer::RenderFillRect(Rect rect) {
-	SDL_Rect r = {(int)rect.x, (int)rect.y, (int)rect.w, (int)rect.h};
-	SDL_RenderFillRect(renderer, &r);
+	rect = TransformRect(rect);
+	SDL_Rect sdlrect = rect.ToSDLRect();
+	SDL_RenderFillRect(renderer, &sdlrect);
 }
 void Renderer::RenderFillRect(Rect rect, const SDL_Color& c) {
 	SetColor(c);
-	SDL_Rect r = {(int)rect.x, (int)rect.y, (int)rect.w, (int)rect.h};
-	SDL_RenderFillRect(renderer, &r);
+	RenderFillRect(rect);
 }
 
-void Renderer::RenderTexture(const std::string& img_name, SDL_Rect* src, SDL_Rect* dest) {
+void Renderer::RenderTexture(const std::string& img_name, Rect* src, Rect* dest) {
 	auto texture = Media.GetTexture(img_name);
 	if (texture == nullptr) return;
-	SDL_RenderCopy(renderer, texture, src, dest);
+
+	SDL_Rect sdlsrc, sdldest;
+
+	if (src)  sdlsrc  = TransformRect(*src).ToSDLRect();
+	if (dest) sdldest = TransformRect(*dest).ToSDLRect();
+
+	SDL_RenderCopy(renderer, texture, src ? &sdlsrc : nullptr, dest ? &sdldest : nullptr);
 }
 
-void Renderer::RenderTexture(const std::string& img_name, SDL_Rect* src, SDL_Rect* dest,
+void Renderer::RenderTexture(const std::string& img_name, Rect* src, Rect* dest,
   double angle, SDL_RendererFlip flip, SDL_Point * rot_centre)
 {
 	auto texture = Media.GetTexture(img_name);
 	if (texture == nullptr) return;
-	SDL_RenderCopyEx(renderer, texture, src, dest, angle, rot_centre, flip);
+
+	SDL_Rect sdlsrc, sdldest;
+
+	if (src)  sdlsrc  = TransformRect(*src).ToSDLRect();
+	if (dest) sdldest = TransformRect(*dest).ToSDLRect();
+
+	SDL_RenderCopyEx(renderer, texture, src ? &sdlsrc : nullptr, dest ? &sdldest : nullptr,
+	  angle, rot_centre, flip);
 }
 
 void Renderer::RenderTiledTexture(const std::string& tex_name, Rect _rect, Vec2 scale, Vec2 offset) {
@@ -110,18 +163,21 @@ void Renderer::RenderTiledTexture(const std::string& tex_name, Rect _rect, Vec2 
 	offset.y = std::fmod(offset.y, tile_h);
 	if (offset.y > 0.0) offset.y -= tile_h;
 
-	SDL_Rect viewport = rect.ToSDLRect();
+	SDL_Rect viewport = TransformRect(rect).ToSDLRect();
 	SDL_RenderSetViewport(renderer, &viewport);
+	SetColor({0,0xff,0,0xff});
+	SDL_RenderFillRect(renderer, &viewport);
 
-	SDL_Rect draw_rect = { 0, 0, (int)(tile_w+0.5), (int)(tile_h+0.5) };
+	SDL_Rect draw_rect = { 0, 0, (int)(zoom * tile_w + 1.0), (int)(zoom * tile_h + 1.0) };
 
 	double edge_x = rect.x + rect.w,
 	       edge_y = rect.y + rect.h;
 
 	for (double x = offset.x; x < edge_x; x += tile_w) {
 		for (double y = offset.y; y < edge_y; y += tile_h) {
-			draw_rect.x = x;
-			draw_rect.y = y;
+			draw_rect.x = x * zoom;
+			draw_rect.y = y * zoom;
+
 			SDL_RenderCopyEx(renderer, texture, nullptr, &draw_rect,
 			  0.0, nullptr, flip);
 		}
@@ -143,7 +199,7 @@ void Renderer::RenderText(const std::string& font_name, const std::string& text,
 		int w,h;
 		TTF_SizeText(font->GetTTFSize(size), text.c_str(), &w, &h);
 
-		SDL_Rect r = {x,y,w,h};
+		SDL_Rect r = TransformRect(Rect(x,y,w,h)).ToSDLRect();
 
 		if (align == ALIGN_RIGHT)
 			r.x -= w;

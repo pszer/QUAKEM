@@ -50,3 +50,11 @@ Vec2 operator*(const Vec2& a, const double& s) {
 Vec2 operator/(const Vec2& a, const double& s) {
 	return Vec2(a.x / s, a.y / s);
 }
+
+Rect operator+(const Rect& r, const Vec2& v) {
+	return Rect(r.x+v.x, r.y+v.y, r.w, r.h);
+}
+
+Rect operator-(const Rect& r, const Vec2& v) {
+	return Rect(r.x-v.x, r.y-v.y, r.w, r.h);
+} 

@@ -1,15 +1,20 @@
 #pragma once
 
+#include <SDL2/SDL.h>
+
 #include <vector>
 
-#include <SDL2/SDL.h>
+#include "Timer.hpp"
 
 //                  not pressed
 enum Keypress_State { KEY_NULL , KEY_DOWN , KEY_HELD , KEY_UP };
 struct Keypress {
-	Keypress(SDL_Keycode c, Keypress_State s): code(c), state(s) { }
+	Keypress(SDL_Keycode c, Keypress_State s): code(c), state(s) { timer.Start(); }
 	SDL_Keycode code;
 	Keypress_State state;
+	Timer timer;
+
+	double GetDuration();
 };
 
 extern struct Event {
@@ -22,6 +27,7 @@ extern struct Event {
 
 	std::vector<Keypress> Keypresses;
 	Keypress_State GetKey(SDL_Keycode c);
+	double GetKeyDuration(SDL_Keycode c);
 	void EnableRepeatedKeys();
 	void DisableRepeatedKeys();
 	bool repeated_keys = false;

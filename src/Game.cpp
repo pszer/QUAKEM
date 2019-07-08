@@ -7,11 +7,20 @@ void Game::Update() {
 	UpdatePhysics();
 	UpdateEntities();
 
+	camera = Camera(Vec2(0.0,0.0), 1.0);
+	for (auto ent = Entities.begin(); ent != Entities.end(); ++ent) {
+		if ((*ent)->type == ENT_PLAYER) {
+			camera = Camera((*ent)->UNIQUE_ID, 1.0 + std::sin(SDL_GetTicks()/1000.0)/4.0);
+		}
+	}
+	Renderer.camera = &camera;
+
 	World.CollideWithEntities();
 	World.Update();
 }
 
 void Game::Render() {
+	Renderer.CameraUpdate();
 	World.RenderBackground();
 	World.RenderMiddle();
 	RenderEntities();
@@ -87,4 +96,18 @@ int Game::CreateEntity(Entity_Type ent_type, std::vector<Argument>& args) {
 	if (!ent->Construct(args)) return 0;
 	Entities.push_back(std::move(ent));
 	return 1;
+}
+
+bool Game::EntityExists(unsigned long ID) {
+	for (auto e = Entities.begin(); e != Entities.end(); ++e) {
+		if ((*e)->UNIQUE_ID == ID) return true;
+	}
+	return false;
+}
+
+Entity* Game::GetEntityByID(unsigned long ID) {
+	for (auto e = Entities.begin(); e != Entities.end(); ++e) {
+		if ((*e)->UNIQUE_ID == ID) return e->get();
+	}
+	return nullptr;
 }

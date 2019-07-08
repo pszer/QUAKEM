@@ -48,6 +48,8 @@ int Core::Init(InitParameters init) {
 		return -1;
 	}
 
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
+
 	Media.LoadMedia();
 	Event.Init();
 	Game.Init();
@@ -118,5 +120,7 @@ void Core::RenderFPS() {
 	else if (fps < 150) c = {0x00,0xff,0x00,0xff};
 	else                c = {0x00,0xff,0xff,0xff};
 
+	Renderer.CameraStop();
 	Renderer.RenderText(Console.font, fps_str, Event.win_w, 0, FONT_P16, c, ALIGN_RIGHT);
+	Renderer.CameraUpdate();
 }

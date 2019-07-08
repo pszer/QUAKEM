@@ -41,3 +41,6 @@ Vec2 operator-(const Vec2& a, const Vec2& b);
 Vec2 operator*(const Vec2& a, const double& s);
 Vec2 operator/(const Vec2& a, const double& s);
 bool operator==(const Vec2& a, const Vec2& b);
+
+Rect operator+(const Rect& r, const Vec2& v);
+Rect operator-(const Rect& r, const Vec2& v);
