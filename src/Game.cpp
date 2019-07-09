@@ -71,6 +71,9 @@ void Game::CameraPath(Vec2 start, Vec2 end, double duration, double zoom) {
 void Game::UpdateEntities() {
 	for (auto ent = Entities.begin(); ent != Entities.end();) {
 		if (!(*ent)->destroy) {
+			if (!SDL_IsTextInputActive())
+				(*ent)->HandleInput();
+
 			(*ent)->Update();
 			++ent;
 		} else {

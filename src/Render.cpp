@@ -54,6 +54,20 @@ Rect Renderer::TransformRect(const Rect& rect) {
 	return Rect(pos, size);
 }
 
+Vec2 Renderer::ReverseTransformVec2(const Vec2& vec) {
+	return (vec - (Vec2(win_w_mid, win_h_mid) * zoom)) / zoom + pos;
+}
+
+Line Renderer::ReverseTransformLine(const Line& line) {
+	return Line( ReverseTransformVec2(line.a) , ReverseTransformVec2(line.b) );
+}
+
+Rect Renderer::ReverseTransformRect(const Rect& rect) {
+	Vec2 pos = ReverseTransformVec2( Vec2(rect.x, rect.y) );
+	Vec2 size = Vec2(rect.w, rect.h) / zoom;
+	return Rect(pos, size);
+}
+
 void Renderer::RenderPixel(Vec2 p) {
 	p = TransformVec2(p);
 	SDL_RenderDrawPoint(renderer, p.x, p.y);

@@ -25,6 +25,10 @@ extern struct Renderer {
 	Vec2 TransformVec2(const Vec2& vec);
 	Line TransformLine(const Line& line);
 	Rect TransformRect(const Rect& rect);
+
+	Vec2 ReverseTransformVec2(const Vec2& vec);
+	Line ReverseTransformLine(const Line& line);
+	Rect ReverseTransformRect(const Rect& rect);
 	
 	void RenderPixel(Vec2 p);
 	void RenderPixel(Vec2 p, const SDL_Color&);

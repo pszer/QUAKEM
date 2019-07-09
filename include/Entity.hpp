@@ -26,6 +26,7 @@ struct Entity {
 
 	virtual void Update() = 0;
 	virtual void Render() { }
+	virtual void HandleInput() { }
 	virtual Rect Hitbox() { return Rect(0.0,0.0,0.0,0.0); }
 	Rect Hull(); 
 	

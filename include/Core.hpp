@@ -43,9 +43,6 @@ extern struct Core {
 
 	// CONSOLE
 	struct Console {
-		const std::vector<SDL_Keycode> CONSOLE_KEYS = { SDLK_LEFT, SDLK_RIGHT, SDLK_BACKQUOTE,
-		  SDLK_UP, SDLK_DOWN, SDLK_BACKSPACE, SDLK_RETURN, SDLK_PAGEUP, SDLK_PAGEDOWN,
-		  SDLK_END, SDLK_HOME };
 		void Toggle();
 
 		std::string font = DEF_CONSOLE_FONT;

@@ -101,17 +101,6 @@ void Event::HandleWindowEvent() {
 }
 
 void Event::HandleKeyDownEvent() {
-	if (SDL_IsTextInputActive()) {
-		bool found = false;
-		for (auto k : Core.Console.CONSOLE_KEYS) {
-			if (event.key.keysym.sym == k) {
-				found = true;
-				break;
-			}
-		}
-		if (!found) return;
-	}
-
 	// check for repeated input
 	for (auto k = Keypresses.begin(); k != Keypresses.end(); ++k) { 
 		if (k->code == event.key.keysym.sym) {

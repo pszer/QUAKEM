@@ -106,7 +106,7 @@ int EntityRectCollision(Entity* ent, const Rect rect, bool collide) {
 	  Line(e_bottomright, e_bottomright + dvel), Line(r_topleft, r_topright + Vec2(hull.w, 0.0) ))
 	) {
 		double collision_depth = hull.y + hull.h + dvel.y - r_pos.y;
-		if (collision_depth >= 0.0) {
+		if (collision_depth > 0.0) {
 			ent->pos.y = r_pos.y - hull.h;
 			ent->vel.y = 0.0;
 			ent->on_ground = true;
@@ -121,7 +121,7 @@ int EntityRectCollision(Entity* ent, const Rect rect, bool collide) {
 	  Line(e_topright, e_topright + dvel), Line(r_bottomleft, r_bottomright + Vec2(hull.w, 0.0) ))
 	) {
 		double collision_depth = hull.y + dvel.y - r_pos.y - r_size.y;
-		if (collision_depth <= 0.0) {
+		if (collision_depth < 0.0) {
 			ent->pos.y = r_pos.y + r_size.y;
 			ent->vel.y = 0.0;
 			ent->on_ceiling = true;
@@ -137,7 +137,7 @@ int EntityRectCollision(Entity* ent, const Rect rect, bool collide) {
 	  Line(e_bottomright, e_bottomright + dvel), Line(r_topleft, r_bottomleft + Vec2(0.0, hull.h) ))
 	) {
 		double collision_depth = hull.x + hull.w + dvel.x - r_pos.x;
-		if (collision_depth >= 0.0) {
+		if (collision_depth > 0.0) {
 			ent->pos.x = r_pos.x - hull.w;
 			ent->vel.x = 0.0;
 			ent->on_leftwall = true;
@@ -151,8 +151,8 @@ int EntityRectCollision(Entity* ent, const Rect rect, bool collide) {
 	  // bottom-left velocity line of entity, extended side of brush
 	  Line(e_bottomleft, e_bottomleft + dvel), Line(r_topright, r_bottomright + Vec2(0.0, hull.h) ))
 	) {
-		double collision_depth = hull.x + dvel.x - r_pos.x - r_size.x;
-		if (collision_depth <= 0.0) {
+		double collision_depth = hull.x + dvel.x - (r_pos.x + r_size.x);
+		if (collision_depth < 0.0) {
 			ent->pos.x = r_pos.x + r_size.x;
 			ent->vel.x = 0.0;
 			ent->on_rightwall = true;

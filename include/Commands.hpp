@@ -68,6 +68,25 @@ namespace Commands {
 	// brush_create brush_type x y w h texture [scalex] [scaley] [offsetx] [offsety]
 	std::string _brush_create(const std::vector<Argument>&);
 
+	// lists all brushes
+	// brush_list
+	std::string _brush_list(const std::vector<Argument>&);
+
+	// delete a brush
+	// brush_del index	
+	std::string _brush_del(const std::vector<Argument>& args);
+
+	// deletes brush/entity pointed at by mouse
+	// mouse_del {ignore_brush/ignore_ent}
+	std::string _mouse_del(const std::vector<Argument>& args);
+
+	// moves brush/entity pointed at by mouse
+	// mouse_move x y [world/relative]
+	std::string _mouse_move(const std::vector<Argument>& args);
+
+	// prints mouse position
+	std::string _mouse_pos(const std::vector<Argument>&);
+
 	// lists all set cvars
 	std::string _list_cvars(const std::vector<Argument>&);
 

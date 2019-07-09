@@ -1,4 +1,4 @@
-brush_create BRUSH_SOLID -64 392 576 192 "64.png" 1.0 1.0 -64 392
+brush_create BRUSH_SOLID -64 392 832 192 "64.png" 1.0 1.0 -64 392
 brush_create BRUSH_SOLID 192 264 128 32 "64.png" 1.0 1.0 192 264
 brush_create BRUSH_SOLID 256 168 128 32 "64.png" 1.0 1.0 256 168
 brush_create BRUSH_SOLID 320 72 256 32 "64.png" 1.0 1.0 320 72

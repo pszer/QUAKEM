@@ -22,6 +22,11 @@ void Commands::Init() {
 	COMMANDS["ent_list"] = _ent_list;
 	COMMANDS["ent_del"] = _ent_del;
 	COMMANDS["brush_create"] = _brush_create;
+	COMMANDS["brush_list"] = _brush_list;
+	COMMANDS["brush_del"] = _brush_del;
+	COMMANDS["mouse_del"] = _mouse_del;
+	COMMANDS["mouse_move"] = _mouse_move;
+	COMMANDS["mouse_pos"] = _mouse_pos;
 	COMMANDS["camera"] = _camera;
 	COMMANDS["play_wav"] = _play_wav;
 	COMMANDS["play_mus"] = _play_mus;
@@ -157,12 +162,16 @@ std::string _ent_args(const std::vector<Argument>& args) {
 }
 
 
+#define COL(st,width) \
+	s=st;\
+	if(s.length()>width)s=s.substr(0,width);\
+	digits=s.length()-width;\
+	while(digits++ <0)s+=' ';\
+	str+=s+'|';
 std::string _ent_list(const std::vector<Argument>&) {
-	std::string str = "ID      |TYPE\n";
+	std::string str = "ID NUM|        TYPE        |    EXTRA INFO\n";
 
 	for (auto e = Game.Entities.begin(); e != Game.Entities.end(); ++e) {
-		str += std::to_string( (*e)->UNIQUE_ID );
-
 		// get number of digits in UNIQUE_ID
 		int digits=0, temp = (*e)->UNIQUE_ID;
 		if (!temp) digits=1;
@@ -171,9 +180,9 @@ std::string _ent_list(const std::vector<Argument>&) {
 			digits++;
 		}
 
-		for (int i = 6; i >= digits; --i) {
-			str += " ";
-		}
+		digits-=6;
+		while (digits++ < 0) str += ' ';
+		str += std::to_string((*e)->UNIQUE_ID) + '|';
 
 		std::string ent_name = "ENT_UNKNOWN";
 		for (auto s : Game.STR_TO_ENT_TYPE) {
@@ -183,7 +192,10 @@ std::string _ent_list(const std::vector<Argument>&) {
 			}
 		}
 
-		str += "  " + ent_name;
+		std::string s;
+		COL(ent_name,20);
+
+		str += (*e)->Info();
 
 		if (e != Game.Entities.end()-1) {
 			str += '\n';
@@ -297,6 +309,140 @@ std::string _brush_create(const std::vector<Argument>& args) {
 	return "";
 }
 
+
+std::string _brush_list(const std::vector<Argument>&) {
+	std::string str = "INDEX|     X     |     Y     |    W    |    H    |   TYPE   | TEXTURE\n";
+
+	for (std::size_t i=0; i < Game.World.Brushes.size(); ++i) {
+		Brush * brush = Game.World.Brushes.at(i).get();
+
+		long long digits=0, temp = i;
+		if (!temp) digits=1;
+		else while (temp) {
+			temp /= 10;
+			digits++;
+		}
+
+		digits-=5;
+		while (digits++ < 0) str += ' ';
+		str += std::to_string(i) + '|';
+
+		std::string s;
+
+		#define COL(st,width) \
+		s=st;\
+		if(s.length()>width)s=s.substr(0,width);\
+		digits=s.length()-width;\
+		while(digits++ <0)s+=' ';\
+		str+=s+'|';
+
+		COL( std::to_string(brush->rect.x), 11 );
+		COL( std::to_string(brush->rect.y), 11 );
+		COL( std::to_string(brush->rect.w), 9 );
+		COL( std::to_string(brush->rect.h), 9 );
+
+		const std::string TYPENAMES[] =
+		  {"SOLID","NONSOLID","BACKGROUND","FOREGROUND"};
+		COL( TYPENAMES[(int)brush->type], 10);
+		str += brush->texture;
+
+		if (i < Game.World.Brushes.size()-1)
+			str += '\n';
+	}
+	return str;
+}
+
+std::string _brush_del(const std::vector<Argument>& args) {
+	const std::string USE_MSG = "brush_del index";
+	if (args.size() < 1) return USE_MSG;
+	auto index = args.at(0).ToInt();
+	if (index < 0 || index >= Game.World.Brushes.size())
+		return "Invalid index";
+	Game.World.Brushes.erase(Game.World.Brushes.begin() + index);
+	return "";
+}
+
+std::string _mouse_del(const std::vector<Argument>& args) {
+	const std::string USE_MSG = "mouse_del [ignore_brush/ignore_ent]";
+
+	bool check_brush = true, check_ent = true;
+	for (auto a : args) {
+		std::string str = a.ToString();
+		if (str == "ignore_brush") check_brush = false;
+		else if (str == "ignore_ent") check_ent = false;
+		else return USE_MSG;
+	}
+
+	if (check_brush) {
+		for (auto b = Game.World.Brushes.begin(); b != Game.World.Brushes.end(); ++b) {
+			Rect t_rect = Renderer.TransformRect((*b)->rect);
+			if (CheckCollision(t_rect, Vec2(Event.mouse_x, Event.mouse_y))) {
+				Game.World.Brushes.erase(b);
+				return "";
+			}
+		}
+	}
+
+	if (check_ent) {
+		for (auto e = Game.Entities.begin(); e != Game.Entities.end(); ++e) {
+			Rect t_rect = Renderer.TransformRect((*e)->Hull());
+			if (CheckCollision(t_rect, Vec2(Event.mouse_x, Event.mouse_y))) {
+				Game.Entities.erase(e);
+				return "";
+			}
+		}
+	}
+
+	return "";
+}
+
+std::string _mouse_move(const std::vector<Argument>& args) {
+	const std::string USE_MSG = "mouse_move x y [world/relative]";
+	if (args.size() < 2) return USE_MSG;
+	Vec2 v = Vec2(args.at(0).ToFloat(), args.at(1).ToFloat());
+
+	bool relative = true;
+	if (args.size() > 2) {
+		std::string str = args.at(2).ToString();
+		if (str == "world") relative = false;
+		else if (str == "relative") relative = true;
+		else return USE_MSG;
+	}
+
+	for (auto b = Game.World.Brushes.begin(); b != Game.World.Brushes.end(); ++b) {
+		Rect t_rect = Renderer.TransformRect((*b)->rect);
+		if (CheckCollision(t_rect, Vec2(Event.mouse_x, Event.mouse_y))) {
+			if (relative) {
+				(*b)->rect.x += v.x;
+				(*b)->rect.y += v.y;
+			} else {
+				(*b)->rect.x = v.x;
+				(*b)->rect.y = v.y;
+			}
+			return "";
+		}
+	}
+
+	for (auto e = Game.Entities.begin(); e != Game.Entities.end(); ++e) {
+		Rect t_rect = Renderer.TransformRect((*e)->Hull());
+		if (CheckCollision(t_rect, Vec2(Event.mouse_x, Event.mouse_y))) {
+			if (relative)
+				(*e)->pos = (*e)->pos + v;
+			else
+				(*e)->pos = v;
+
+			return "";
+		}
+	}
+
+	return "";	
+}
+
+std::string _mouse_pos(const std::vector<Argument>&) {
+	Vec2 v = Renderer.ReverseTransformVec2(Vec2(Event.mouse_x,Event.mouse_y));
+	return std::to_string(v.x) + " " + std::to_string(v.y);
+}
+
 std::string _play_wav(const std::vector<Argument>& args) {
 	const std::string USE_MSG = "play_wav chunkname";
 
@@ -330,7 +476,7 @@ std::string _play_mus(const std::vector<Argument>& args) {
 	// loops args
 	if (args.size() >= 3) {
 		if (args.at(2).type != ARG_NUMBER)
-			return USE_MSG;
+			 return USE_MSG;
 		else loops = args.at(2).ToInt();
 	}
 

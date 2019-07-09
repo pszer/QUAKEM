@@ -27,7 +27,9 @@ struct Player : public Entity {
 
 private:
 	void MoveLeft();
+	void StopMoveLeft();
 	void MoveRight();
+	void StopMoveRight();
 	void Jump();
 };
 

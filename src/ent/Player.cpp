@@ -5,10 +5,6 @@ namespace Ents {
 const std::string Player::CONSTRUCT_MSG = "x y hp";
 
 void Player::Update() {
-	move_left = false;
-	move_right = false;
-	HandleInput();
-
 	if (!move_left || !move_right) {
 		double speed = GetCVarFloat("player_speed");
 		if (move_left && vel.x > -speed) vel.x = -speed;
@@ -31,10 +27,14 @@ void Player::HandleInput() {
 	auto k = Keys.GetKeyState(PLAYER_LEFT); 
 	if (k == KEY_DOWN || k == KEY_HELD)
 		MoveLeft();
+	else
+		StopMoveLeft();
 
 	k = Keys.GetKeyState(PLAYER_RIGHT);
 	if (k == KEY_DOWN || k == KEY_HELD)
 		MoveRight();
+	else
+		StopMoveRight();
 
 	k = Keys.GetKeyState(PLAYER_JUMP);
 	if (k == KEY_DOWN || k == KEY_HELD)
@@ -47,6 +47,14 @@ void Player::MoveLeft() {
 
 void Player::MoveRight() {
 	move_right = true;
+}
+
+void Player::StopMoveLeft() {
+	move_left = false;
+}
+
+void Player::StopMoveRight() {
+	move_right = false;
 }
 
 void Player::Jump() {
