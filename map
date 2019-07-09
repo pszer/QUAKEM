@@ -1,3 +1,5 @@
-brush_create BRUSH_SOLID 112 384 576 192 "64.png" 1.0 1.0 112 0
-brush_create BRUSH_SOLID 368 256 128 64 "64.png" 1.0 1.0 112 0
-brush_create BRUSH_SOLID 32 32 200 200 "scrung.jpg" 0.2 0.2 32 32
+brush_create BRUSH_SOLID -64 392 576 192 "64.png" 1.0 1.0 -64 392
+brush_create BRUSH_SOLID 192 264 128 32 "64.png" 1.0 1.0 192 264
+brush_create BRUSH_SOLID 256 168 128 32 "64.png" 1.0 1.0 256 168
+brush_create BRUSH_SOLID 320 72 256 32 "64.png" 1.0 1.0 320 72
+brush_create BRUSH_SOLID 320 -24 256 32 "64.png" 1.0 1.0 320 -24

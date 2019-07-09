@@ -19,17 +19,12 @@ struct Camera {
 	Camera_Type type;
 
 	double zoom;
-	union {
-		Vec2 static_pos;
-		unsigned long id_follow; // follows entity by ID
-		
-		struct {
-			Vec2 start_pos, end_pos;
-			Timer timer;
-			double duration;
-		};
-	};
+	Vec2 static_pos;
+	unsigned long id_follow; // follows entity by ID
+	Vec2 start_pos, end_pos;
+	double duration;
 
+	Timer timer;
 	Vec2 GetPos();
 	double GetZoom();
 };

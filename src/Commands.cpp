@@ -253,6 +253,8 @@ std::string _camera(const std::vector<Argument>& args) {
 		return "Available camera modes: default, static, player, ent, path";
 	}
 
+	Game.CameraUpdate();
+
 	return "";
 }
 

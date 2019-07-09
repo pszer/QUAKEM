@@ -6,9 +6,6 @@ struct Game Game;
 void Game::Update() {
 	UpdatePhysics();
 	UpdateEntities();
-
-	CameraUpdate();
-
 	World.CollideWithEntities();
 	World.Update();
 }
@@ -123,6 +120,8 @@ void Game::Init() {
 	CVARS["player_speed"] = Argument(300.0);
 	CVARS["player_jump"] = Argument(800.0);
 	CVARS["timescale"] = Argument(1.0);
+
+	CameraUpdate();
 }
 
 void Game::Quit() {

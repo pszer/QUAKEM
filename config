@@ -2,4 +2,7 @@ set $maxfps 121
 set $showfps 1
 set $console 1
 
+ent_create ENT_PLAYER
+camera player 1.0
+
 exec map

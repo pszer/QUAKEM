@@ -1,6 +1,7 @@
 #include "Camera.hpp"
 #include "Game.hpp"
 
+#include <iostream>
 Vec2 Camera::GetPos() {
 	Entity* ent;
 	double ratio;
@@ -16,10 +17,12 @@ Vec2 Camera::GetPos() {
 		break;
 	case CAMERA_PATH:
 		ratio = timer.GetTime().count()/1000000000.0;
-		ratio = duration/4.0 - std::fmod(ratio, duration)/duration;
-		ratio = 1.0 - 2.0 * std::abs(ratio);
+		ratio = std::fmod(ratio, duration)/duration;
+		ratio = 2.0 * (ratio - 0.5);
+		ratio = std::sin( ratio * 3.14159265359 * 0.5  );
+		ratio = 1.0 - ratio*ratio;
 
-		return start_pos + (end_pos-start_pos) * ratio;
+		return start_pos + ((end_pos-start_pos) * ratio);
 		break;
 	}
 }

@@ -5,6 +5,7 @@ struct Core Core;
 int Core::Init(InitParameters init) {
 	World::Init();
 	Commands::Init();
+	Game.Init();
 	Keys.DefaultBindings();
 	
 	if (!Config::ExecFile(CONFIG_PATH)) {
@@ -53,7 +54,6 @@ int Core::Init(InitParameters init) {
 
 	Media.LoadMedia();
 	Event.Init();
-	Game.Init();
 
 	return 0;
 }

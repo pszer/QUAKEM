@@ -156,12 +156,13 @@ void Renderer::RenderTiledTexture(const std::string& tex_name, Rect _rect, Vec2 
 
 	offset.x -= rect.x;
 	offset.y -= rect.y;
+
 	// wrap offset around and make negative
 	offset.x = std::fmod(offset.x, tile_w);
-	if (offset.x > 0.0) offset.x -= tile_w;
+	offset.x -= tile_w;
 
 	offset.y = std::fmod(offset.y, tile_h);
-	if (offset.y > 0.0) offset.y -= tile_h;
+	offset.y -= tile_h;
 
 	SDL_Rect viewport = TransformRect(rect).ToSDLRect();
 	SDL_RenderSetViewport(renderer, &viewport);
@@ -170,11 +171,8 @@ void Renderer::RenderTiledTexture(const std::string& tex_name, Rect _rect, Vec2 
 
 	SDL_Rect draw_rect = { 0, 0, (int)(zoom * tile_w + 1.0), (int)(zoom * tile_h + 1.0) };
 
-	double edge_x = rect.x + rect.w,
-	       edge_y = rect.y + rect.h;
-
-	for (double x = offset.x; x < edge_x; x += tile_w) {
-		for (double y = offset.y; y < edge_y; y += tile_h) {
+	for (double x = offset.x; x < rect.w; x += tile_w) {
+		for (double y = offset.y; y < rect.h; y += tile_h) {
 			draw_rect.x = x * zoom;
 			draw_rect.y = y * zoom;
 
