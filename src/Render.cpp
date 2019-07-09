@@ -180,17 +180,19 @@ void Renderer::RenderTiledTexture(const std::string& tex_name, Rect _rect, Vec2 
 
 	SDL_Rect viewport = TransformRect(rect).ToSDLRect();
 	SDL_RenderSetViewport(renderer, &viewport);
-	SetColor({0,0xff,0,0xff});
-	SDL_RenderFillRect(renderer, &viewport);
 
-	SDL_Rect draw_rect = { 0, 0, (int)(zoom * tile_w + 1.0), (int)(zoom * tile_h + 1.0) };
+	Rect draw_rect = { 0, 0, (int)(zoom * tile_w), (int)(zoom * tile_h) };
 
 	for (double x = offset.x; x < rect.w; x += tile_w) {
 		for (double y = offset.y; y < rect.h; y += tile_h) {
 			draw_rect.x = x * zoom;
 			draw_rect.y = y * zoom;
 
-			SDL_RenderCopyEx(renderer, texture, nullptr, &draw_rect,
+			SDL_Rect r = draw_rect.ToSDLRect();
+			if (std::fmod(draw_rect.x,1.0) && x != offset.x) r.w+=1;
+			if (std::fmod(draw_rect.y,1.0) && y != offset.y) r.h+=1;
+
+			SDL_RenderCopyEx(renderer, texture, nullptr, &r,
 			  0.0, nullptr, flip);
 		}
 	}

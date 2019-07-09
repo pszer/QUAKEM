@@ -89,7 +89,7 @@ void Game::UpdatePhysics() {
 		(*ent)->ResetFlags();
 		if ((*ent)->collide) {
 			for (auto b = World.Brushes.begin(); b != World.Brushes.end(); ++b) {
-				bool collide = (*b)->type == BRUSH_SOLID;
+				bool collide = ((*b)->type == BRUSH_SOLID);
 				EntityRectCollision(ent->get(), (*b)->rect, collide);
 			}
 		}

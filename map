@@ -3,3 +3,5 @@ brush_create BRUSH_SOLID 192 264 128 32 "64.png" 1.0 1.0 192 264
 brush_create BRUSH_SOLID 256 168 128 32 "64.png" 1.0 1.0 256 168
 brush_create BRUSH_SOLID 320 72 256 32 "64.png" 1.0 1.0 320 72
 brush_create BRUSH_SOLID 320 -24 256 32 "64.png" 1.0 1.0 320 -24
+
+brush_create BRUSH_FOREGROUND 526 368 224 24 "fence.png" 1 1 526 368

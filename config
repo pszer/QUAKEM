@@ -1,8 +1,9 @@
 set $maxfps 121
 set $showfps 1
 set $console 1
+set $renderscalequality nearest
 
 ent_create ENT_PLAYER
-camera player 1.0
+camera player 1.5
 
 exec map

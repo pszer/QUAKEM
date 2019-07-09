@@ -48,8 +48,9 @@ int Core::Init(InitParameters init) {
 		Log::ErrorSDL();
 		return -1;
 	}
+	std::string quality = GetCVarString("renderscalequality");
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, quality.c_str());
 
-	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 	SDL_SetRenderDrawBlendMode(Renderer.renderer, SDL_BLENDMODE_BLEND);
 
 	Media.LoadMedia();
