@@ -22,6 +22,7 @@ extern struct Keys {
 
 	// returns SDLK_UNKNOWN if invalid string
 	SDL_Keycode GetKeyFromString(const std::string& str);
+	std::string GetStringFromKey(SDL_Keycode key);
 
 	// returns SDLK_UNKNOWN if key is unbound
 	SDL_Keycode GetBoundKey(const std::string& str);

@@ -32,7 +32,7 @@ struct Rect {
 	void SetSize(const Vec2& s);
 
 	Rect Absolute();
-
+	Vec2 Middle();
 	SDL_Rect ToSDLRect();
 };
 

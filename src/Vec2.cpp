@@ -22,6 +22,11 @@ SDL_Rect Rect::ToSDLRect() {
 	return {(int)x,(int)y,(int)w,(int)h};
 }
 
+
+Vec2 Rect::Middle() {
+	return Vec2(x+w/2.0,y+h/2.0);
+}
+
 Rect Rect::Absolute() {
 	Rect r = *this;
 	if (r.w < 0.0) {

@@ -24,7 +24,7 @@ struct Player : public Entity {
 	std::string Info();
 
 	int shot_counter = 0, shot_burst = 4;
-	double fire_cooldown = 0.5, shot_delay = 0.03;
+	double fire_cooldown = 0.5, shot_delay = 0.048;
 	bool shot = false;
 	Timer cooldown, burst_timer;
 

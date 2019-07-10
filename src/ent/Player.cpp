@@ -85,7 +85,7 @@ void Player::SpawnBullets() {
 			++shot_counter;
 		} else return;
 
-		Vec2 b_vel = Renderer.ReverseTransformVec2(Vec2(Event.mouse_x, Event.mouse_y)) - pos;
+		Vec2 b_vel = Renderer.ReverseTransformVec2(Vec2(Event.mouse_x, Event.mouse_y)) - Hull().Middle() ;
 		b_vel = b_vel / std::sqrt(b_vel.x*b_vel.x + b_vel.y*b_vel.y); // normalize vector
 		b_vel = b_vel * 1000.0; // speed
 		b_vel = b_vel + vel; // add on parent player velocity

@@ -601,7 +601,7 @@ std::string _list_binds(const std::vector<Argument>& args) {
 			}
 
 		} else {
-			std::string codename(SDL_GetKeyName(c.second));
+			std::string codename = Keys.GetStringFromKey(c.second);
 			str += name + " = " + codename + "\n";
 		}
 

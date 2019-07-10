@@ -34,6 +34,21 @@ SDL_Keycode Keys::GetKeyFromString(const std::string& str) {
 	return SDL_GetKeyFromName(str.c_str());
 }
 
+std::string Keys::GetStringFromKey(SDL_Keycode key) {
+	const std::map<int, std::string> mouse_names{
+		std::make_pair(MOUSE1, "Mouse1"),
+		std::make_pair(MOUSE2, "Mouse2"),
+		std::make_pair(MOUSE3, "Mouse3"),
+		std::make_pair(MOUSE4, "Mouse4"),
+		std::make_pair(MOUSE5, "Mouse5"),
+	};
+	auto f = mouse_names.find((int)key);
+	if (f != mouse_names.end()) return f->second;
+
+
+	return std::string(SDL_GetKeyName(key));
+}
+
 SDL_Keycode Keys::GetBoundKey(const std::string& str) {
 	auto b = Bindings.find(str);
 	if (b == Bindings.end()) return SDLK_UNKNOWN;
