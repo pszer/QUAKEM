@@ -6,7 +6,10 @@ namespace Ents {
 
 struct Player : public Entity {
 	Player(): Entity(ENT_PLAYER,
-	  Vec2(0.0,0.0), Vec2(25.0,50.0), Vec2(0.0,0.0), TEAM_PLAYER) { }
+	  Vec2(0.0,0.0), Vec2(25.0,50.0), Vec2(0.0,0.0), TEAM_PLAYER)
+	{ 
+		hitpoints = 100; max_hitpoints = 100;
+	}
 
 	void Update();
 	void Render();
@@ -19,8 +22,6 @@ struct Player : public Entity {
 
 	std::string Info();
 
-	int hitpoints=100, max_hitpoints=100;
-
 	bool move_left = false, move_right = true;
 
 	~Player() { }
@@ -31,6 +32,7 @@ private:
 	void MoveRight();
 	void StopMoveRight();
 	void Jump();
+	void Fire();
 };
 
 }

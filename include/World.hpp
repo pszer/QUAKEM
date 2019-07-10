@@ -4,9 +4,10 @@
 #include <map>
 #include <vector>
 
-#include "Entity.hpp"
 #include "Vec2.hpp"
 #include "Render.hpp"
+
+struct Entity;
 
 // BRUSH_SOLID's block all entitites
 // BRUSH_NONSOLID's don't block entities
@@ -55,3 +56,5 @@ struct World {
 
 	std::vector<std::unique_ptr<Brush>> Brushes;
 };
+
+#include "Entity.hpp"

@@ -4,7 +4,7 @@
 struct Event Event;
 
 double Keypress::GetDuration() {
-	return timer.GetTime().count() / 1000000000.0;
+	return timer.GetSeconds();
 }
 
 void Event::Init() {
@@ -123,11 +123,36 @@ void Event::HandleKeyUpEvent() {
 }
 
 void Event::HandleMouseDownEvent() {
-	//
+	int code;
+	switch (event.button.button) {
+	case SDL_BUTTON_LEFT: code = MOUSE1; break;
+	case SDL_BUTTON_RIGHT: code = MOUSE2; break;
+	case SDL_BUTTON_MIDDLE: code = MOUSE3; break;
+	case SDL_BUTTON_X1: code = MOUSE4; break;
+	case SDL_BUTTON_X2: code = MOUSE5; break;
+	default: return;
+	}
+
+	Keypresses.emplace_back((SDL_Keycode)code, KEY_DOWN);
 }
 
 void Event::HandleMouseUpEvent() {
-	//
+	int code;
+	switch (event.button.button) {
+	case SDL_BUTTON_LEFT: code = MOUSE1; break;
+	case SDL_BUTTON_RIGHT: code = MOUSE2; break;
+	case SDL_BUTTON_MIDDLE: code = MOUSE3; break;
+	case SDL_BUTTON_X1: code = MOUSE4; break;
+	case SDL_BUTTON_X2: code = MOUSE5; break;
+	default: return;
+	}
+
+	for (auto k = Keypresses.begin(); k != Keypresses.end(); ++k) {
+		if (k->code == code) {
+			k->state = KEY_UP;
+			break;
+		}
+	}
 }
 
 void Event::HandleMouseMotionEvent() {

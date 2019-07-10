@@ -8,6 +8,7 @@
 
 //                  not pressed
 enum Keypress_State { KEY_NULL , KEY_DOWN , KEY_HELD , KEY_UP };
+enum { MOUSE1=0x00ffffff , MOUSE2=0x00ffffff+1 , MOUSE3=0x00ffffff+2 , MOUSE4=0x00ffffff+3, MOUSE5=0x00ffffff+4 };
 struct Keypress {
 	Keypress(SDL_Keycode c, Keypress_State s): code(c), state(s) { timer.Start(); }
 	SDL_Keycode code;

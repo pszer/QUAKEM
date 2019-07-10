@@ -10,6 +10,7 @@
 #define PLAYER_LEFT  "+left"
 #define PLAYER_RIGHT "+right"
 #define PLAYER_JUMP  "+jump"
+#define PLAYER_FIRE  "+fire"
 
 extern struct Keys {
 	void DefaultBindings();

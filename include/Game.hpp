@@ -58,4 +58,6 @@ extern struct Game {
 
 	void Update();
 	void Render();
+private:
+	std::vector< std::unique_ptr<Entity> > Entities_Queue;
 } Game;

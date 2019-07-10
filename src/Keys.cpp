@@ -21,6 +21,16 @@ double Keys::GetKeyDuration(const std::string& str) {
 }
 
 SDL_Keycode Keys::GetKeyFromString(const std::string& str) {
+	const std::map<std::string, int> mouse_names{
+		std::make_pair("Mouse1", MOUSE1),
+		std::make_pair("Mouse2", MOUSE2),
+		std::make_pair("Mouse3", MOUSE3),
+		std::make_pair("Mouse4", MOUSE4),
+		std::make_pair("Mouse5", MOUSE5),
+	};
+	auto f = mouse_names.find(str);
+	if (f != mouse_names.end()) return (SDL_Keycode)f->second;
+
 	return SDL_GetKeyFromName(str.c_str());
 }
 

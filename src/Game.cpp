@@ -4,8 +4,8 @@
 struct Game Game;
 
 void Game::Update() {
-	UpdatePhysics();
 	UpdateEntities();
+	UpdatePhysics();
 	World.CollideWithEntities();
 	World.Update();
 }
@@ -69,6 +69,11 @@ void Game::CameraPath(Vec2 start, Vec2 end, double duration, double zoom) {
 
 
 void Game::UpdateEntities() {
+	for (auto ent = Entities_Queue.begin(); ent != Entities_Queue.end(); ++ent) {
+		Entities.push_back(std::move(*ent));
+	}
+	Entities_Queue.clear();
+
 	for (auto ent = Entities.begin(); ent != Entities.end();) {
 		if (!(*ent)->destroy) {
 			if (!SDL_IsTextInputActive())
@@ -89,17 +94,34 @@ void Game::UpdatePhysics() {
 		(*ent)->ResetFlags();
 		if ((*ent)->collide) {
 			for (auto b = World.Brushes.begin(); b != World.Brushes.end(); ++b) {
-				bool collide = ((*b)->type == BRUSH_SOLID);
-				EntityRectCollision(ent->get(), (*b)->rect, collide);
+				if (CheckCollision((*b)->rect, (*ent)->Hull())) {
+					(*ent)->BrushCollision(b->get());
+					if ((*ent)->destroy) goto nextent;
+				}
+			}
+
+			for (auto ent2 = Entities.begin(); ent2 != Entities.end(); ++ent2) {
+				if (ent == ent2) continue;
+				if (CheckCollision((*ent2)->Hitbox(), (*ent)->Hitbox())) {
+					(*ent)->EntityCollision(ent2->get());
+					if ((*ent)->destroy) goto nextent;
+				}
 			}
 		}
 
-		(*ent)->UpdatePos();
-
 		if ((*ent)->physics) {
+			for (auto b = World.Brushes.begin(); b != World.Brushes.end(); ++b) {
+				bool collide = ((*b)->type == BRUSH_SOLID);
+				EntityRectCollision(ent->get(), (*b)->rect, collide);
+			}
+			(*ent)->UpdatePos();
 			ApplyGravity(ent->get());
 			(*ent)->vel.x /= 1.0 + (friction * FrameLimit.deltatime);
+		} else {
+			(*ent)->UpdatePos();
 		}
+
+		nextent: NULL;
 	}
 }
 
@@ -115,8 +137,10 @@ void Game::RenderEntities() {
 
 void Game::Init() {
 	STR_TO_ENT_TYPE["ENT_PLAYER"] = ENT_PLAYER;
+	STR_TO_ENT_TYPE["ENT_BULLET"] = ENT_BULLET;
 
 	ENT_CONSTRUCT_MSG[ENT_PLAYER] = Ents::Player::CONSTRUCT_MSG;
+	ENT_CONSTRUCT_MSG[ENT_BULLET] = Ents::Bullet::CONSTRUCT_MSG;
 
 	CVARS["gravity"] = Argument(1800.0);
 	CVARS["friction"] = Argument(25.0);
@@ -135,12 +159,13 @@ int Game::CreateEntity(Entity_Type ent_type, std::vector<Argument>& args) {
 	std::unique_ptr<Entity> ent = nullptr;
 	switch (ent_type) {
 	case ENT_PLAYER: ent = std::make_unique<Ents::Player>(); break;
+	case ENT_BULLET: ent = std::make_unique<Ents::Bullet>(); break;
 
 	default: return 0;
 	}
 
 	if (!ent->Construct(args)) return 0;
-	Entities.push_back(std::move(ent));
+	Entities_Queue.push_back(std::move(ent));
 	return 1;
 }
 

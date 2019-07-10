@@ -8,9 +8,10 @@
 #include "Timer.hpp"
 #include "Events.hpp"
 #include "Keys.hpp"
+#include "World.hpp"
 
-enum Entity_Type { ENT_NULL , ENT_PLAYER };
-enum Entity_Team { TEAM_NULL , TEAM_PLAYER , TEAM_ENEMY , TEAM_ENEMY2 , TEAM_OBJECT };
+enum Entity_Type { ENT_NULL , ENT_PLAYER , ENT_BULLET };
+enum Entity_Team { TEAM_NULL , TEAM_PLAYER , TEAM_ENEMY , TEAM_OBJECT };
 
 struct Entity {
 	Entity(Entity_Type _type, Vec2 _pos=Vec2(0.0,0.0), Vec2 _size=Vec2(0.0,0.0),
@@ -29,6 +30,9 @@ struct Entity {
 	virtual void HandleInput() { }
 	virtual Rect Hitbox() { return Rect(0.0,0.0,0.0,0.0); }
 	Rect Hull(); 
+
+	virtual void BrushCollision(Brush * brush) { }
+	virtual void EntityCollision(Entity * entity) { }
 	
 	// construct from a list of labelled arguments
 	// returns 1 for success, 0 for error
@@ -42,6 +46,8 @@ struct Entity {
 	Entity_Type type;
 	Entity_Team team = TEAM_NULL;
 	Vec2 pos, size, vel;
+
+	int hitpoints=1, max_hitpoints=1;
 
 	void UpdatePos();
 

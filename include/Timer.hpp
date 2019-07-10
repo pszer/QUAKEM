@@ -21,6 +21,7 @@ struct Timer {
 	void Stop();
 
 	ch::nanoseconds GetTime();
+	double GetSeconds();
 };
 
 extern struct FrameLimit {

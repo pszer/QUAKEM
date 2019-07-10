@@ -1,4 +1,5 @@
 #include "ent/Player.hpp"
+#include "Game.hpp"
 
 namespace Ents {
 
@@ -11,7 +12,7 @@ void Player::Update() {
 		else if (move_right && vel.x < speed) vel.x = speed;
 	}
 
-	if (hitpoints < 0)
+	if (hitpoints <= 0)
 		destroy = true;
 }
 
@@ -39,6 +40,9 @@ void Player::HandleInput() {
 	k = Keys.GetKeyState(PLAYER_JUMP);
 	if (k == KEY_DOWN || k == KEY_HELD)
 		Jump();
+
+	k = Keys.GetKeyState(PLAYER_FIRE);
+	if (k == KEY_DOWN) Fire();
 }
 
 void Player::MoveLeft() {
@@ -63,12 +67,30 @@ void Player::Jump() {
 	vel.y -= jump;
 }
 
+
+void Player::Fire() {
+	Vec2 vel = Renderer.ReverseTransformVec2(Vec2(Event.mouse_x, Event.mouse_y)) - pos;
+	vel = vel / std::sqrt(vel.x*vel.x + vel.y*vel.y); // normalize vector
+	vel = vel * 1000.0; // speed
+	Vec2 bullet_pos = pos + (Hull().Size()/2.0) - Vec2();
+
+	std::vector<Argument> args = {
+	  Argument(bullet_pos.x, "x"),
+	  Argument(bullet_pos.y, "y"),
+	  Argument(vel.x, "xv"),
+	  Argument(vel.y, "yv"),
+	  Argument(10ll, "dmg"),
+	  Argument(0.8, "life"),
+	  Argument(ARG_STRING, "player", "team"),
+	};
+
+	Game.CreateEntity(ENT_BULLET, args);
+}
+
 int Player::Construct(const std::vector<Argument>& args) {
 	for (auto arg : args) {
 		if      (arg.label=="x")  pos.x = arg.ToFloat();
 		else if (arg.label=="y")  pos.y = arg.ToFloat();
-		//else if (arg.label=="w")  size.x = arg.ToFloat();
-		//else if (arg.label=="h")  size.y = arg.ToFloat();
 		else if (arg.label=="hp") {
 			hitpoints = arg.ToInt();
 			max_hitpoints = hitpoints;

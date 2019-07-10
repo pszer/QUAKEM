@@ -31,6 +31,10 @@ ch::nanoseconds Timer::GetTime() {
 	}
 }
 
+double Timer::GetSeconds() {
+	return GetTime().count()/1000000000.0;
+}
+
 struct FrameLimit FrameLimit;
 
 void FrameLimit::SetLimit(const int fps) {
