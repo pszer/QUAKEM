@@ -90,8 +90,7 @@ void Game::UpdateEntities() {
 void Game::UpdatePhysics() {
 	gravity = GetCVarFloat("gravity");
 	friction = GetCVarFloat("friction");
-	for (auto ent = Entities.begin(); ent != Entities.end(); ++ent) {
-		(*ent)->ResetFlags();
+	for (auto ent = Entities.begin(); ent != Entities.end(); ++ent) {	
 		if ((*ent)->collide) {
 			for (auto b = World.Brushes.begin(); b != World.Brushes.end(); ++b) {
 				if (CheckCollision((*b)->rect, (*ent)->Hull())) {
@@ -110,14 +109,24 @@ void Game::UpdatePhysics() {
 		}
 
 		if ((*ent)->physics) {
+			ApplyGravity(ent->get());
+			double max_speed = GetCVarFloat("max_speed");
+			Vec2& vel = (*ent)->vel;
+			if (vel.x * vel.x + vel.y * vel.y > max_speed * max_speed) {
+				double mag = std::sqrt(vel.x * vel.x + vel.y * vel.y);
+				vel = vel / mag;
+				vel = vel * max_speed;
+			}
+
+			if ((*ent)->on_ground || (*ent)->on_ceiling)
+				(*ent)->vel.x /= 1.0 + (friction * FrameLimit.deltatime);
+
+			(*ent)->ResetFlags();
 			for (auto b = World.Brushes.begin(); b != World.Brushes.end(); ++b) {
 				bool collide = ((*b)->type == BRUSH_SOLID);
 				EntityRectCollision(ent->get(), (*b)->rect, collide);
 			}
 			(*ent)->UpdatePos();
-			ApplyGravity(ent->get());
-			if ((*ent)->on_ground)
-				(*ent)->vel.x /= 1.0 + (friction * FrameLimit.deltatime);
 		} else {
 			(*ent)->UpdatePos();
 		}
@@ -144,6 +153,7 @@ void Game::Init() {
 	ENT_CONSTRUCT_MSG[ENT_BULLET] = Ents::Bullet::CONSTRUCT_MSG;
 
 	CVARS["gravity"] = Argument(1800.0);
+	CVARS["max_speed"] = Argument(3500.0);
 	CVARS["friction"] = Argument(25.0);
 	CVARS["player_speed"] = Argument(345.0);
 	CVARS["player_jump"] = Argument(800.0);

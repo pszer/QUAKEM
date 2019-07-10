@@ -11,7 +11,7 @@ void Player::Update() {
 	if (!move_left || !move_right) {
 		double speed = GetCVarFloat("player_speed");
 		double accel = 18.0;
-		if (!on_ground) accel = 3.0;
+		if (!on_ground && !on_ceiling) accel = 3.0;
 
 		if (move_left && vel.x > -speed) vel.x += -speed * FrameLimit.deltatime * accel;
 		else if (move_right && vel.x < speed) vel.x += speed * FrameLimit.deltatime * accel;
@@ -43,7 +43,7 @@ void Player::HandleInput() {
 		StopMoveRight();
 
 	k = Keys.GetKeyState(PLAYER_JUMP);
-	if (k == KEY_DOWN || k == KEY_HELD)
+	if ((k == KEY_DOWN || k == KEY_HELD) && Keys.GetKeyDuration(PLAYER_JUMP) <= 0.2)
 		Jump();
 
 	k = Keys.GetKeyState(PLAYER_FIRE);
@@ -67,9 +67,11 @@ void Player::StopMoveRight() {
 }
 
 void Player::Jump() {
-	if (!on_ground) return;
+	if ((Game.gravity >= 0.0 && !on_ground) || (Game.gravity < 0.0 && !on_ceiling)) return;
 	double jump = GetCVarFloat("player_jump");
-	vel.y -= jump;
+	if (Game.gravity >= 0.0)
+		vel.y -= jump;
+	else    vel.y += jump;
 }
 
 void Player::SpawnBullets() {
