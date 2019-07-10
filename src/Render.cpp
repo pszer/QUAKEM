@@ -55,7 +55,7 @@ Rect Renderer::TransformRect(const Rect& rect) {
 }
 
 Vec2 Renderer::ReverseTransformVec2(const Vec2& vec) {
-	return (vec - (Vec2(win_w_mid, win_h_mid) * zoom)) / zoom + pos;
+	return (vec - (Vec2(win_w_mid, win_h_mid))) / zoom + pos;
 }
 
 Line Renderer::ReverseTransformLine(const Line& line) {

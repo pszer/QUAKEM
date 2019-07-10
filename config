@@ -4,6 +4,6 @@ set $console 1
 set $renderscalequality nearest
 
 ent_create ENT_PLAYER
-camera player 1.5
+camera player 1.0
 
 exec map

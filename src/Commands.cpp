@@ -373,10 +373,12 @@ std::string _mouse_del(const std::vector<Argument>& args) {
 		else return USE_MSG;
 	}
 
+	Vec2 m_pos = Renderer.ReverseTransformVec2(
+		Vec2(Event.mouse_x, Event.mouse_y));
+
 	if (check_brush) {
 		for (auto b = Game.World.Brushes.begin(); b != Game.World.Brushes.end(); ++b) {
-			Rect t_rect = Renderer.TransformRect((*b)->rect);
-			if (CheckCollision(t_rect, Vec2(Event.mouse_x, Event.mouse_y))) {
+			if (CheckCollision((*b)->rect, m_pos)) {
 				Game.World.Brushes.erase(b);
 				return "";
 			}
@@ -385,8 +387,7 @@ std::string _mouse_del(const std::vector<Argument>& args) {
 
 	if (check_ent) {
 		for (auto e = Game.Entities.begin(); e != Game.Entities.end(); ++e) {
-			Rect t_rect = Renderer.TransformRect((*e)->Hull());
-			if (CheckCollision(t_rect, Vec2(Event.mouse_x, Event.mouse_y))) {
+			if (CheckCollision((*e)->Hull(), m_pos)) {
 				Game.Entities.erase(e);
 				return "";
 			}
@@ -440,7 +441,10 @@ std::string _mouse_move(const std::vector<Argument>& args) {
 
 std::string _mouse_pos(const std::vector<Argument>&) {
 	Vec2 v = Renderer.ReverseTransformVec2(Vec2(Event.mouse_x,Event.mouse_y));
-	return std::to_string(v.x) + " " + std::to_string(v.y);
+
+	return "world : " + std::to_string(v.x) + " " + std::to_string(v.y) +
+	       "\nscreen: " + std::to_string(Event.mouse_x) + " " +
+	         std::to_string(Event.mouse_y);
 }
 
 std::string _play_wav(const std::vector<Argument>& args) {

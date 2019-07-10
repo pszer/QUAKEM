@@ -11,7 +11,7 @@ struct Camera {
 	// static camera constructor
 	Camera(Vec2 _pos, double z=1.0): type(CAMERA_STATIC), static_pos(_pos), zoom(z) { }
 	// entity following camera constructor
-	Camera(unsigned long id, double z=1.0): type(CAMERA_FOLLOW), id_follow(id), zoom(z) { }
+	Camera(unsigned long id, double z=1.0);
 	// path following camera constructor
 	Camera(Vec2 start, Vec2 end, double dur, double z=1.0): type(CAMERA_PATH),
 	  start_pos(start), end_pos(end), duration(dur), zoom(z) { timer.Start(); }
