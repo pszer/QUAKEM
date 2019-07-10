@@ -2,6 +2,12 @@ brush_create BRUSH_SOLID -64 392 832 192 "64.png" 1.0 1.0 -64 392
 brush_create BRUSH_SOLID 192 264 128 32 "64.png" 1.0 1.0 192 264
 brush_create BRUSH_SOLID 256 168 128 32 "64.png" 1.0 1.0 256 168
 brush_create BRUSH_SOLID 320 72 256 32 "64.png" 1.0 1.0 320 72
-brush_create BRUSH_SOLID 320 -24 256 32 "64.png" 1.0 1.0 320 -24
+brush_create BRUSH_SOLID 384 -24 384 32 "64.png" 1.0 1.0 320 -24
+
+brush_create BRUSH_SOLID 896 392 832 192 "64.png" 1.0 1.0 -64 392
+brush_create BRUSH_SOLID 1344 264 128 32 "64.png" 1.0 1.0 192 264
+brush_create BRUSH_SOLID 1280 168 128 32 "64.png" 1.0 1.0 256 168
+brush_create BRUSH_SOLID 1088 72 256 32 "64.png" 1.0 1.0 320 72
+brush_create BRUSH_SOLID 896 -24 384 32 "64.png" 1.0 1.0 320 -24
 
 brush_create BRUSH_FOREGROUND 526 368 224 24 "fence.png" 1 1 526 368

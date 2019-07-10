@@ -12,6 +12,7 @@ struct Bullet : public Entity {
 	void Update();
 	void Render();
 	Rect Hitbox();
+	Rect Hull();
 
 	static const std::string CONSTRUCT_MSG;
 	int Construct(const std::vector<Argument>& args);

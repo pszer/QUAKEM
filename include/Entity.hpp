@@ -29,7 +29,7 @@ struct Entity {
 	virtual void Render() { }
 	virtual void HandleInput() { }
 	virtual Rect Hitbox() { return Rect(0.0,0.0,0.0,0.0); }
-	Rect Hull(); 
+	virtual Rect Hull() { return Rect(pos, size); }
 
 	virtual void BrushCollision(Brush * brush) { }
 	virtual void EntityCollision(Entity * entity) { }

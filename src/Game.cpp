@@ -116,7 +116,8 @@ void Game::UpdatePhysics() {
 			}
 			(*ent)->UpdatePos();
 			ApplyGravity(ent->get());
-			(*ent)->vel.x /= 1.0 + (friction * FrameLimit.deltatime);
+			if ((*ent)->on_ground)
+				(*ent)->vel.x /= 1.0 + (friction * FrameLimit.deltatime);
 		} else {
 			(*ent)->UpdatePos();
 		}
@@ -144,7 +145,7 @@ void Game::Init() {
 
 	CVARS["gravity"] = Argument(1800.0);
 	CVARS["friction"] = Argument(25.0);
-	CVARS["player_speed"] = Argument(300.0);
+	CVARS["player_speed"] = Argument(345.0);
 	CVARS["player_jump"] = Argument(800.0);
 	CVARS["timescale"] = Argument(1.0);
 

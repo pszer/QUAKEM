@@ -10,8 +10,12 @@ void Bullet::Render() {
 	Renderer.RenderFillRect(Hitbox(), {0xFF,0xF6,0x7A,0xFF});
 }
 
+Rect Bullet::Hull() {
+	return Rect(pos.x + size.x/2.0, pos.y + size.y/2.0, 1.0, 1.0);
+}
+
 Rect Bullet::Hitbox() {
-	return Hull();
+	return Rect(pos.x,pos.y,size.x,size.y);
 }
 
 const std::string Bullet::CONSTRUCT_MSG = "x y xv yv dmg life team";
@@ -28,6 +32,7 @@ int Bullet::Construct(const std::vector<Argument>& args) {
 			else if (arg.ToString() == "enemy") team = TEAM_ENEMY;
 		}
 	}
+
 	return 1;
 }
 

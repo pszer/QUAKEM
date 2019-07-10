@@ -6,10 +6,15 @@ namespace Ents {
 const std::string Player::CONSTRUCT_MSG = "x y hp";
 
 void Player::Update() {
+	SpawnBullets();
+
 	if (!move_left || !move_right) {
 		double speed = GetCVarFloat("player_speed");
-		if (move_left && vel.x > -speed) vel.x = -speed;
-		else if (move_right && vel.x < speed) vel.x = speed;
+		double accel = 18.0;
+		if (!on_ground) accel = 3.0;
+
+		if (move_left && vel.x > -speed) vel.x += -speed * FrameLimit.deltatime * accel;
+		else if (move_right && vel.x < speed) vel.x += speed * FrameLimit.deltatime * accel;
 	}
 
 	if (hitpoints <= 0)
@@ -67,24 +72,45 @@ void Player::Jump() {
 	vel.y -= jump;
 }
 
+void Player::SpawnBullets() {
+	if (shot) {
+		if (shot_counter == shot_burst) {
+			shot_counter = 0;
+			shot = false;
+			return;
+		}
+
+		if (!shot_counter || burst_timer.GetSeconds() > shot_delay) {
+			burst_timer.Reset();
+			++shot_counter;
+		} else return;
+
+		Vec2 b_vel = Renderer.ReverseTransformVec2(Vec2(Event.mouse_x, Event.mouse_y)) - pos;
+		b_vel = b_vel / std::sqrt(b_vel.x*b_vel.x + b_vel.y*b_vel.y); // normalize vector
+		b_vel = b_vel * 1000.0; // speed
+		b_vel = b_vel + vel; // add on parent player velocity
+		Vec2 b_pos = pos + (Hull().Size()/2.0) - Vec2();
+
+		std::vector<Argument> args = {
+		  Argument(b_vel.x, "xv"),
+		  Argument(b_vel.y, "yv"),
+		  Argument(b_pos.x, "x"),
+		  Argument(b_pos.y, "y"),
+		  Argument(10ll, "dmg"),
+		  Argument(0.8, "life"),
+		  Argument(ARG_STRING, "player", "team"),
+		};
+
+		Game.CreateEntity(ENT_BULLET, args);
+	}
+}
 
 void Player::Fire() {
-	Vec2 vel = Renderer.ReverseTransformVec2(Vec2(Event.mouse_x, Event.mouse_y)) - pos;
-	vel = vel / std::sqrt(vel.x*vel.x + vel.y*vel.y); // normalize vector
-	vel = vel * 1000.0; // speed
-	Vec2 bullet_pos = pos + (Hull().Size()/2.0) - Vec2();
-
-	std::vector<Argument> args = {
-	  Argument(bullet_pos.x, "x"),
-	  Argument(bullet_pos.y, "y"),
-	  Argument(vel.x, "xv"),
-	  Argument(vel.y, "yv"),
-	  Argument(10ll, "dmg"),
-	  Argument(0.8, "life"),
-	  Argument(ARG_STRING, "player", "team"),
-	};
-
-	Game.CreateEntity(ENT_BULLET, args);
+	if (cooldown.GetSeconds() > fire_cooldown) {
+		cooldown.Reset();
+		burst_timer.Reset();
+		shot = true;
+	}
 }
 
 int Player::Construct(const std::vector<Argument>& args) {

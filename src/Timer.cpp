@@ -20,6 +20,11 @@ void Timer::Stop() {
 	state = TIMER_STOPPED;
 }
 
+void Timer::Reset() {
+	Stop();
+	Start();
+}
+
 ch::nanoseconds Timer::GetTime() {
 	switch (state) {
 	case TIMER_STOPPED:

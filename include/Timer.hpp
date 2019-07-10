@@ -16,6 +16,7 @@ struct Timer {
 	ch::time_point<ch::high_resolution_clock> start, pause_time;
 	ch::nanoseconds pause_offset = ch::nanoseconds(0);
 
+	void Reset();
 	void Start();
 	void Pause();
 	void Stop();
