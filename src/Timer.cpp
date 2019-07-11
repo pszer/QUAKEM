@@ -5,7 +5,7 @@ void Timer::Start() {
 	if (state == TIMER_STOPPED) {
 		start = ch::high_resolution_clock::now();
 		pause_offset = ch::nanoseconds(0);
-	} else {
+	} else if (state == TIMER_PAUSED) {
 		pause_offset += ch::high_resolution_clock::now() - pause_time;	
 	}
 

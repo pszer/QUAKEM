@@ -35,7 +35,7 @@ extern struct Event {
 
 	int win_w, win_h;
 	int mouse_x, mouse_y,
-	    mouse_dx, mouse_dy;
+	    mouse_dx, mouse_dy, wheel_y;
 
 	void HandleQuitEvent();
 	void HandleWindowEvent();
@@ -46,6 +46,7 @@ extern struct Event {
 	void HandleMouseDownEvent();
 	void HandleMouseUpEvent();
 	void HandleMouseMotionEvent();
+	void HandleMouseWheelEvent();
 
 	void HandleTextInputEvent();
 

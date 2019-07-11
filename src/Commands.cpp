@@ -272,7 +272,7 @@ std::string _camera(const std::vector<Argument>& args) {
 
 std::string _brush_create(const std::vector<Argument>& args) {
 	const std::string USE_MSG = "brush_create brush_type x y w h"
-		" texture [scalex] [scaley] [offsetx] [offsety]";
+		" texture [scalex] [scaley] [offsetx] [offsety] {key:val}";
 	if (args.size() < 6) return USE_MSG;
 	if (args.size() == 7 || args.size() == 9) return USE_MSG;
 
@@ -292,6 +292,8 @@ std::string _brush_create(const std::vector<Argument>& args) {
 	rect.h = args.at(4).ToFloat();
 	texture = args.at(5).ToString();
 
+	std::map<std::string, double> keys;
+
 	// if scale arg present
 	if (args.size() > 7) {
 		scale.x = args.at(6).ToFloat();
@@ -300,12 +302,19 @@ std::string _brush_create(const std::vector<Argument>& args) {
 		if (args.size() > 9) {
 			offset.x = args.at(8).ToFloat();
 			offset.y = args.at(9).ToFloat();
+
+			for (auto a = args.begin()+9; a != args.end(); ++a) {
+				if (!a->label.empty())
+					keys[a->label] = a->ToFloat();
+			}
 		}
 	}
 
+
 	rect = rect.Absolute();
-	Game.World.Brushes.push_back(std::make_unique<Brush>(rect, type,
-	                                                     texture, scale, offset));
+	//Game.World.Brushes.push_back(std::make_unique<Brush>(rect, type,
+	  //                                                   texture, scale, offset));
+	Game.World.CreateBrush(rect, type, texture, scale, offset, std::move(keys));
 	return "";
 }
 

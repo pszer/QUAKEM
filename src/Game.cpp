@@ -8,6 +8,7 @@ void Game::Update() {
 	UpdatePhysics();
 	World.CollideWithEntities();
 	World.Update();
+	CameraWheelScroll();
 }
 
 void Game::Render() {
@@ -36,6 +37,32 @@ void Game::CameraUpdate() {
 		CameraPath(camera_start, camera_end, camera_duration, camera_zoom);
 		break;
 	}
+}
+
+void Game::CameraWheelScroll() {
+	scroll_count += Event.wheel_y * 0.035;
+
+	double d = scroll_count * std::min(FrameLimit.deltatime * 8.0, 0.2);
+	scroll_change += d;
+	scroll_count -= d;
+	if (scroll_count < 0.02 && scroll_count > -0.02) scroll_count = 0.0;
+	if (scroll_change < 0.0) scroll_change = 0.0;
+
+	if (Event.wheel_y) {
+		scroll_timer.Stop();
+	} else {
+		scroll_timer.Start();
+	}
+
+	if (scroll_timer.GetSeconds() > 0.4) {
+		scroll_change -= (scroll_change - 1.0)*std::min(FrameLimit.deltatime*2.0, 0.2);
+		if (scroll_change < 1.005 && scroll_change > 0.995) {
+			scroll_count = 0.0;
+			scroll_change = 1.0;
+		}
+	}
+
+	camera.zoom = camera_zoom * scroll_change;
 }
 
 void Game::CameraDefault() {
@@ -96,6 +123,9 @@ void Game::UpdatePhysics() {
 				if (CheckCollision((*b)->rect, (*ent)->Hull())) {
 					(*ent)->BrushCollision(b->get());
 					if ((*ent)->destroy) goto nextent;
+
+					if ((*b)->check_collision)
+						(*b)->CollideFunc(ent->get());
 				}
 			}
 
@@ -123,8 +153,8 @@ void Game::UpdatePhysics() {
 
 			(*ent)->ResetFlags();
 			for (auto b = World.Brushes.begin(); b != World.Brushes.end(); ++b) {
-				bool collide = ((*b)->type == BRUSH_SOLID);
-				EntityRectCollision(ent->get(), (*b)->rect, collide);
+				if ((*b)->type != BRUSH_SOLID) continue;
+				EntityRectCollision(ent->get(), (*b)->rect);
 			}
 			(*ent)->UpdatePos();
 		} else {
@@ -152,10 +182,11 @@ void Game::Init() {
 	ENT_CONSTRUCT_MSG[ENT_PLAYER] = Ents::Player::CONSTRUCT_MSG;
 	ENT_CONSTRUCT_MSG[ENT_BULLET] = Ents::Bullet::CONSTRUCT_MSG;
 
+	CVARS["followspeed"] = Argument(3.5);
 	CVARS["gravity"] = Argument(1800.0);
 	CVARS["max_speed"] = Argument(3500.0);
 	CVARS["friction"] = Argument(25.0);
-	CVARS["player_speed"] = Argument(345.0);
+	CVARS["player_speed"] = Argument(420.0);
 	CVARS["player_jump"] = Argument(800.0);
 	CVARS["timescale"] = Argument(1.0);
 

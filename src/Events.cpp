@@ -15,6 +15,7 @@ void Event::Init() {
 
 
 void Event::Update() {
+	wheel_y = 0;
 	for (auto k = Keypresses.begin(); k != Keypresses.end();) {
 		if (k->state == KEY_UP) {
 			Keypresses.erase(k);
@@ -84,6 +85,9 @@ void Event::HandleEvents() {
 			break;
 		case SDL_MOUSEMOTION:
 			HandleMouseMotionEvent();
+			break;
+		case SDL_MOUSEWHEEL:
+			HandleMouseWheelEvent();
 			break;
 		case SDL_TEXTINPUT:
 			HandleTextInputEvent();
@@ -158,6 +162,10 @@ void Event::HandleMouseUpEvent() {
 void Event::HandleMouseMotionEvent() {
 	SDL_GetMouseState(&mouse_x, &mouse_y);
 	SDL_GetRelativeMouseState(&mouse_dx, &mouse_dy);
+}
+
+void Event::HandleMouseWheelEvent() {
+	wheel_y = event.wheel.y;
 }
 
 void Event::HandleTextInputEvent() {

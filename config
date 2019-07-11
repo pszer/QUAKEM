@@ -2,10 +2,9 @@ set $maxfps 121
 set $showfps 1
 set $console 1
 set $renderscalequality 1
-set $followspeed 1.5
+set $followspeed 3.0
 
 ent_create ENT_PLAYER
-camera player 1.0
 
 bind Mouse1 "+fire"
 

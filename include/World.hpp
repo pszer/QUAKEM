@@ -19,15 +19,17 @@ struct Entity;
 // update() is called every frame
 //
 // std::map keys is used to specify properties for special brushes like push brushes
-enum BRUSH_TYPE { BRUSH_SOLID , BRUSH_NONSOLID , BRUSH_BACKGROUND , BRUSH_FOREGROUND };
+enum BRUSH_TYPE { BRUSH_SOLID , BRUSH_NONSOLID , BRUSH_BACKGROUND , BRUSH_FOREGROUND ,
+                  BRUSH_PUSH };
 extern std::map<std::string, BRUSH_TYPE> STR_TO_BRUSH_TYPE;
 
 struct Brush {
 	// Rect BRUSH_TYPE texture scale offset
 	Brush(Rect _rect, BRUSH_TYPE _type, const std::string& tex="",
-	  Vec2 scale = Vec2(1.0,1.0), Vec2 offset = Vec2(0.0,0.0))
+	  Vec2 scale = Vec2(1.0,1.0), Vec2 offset = Vec2(0.0,0.0),
+	  std::map<std::string,double> _k=std::map<std::string,double>())
 	: rect(_rect), type(_type), texture(tex),
-	  texture_scale(scale), texture_offset(offset) { }
+	  texture_scale(scale), texture_offset(offset), keys(_k) { }
 
 	Rect rect;
 	BRUSH_TYPE type;
@@ -35,6 +37,7 @@ struct Brush {
 	std::string texture = "";
 	Vec2 texture_scale, texture_offset;
 	std::map<std::string, double> keys;
+	double GetValue(const std::string& str);
 
 	bool check_collision = false;
 
@@ -53,6 +56,9 @@ struct World {
 	void RenderBackground();
 	void RenderMiddle();
 	void RenderForeground();
+
+	void CreateBrush(Rect _rect, BRUSH_TYPE _type, const std::string& tex,
+	  Vec2 scale, Vec2 offset, std::map<std::string, double> keys);
 
 	std::vector<std::unique_ptr<Brush>> Brushes;
 };

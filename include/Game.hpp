@@ -56,6 +56,10 @@ extern struct Game {
 	void CameraStatic(Vec2 pos, double zoom = 1.0);
 	void CameraPath(Vec2 start, Vec2 end, double duration, double zoom = 1.0);
 
+	Timer scroll_timer;
+	double scroll_count = 0.0, scroll_change = 1.0;
+	void CameraWheelScroll();
+
 	void Update();
 	void Render();
 private:
