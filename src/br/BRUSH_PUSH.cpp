@@ -9,9 +9,9 @@ void Brushes::Push::CollideFunc(Entity * ent) {
 	if (yf < 0.0) yf2 = -yf2;
 
 	if ( ((xf > 0.0)&&(v.x <= xf)) || ((xf < 0.0)&&(v.x >= xf)) ) {
-		v.x += xf * FrameLimit.deltatime;
+		v.x += 9.0 * xf * FrameLimit.deltatime;
 	}
 	if ( ((yf > 0.0)&&(v.y <= yf)) || ((yf < 0.0)&&(v.y >= yf)) ) {
-		v.y += yf * FrameLimit.deltatime;
+		v.y += 9.0 * yf * FrameLimit.deltatime;
 	}
 }
