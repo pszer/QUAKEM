@@ -178,9 +178,11 @@ void Game::RenderEntities() {
 void Game::Init() {
 	STR_TO_ENT_TYPE["ENT_PLAYER"] = ENT_PLAYER;
 	STR_TO_ENT_TYPE["ENT_BULLET"] = ENT_BULLET;
+	STR_TO_ENT_TYPE["ENT_ENEMY_WALKER"] = ENT_ENEMY_WALKER;
 
 	ENT_CONSTRUCT_MSG[ENT_PLAYER] = Ents::Player::CONSTRUCT_MSG;
 	ENT_CONSTRUCT_MSG[ENT_BULLET] = Ents::Bullet::CONSTRUCT_MSG;
+	ENT_CONSTRUCT_MSG[ENT_ENEMY_WALKER] = Ents::Walker::CONSTRUCT_MSG;
 
 	CVARS["followspeed"] = Argument(3.5);
 	CVARS["gravity"] = Argument(1800.0);
@@ -202,6 +204,7 @@ int Game::CreateEntity(Entity_Type ent_type, std::vector<Argument>& args) {
 	switch (ent_type) {
 	case ENT_PLAYER: ent = std::make_unique<Ents::Player>(); break;
 	case ENT_BULLET: ent = std::make_unique<Ents::Bullet>(); break;
+	case ENT_ENEMY_WALKER: ent = std::make_unique<Ents::Walker>(); break;
 
 	default: return 0;
 	}

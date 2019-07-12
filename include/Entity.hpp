@@ -10,7 +10,7 @@
 #include "Keys.hpp"
 #include "World.hpp"
 
-enum Entity_Type { ENT_NULL , ENT_PLAYER , ENT_BULLET };
+enum Entity_Type { ENT_NULL , ENT_PLAYER , ENT_BULLET , ENT_ENEMY_WALKER };
 enum Entity_Team { TEAM_NULL , TEAM_PLAYER , TEAM_ENEMY , TEAM_OBJECT };
 
 struct Entity {
@@ -36,7 +36,6 @@ struct Entity {
 	
 	// construct from a list of labelled arguments
 	// returns 1 for success, 0 for error
-	const std::string CONSTRUCT_USE;
 	virtual int Construct(const std::vector<Argument>& args) = 0;
 
 	// constructs a string about entity status
