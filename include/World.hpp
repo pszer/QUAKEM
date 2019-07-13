@@ -20,7 +20,7 @@ struct Entity;
 //
 // std::map keys is used to specify properties for special brushes like push brushes
 enum BRUSH_TYPE { BRUSH_SOLID , BRUSH_NONSOLID , BRUSH_BACKGROUND , BRUSH_FOREGROUND ,
-                  BRUSH_PUSH };
+                  BRUSH_PUSH , BRUSH_HURT };
 extern std::map<std::string, BRUSH_TYPE> STR_TO_BRUSH_TYPE;
 
 struct Brush {

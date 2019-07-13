@@ -10,7 +10,7 @@
 #include "Keys.hpp"
 #include "World.hpp"
 
-enum Entity_Type { ENT_NULL , ENT_PLAYER , ENT_BULLET , ENT_ENEMY_WALKER };
+enum Entity_Type { ENT_NULL , ENT_PLAYER , ENT_MEDPACK , ENT_BULLET , ENT_ENEMY_WALKER };
 enum Entity_Team { TEAM_NULL , TEAM_PLAYER , TEAM_ENEMY , TEAM_OBJECT };
 
 struct Entity {
@@ -46,6 +46,7 @@ struct Entity {
 	Entity_Team team = TEAM_NULL;
 	Vec2 pos, size, vel;
 
+	void Heal(int amount);
 	int hitpoints=1, max_hitpoints=1;
 
 	void UpdatePos();

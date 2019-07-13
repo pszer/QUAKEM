@@ -10,6 +10,12 @@ void Entity::ResetFlags() {
 	on_rightwall = false;
 }
 
+
+void Entity::Heal(int amount) {
+	hitpoints += amount;
+	if (hitpoints > max_hitpoints) hitpoints = max_hitpoints;
+}
+
 void Entity::UpdatePos() {
 	pos = pos + (vel * FrameLimit.deltatime);
 }

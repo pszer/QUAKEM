@@ -1,6 +1,7 @@
 #include "World.hpp"
 
 #include "br/BRUSH_PUSH.hpp"
+#include "br/BRUSH_HURT.hpp"
 
 std::map<std::string, BRUSH_TYPE> STR_TO_BRUSH_TYPE;
 
@@ -10,6 +11,7 @@ void World::Init() {
 	STR_TO_BRUSH_TYPE["BRUSH_BACKGROUND"] = BRUSH_BACKGROUND;
 	STR_TO_BRUSH_TYPE["BRUSH_FOREGROUND"] = BRUSH_FOREGROUND;
 	STR_TO_BRUSH_TYPE["BRUSH_PUSH"] = BRUSH_PUSH;
+	STR_TO_BRUSH_TYPE["BRUSH_HURT"] = BRUSH_HURT;
 }
 
 void World::CreateBrush(Rect rect, BRUSH_TYPE type, const std::string& tex, Vec2 scale, Vec2 offset,
@@ -24,6 +26,8 @@ void World::CreateBrush(Rect rect, BRUSH_TYPE type, const std::string& tex, Vec2
 	switch (type) {
 	case BRUSH_PUSH:
 		br = std::make_unique<Brushes::Push>(rect, tex, scale, offset, std::move(keys)); break;
+	case BRUSH_HURT:
+		br = std::make_unique<Brushes::Hurt>(rect, tex, scale, offset, std::move(keys)); break;
 	default: return;
 	}
 

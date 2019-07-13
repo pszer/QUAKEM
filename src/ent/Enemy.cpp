@@ -51,7 +51,19 @@ void Walker::Update() {
 		}
 	}
 
-	if(hitpoints < 0) destroy = true;
+	if (hitpoints < 0) {
+		destroy = true;
+
+		std::vector<Argument> args = {
+		  Argument(Hull().Middle().x, "x"),
+		  Argument(Hull().Middle().y, "y"),
+		  Argument(0.0, "xv"),
+		  Argument(-600.0, "yv"),
+		  Argument(50ll, "heal"),
+		};
+
+		Game.CreateEntity(ENT_MEDPACK, args);
+	}
 }
 
 void Walker::Render() {
