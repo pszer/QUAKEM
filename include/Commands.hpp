@@ -65,7 +65,7 @@ namespace Commands {
 	std::string _camera(const std::vector<Argument>&);
 
 	// creates standard brush
-	// brush_create brush_type x y w h texture [scalex] [scaley] [offsetx] [offsety]
+	// brush_create brush_type x y w h texture [scalex] [scaley] [offsetx] [offsety] {key:val}
 	std::string _brush_create(const std::vector<Argument>&);
 
 	// lists all brushes
@@ -120,4 +120,8 @@ namespace Commands {
 	// executes config file
 	// exec file
 	std::string _exec(const std::vector<Argument>&);
+
+	// exports currently loaded world as a map file
+	// export filename
+	std::string _export(const std::vector<Argument>&);
 };

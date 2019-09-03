@@ -38,6 +38,7 @@ void Commands::Init() {
 	COMMANDS["list_mus"] = _list_mus;
 	COMMANDS["list_binds"] = _list_binds;
 	COMMANDS["exec"] = _exec;
+	COMMANDS["export"] = _export;
 }
 
 CMD_FUNC Commands::GetCommand(const std::string& id) {
@@ -631,6 +632,19 @@ std::string _exec(const std::vector<Argument>& args) {
 		return "Loaded config file \"" + path + "\"";
 }
 
+std::string _export(const std::vector<Argument>& args) {
+	const std::string USE_MSG = "export filename";
+	std::string fname;
+	if (args.size() == 0) return USE_MSG;
+	fname = "maps/"+args.at(0).ToString();
+
+	std::ofstream out(fname);
+	if (!out) return "Failed to open file \"" + fname + "\" for writing";
+	std::string str = Game.World.Export();
+	out << str;
+	out.close();
+
+	return "";
 }
 
-
+}

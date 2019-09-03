@@ -45,6 +45,14 @@ void Brush::Render() {
 	Renderer.RenderTiledTexture(texture, rect, texture_scale, texture_offset);
 }
 
+
+std::string Brush::TypeString() {
+	for (auto p : STR_TO_BRUSH_TYPE) {
+		if (p.second == type) return p.first;
+	}
+	return "";
+}
+
 void World::Update() {
 	for (auto b = Brushes.begin(); b != Brushes.end(); ++b) {
 		(*b)->Update();
@@ -60,6 +68,31 @@ void World::CollideWithEntities() {
 
 void World::Clear() {
 	Brushes.clear();
+}
+
+std::string World::Export() {
+	std::string result = "";
+
+	for (auto B = Brushes.begin(); B != Brushes.end(); ++B) {
+		auto& b = *B;
+		std::string line = "brush_create " + b->TypeString() + " " +
+		 std::to_string(b->rect.x) + " " +
+		 std::to_string(b->rect.y) + " " +
+		 std::to_string(b->rect.w) + " " +
+		 std::to_string(b->rect.h) + " " +
+		 std::to_string(b->texture_scale.x) + " " +
+		 std::to_string(b->texture_scale.y) + " " +
+		 std::to_string(b->texture_offset.x) + " " +
+		 std::to_string(b->texture_offset.y) + " ";
+
+		for (auto p : b->keys) {
+			line += (p.first + " " + std::to_string(p.second) + " ");
+		}
+
+		result += (line + '\n');
+	}
+
+	return result;
 }
 
 void World::RenderBackground() {

@@ -44,6 +44,8 @@ struct Brush {
 	virtual void Render();
 	virtual void CollideFunc(Entity * ent) { }
 	virtual void Update() { }
+
+	std::string TypeString();
 };
 
 struct World {
@@ -56,6 +58,10 @@ struct World {
 	void RenderBackground();
 	void RenderMiddle();
 	void RenderForeground();
+
+	// exports current world into a config file
+	// that can be called to recreate it
+	std::string Export();
 
 	void CreateBrush(Rect _rect, BRUSH_TYPE _type, const std::string& tex,
 	  Vec2 scale, Vec2 offset, std::map<std::string, double> keys);
