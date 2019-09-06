@@ -124,4 +124,8 @@ namespace Commands {
 	// exports currently loaded world as a map file
 	// export filename
 	std::string _export(const std::vector<Argument>&);
+
+	// loads map file : synonymous with exec maps/"filename"
+	// map filename
+	std::string _map(const std::vector<Argument>&);
 };

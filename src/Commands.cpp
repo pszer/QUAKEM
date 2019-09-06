@@ -39,6 +39,7 @@ void Commands::Init() {
 	COMMANDS["list_binds"] = _list_binds;
 	COMMANDS["exec"] = _exec;
 	COMMANDS["export"] = _export;
+	COMMANDS["map"] = _map;
 }
 
 CMD_FUNC Commands::GetCommand(const std::string& id) {
@@ -645,6 +646,18 @@ std::string _export(const std::vector<Argument>& args) {
 	out.close();
 
 	return "";
+}
+
+std::string _map(const std::vector<Argument>& args) {
+	const std::string USE_MSG = "map filename";
+	std::string path;
+	if (args.size() == 0) return USE_MSG;
+	path = "maps/" + args.at(0).ToString();
+
+	if (!Config::ExecFile(path))
+		return "Map file \"" + path + "\" not found";
+	else
+		return "Loaded map file \"" + path + "\"";
 }
 
 }

@@ -80,13 +80,14 @@ std::string World::Export() {
 		 std::to_string(b->rect.y) + " " +
 		 std::to_string(b->rect.w) + " " +
 		 std::to_string(b->rect.h) + " " +
+		 '"' + b->texture + "\" " +
 		 std::to_string(b->texture_scale.x) + " " +
 		 std::to_string(b->texture_scale.y) + " " +
 		 std::to_string(b->texture_offset.x) + " " +
 		 std::to_string(b->texture_offset.y) + " ";
 
 		for (auto p : b->keys) {
-			line += (p.first + " " + std::to_string(p.second) + " ");
+			line += (p.first + ":" + std::to_string(p.second) + " ");
 		}
 
 		result += (line + '\n');

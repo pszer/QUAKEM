@@ -8,4 +8,4 @@ ent_create ENT_PLAYER
 
 bind Mouse1 "+fire"
 
-exec map
+map test
