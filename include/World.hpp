@@ -19,8 +19,8 @@ struct Entity;
 // update() is called every frame
 //
 // std::map keys is used to specify properties for special brushes like push brushes
-enum BRUSH_TYPE { BRUSH_SOLID , BRUSH_NONSOLID , BRUSH_BACKGROUND , BRUSH_FOREGROUND ,
-                  BRUSH_PUSH , BRUSH_HURT };
+enum BRUSH_TYPE { BRUSH_SOLID=0 , BRUSH_NONSOLID=1 , BRUSH_BACKGROUND=2 , BRUSH_FOREGROUND=3 ,
+                  BRUSH_PUSH=4 , BRUSH_HURT=5 };
 extern std::map<std::string, BRUSH_TYPE> STR_TO_BRUSH_TYPE;
 
 struct Brush {

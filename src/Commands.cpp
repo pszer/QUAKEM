@@ -284,6 +284,7 @@ std::string _brush_create(const std::vector<Argument>& args) {
 	Vec2 scale = Vec2(1.0,1.0);
 	Vec2 offset = Vec2(0.0,0.0);
 
+	std::cout << args.at(0).ToString() << std::endl;
 	auto bt = STR_TO_BRUSH_TYPE.find(args.at(0).ToString());
 	if (bt == STR_TO_BRUSH_TYPE.end()) return "Invalid brush type";
 	type = bt->second;
@@ -322,7 +323,7 @@ std::string _brush_create(const std::vector<Argument>& args) {
 
 
 std::string _brush_list(const std::vector<Argument>&) {
-	std::string str = "INDEX|     X     |     Y     |    W    |    H    |   TYPE   | TEXTURE\n";
+	std::string str = "INDEX|     X     |     Y     |    W    |    H    | TEXTURE\n";
 
 	for (std::size_t i=0; i < Game.World.Brushes.size(); ++i) {
 		Brush * brush = Game.World.Brushes.at(i).get();
@@ -352,9 +353,7 @@ std::string _brush_list(const std::vector<Argument>&) {
 		COL( std::to_string(brush->rect.w), 9 );
 		COL( std::to_string(brush->rect.h), 9 );
 
-		const std::string TYPENAMES[] =
-		  {"SOLID","NONSOLID","BACKGROUND","FOREGROUND"};
-		COL( TYPENAMES[(int)brush->type], 10);
+		COL( brush->TypeString(), 16);
 		str += brush->texture;
 
 		if (i < Game.World.Brushes.size()-1)
