@@ -9,6 +9,7 @@
 #include "Events.hpp"
 #include "Keys.hpp"
 #include "World.hpp"
+#include "Weapons.hpp"
 
 enum Entity_Type { ENT_NULL , ENT_PLAYER , ENT_MEDPACK , ENT_BULLET , ENT_ENEMY_WALKER };
 enum Entity_Team { TEAM_NULL , TEAM_PLAYER , TEAM_ENEMY , TEAM_OBJECT };
@@ -61,6 +62,15 @@ struct Entity {
 	     on_ceiling = false,
 	     on_leftwall = false,
 	     on_rightwall = false;
+
+	int active_weapon = 0;
+	std::vector<std::unique_ptr<Weapon>> weapons;
+	Weapon * ActiveWeapon() {
+		return active_weapon < weapons.size()
+		  ? weapons[active_weapon].get() : nullptr; }
+	void SwitchWeapon(int slot);
+
+	void AddWeapon(WEAPON_TYPE type, std::map<std::string, double> keys, int slot=-1);
 
 	virtual ~Entity() { }
 };

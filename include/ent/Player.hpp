@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Entity.hpp"
+#include "Weapons.hpp"
 
 namespace Ents {
 
@@ -10,7 +11,12 @@ struct Player : public Entity {
 	{ 
 		hitpoints = 100; max_hitpoints = 100;
 		cooldown.Start();
+
+		AddWeapon(WEP_PISTOL, {
+		  {"dmg", 10.0}, {"rate", 0.12}, {"vel", 1500.0}, {"life", 0.35} }); 
 	}
+
+	std::unique_ptr<Weapon> weapons[9];
 
 	void Update();
 	void Render();

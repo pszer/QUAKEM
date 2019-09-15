@@ -1,4 +1,5 @@
 #include <iostream>
+#include <filesystem>
 
 #include "Commands.hpp"
 #include "Core.hpp"
@@ -284,7 +285,6 @@ std::string _brush_create(const std::vector<Argument>& args) {
 	Vec2 scale = Vec2(1.0,1.0);
 	Vec2 offset = Vec2(0.0,0.0);
 
-	std::cout << args.at(0).ToString() << std::endl;
 	auto bt = STR_TO_BRUSH_TYPE.find(args.at(0).ToString());
 	if (bt == STR_TO_BRUSH_TYPE.end()) return "Invalid brush type";
 	type = bt->second;
@@ -653,10 +653,13 @@ std::string _map(const std::vector<Argument>& args) {
 	if (args.size() == 0) return USE_MSG;
 	path = "maps/" + args.at(0).ToString();
 
-	if (!Config::ExecFile(path))
-		return "Map file \"" + path + "\" not found";
-	else
+	if (std::filesystem::is_regular_file(std::filesystem::path(path))) {
+		Game.World.Clear();
+		Config::ExecFile(path);
 		return "Loaded map file \"" + path + "\"";
+	} else {
+		return "Map file \"" + path + "\" not found";
+	}
 }
 
 }

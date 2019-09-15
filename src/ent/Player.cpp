@@ -6,7 +6,8 @@ namespace Ents {
 const std::string Player::CONSTRUCT_MSG = "x y hp";
 
 void Player::Update() {
-	SpawnBullets();
+	if (weapons[active_weapon] != nullptr)
+		weapons[active_weapon]->Update();
 
 	if (!move_left || !move_right) {
 		double speed = GetCVarFloat("player_speed");
@@ -48,6 +49,10 @@ void Player::HandleInput() {
 
 	k = Keys.GetKeyState(PLAYER_FIRE);
 	if (k == KEY_DOWN) Fire();
+	else if (k == KEY_HELD) {
+		if (ActiveWeapon() != nullptr && ActiveWeapon()->GetKey("autofire") == 1.0)
+				Fire();
+	}
 }
 
 void Player::MoveLeft() {
@@ -108,11 +113,10 @@ void Player::SpawnBullets() {
 }
 
 void Player::Fire() {
-	if (cooldown.GetSeconds() > fire_cooldown) {
-		cooldown.Reset();
-		burst_timer.Reset();
-		shot = true;
-	}
+	if (ActiveWeapon() == nullptr) return;
+
+	Vec2 pos = Renderer.ReverseTransformVec2(Vec2(Event.mouse_x, Event.mouse_y));
+	ActiveWeapon()->Fire(pos);
 }
 
 int Player::Construct(const std::vector<Argument>& args) {
