@@ -7,6 +7,7 @@
 #include "Commands.hpp"
 #include "Entity.hpp"
 #include "World.hpp"
+#include "Sound.hpp"
 
 extern struct Game {
 	void Init();

@@ -74,3 +74,6 @@ struct Entity {
 
 	virtual ~Entity() { }
 };
+
+// sound effect used for ent positional sound
+void _ent_pos_update(int id);

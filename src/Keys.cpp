@@ -6,6 +6,17 @@ void Keys::DefaultBindings() {
 	SetBoundKey(PLAYER_LEFT , SDLK_a);
 	SetBoundKey(PLAYER_RIGHT, SDLK_d);
 	SetBoundKey(PLAYER_JUMP , SDLK_SPACE);
+
+	SetBoundKey(PLAYER_WEP0, SDLK_1);
+	SetBoundKey(PLAYER_WEP1, SDLK_2);
+	SetBoundKey(PLAYER_WEP2, SDLK_3);
+	SetBoundKey(PLAYER_WEP3, SDLK_4);
+	SetBoundKey(PLAYER_WEP4, SDLK_5);
+	SetBoundKey(PLAYER_WEP5, SDLK_6);
+	SetBoundKey(PLAYER_WEP6, SDLK_7);
+	SetBoundKey(PLAYER_WEP7, SDLK_8);
+	SetBoundKey(PLAYER_WEP8, SDLK_9);
+	SetBoundKey(PLAYER_WEP9, SDLK_0);
 }
 
 Keypress_State Keys::GetKeyState(const std::string& str) {

@@ -18,10 +18,20 @@ class Pistol : public Weapon {
 public:
 	Pistol(std::map<std::string, double> k, Entity * p):
 	 Weapon(k,p) { timer.Start(); }
-	bool Fire(double angle);
+	bool Fire(Vec2 aim);
 
 	Timer timer;
 };
+
+// WEP_MACHINEGUN
+// KEY    / DESCRIPTION
+//  dmg   -  damage per bullet
+//  rate  -  cooldown between shots
+//  vel   -  bullet velocity
+//  life  -  bullet lifetime/
+/*class MachineGun : public Weapon {
+
+};*/
 
 };
 

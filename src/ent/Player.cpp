@@ -115,8 +115,9 @@ void Player::SpawnBullets() {
 void Player::Fire() {
 	if (ActiveWeapon() == nullptr) return;
 
-	Vec2 pos = Renderer.ReverseTransformVec2(Vec2(Event.mouse_x, Event.mouse_y));
-	ActiveWeapon()->Fire(pos);
+	Vec2 p = Renderer.ReverseTransformVec2(Vec2(Event.mouse_x, Event.mouse_y));
+	p = p - pos;
+	ActiveWeapon()->Fire(p);
 }
 
 int Player::Construct(const std::vector<Argument>& args) {

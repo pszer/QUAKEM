@@ -1,11 +1,6 @@
 #include "Weapons.hpp"
 #include "Game.hpp"
 
-bool Weapon::Fire(Vec2 aim) {
-	  return Fire(std::atan2(aim.y - parent->Hull().Middle().y,
-	                         aim.x - parent->Hull().Middle().x ));
-}
-
 namespace Weapons {
 
 std::unique_ptr<Weapon> CreateWeapon(WEAPON_TYPE type, std::map<std::string, double> keys, Entity* p) {
@@ -16,21 +11,22 @@ std::unique_ptr<Weapon> CreateWeapon(WEAPON_TYPE type, std::map<std::string, dou
 	return nullptr;
 }
 
-bool Pistol::Fire(double angle) {
+bool Pistol::Fire(Vec2 aim) {
 	if (timer.GetSeconds() < GetKey("rate")) return false;
 	timer.Reset();
 
-	double vx = std::cos(angle);
-	double vy = std::sin(angle);
+	double length = std::sqrt(aim.x*aim.x + aim.y*aim.y);
+	if (length == 0.0) return false;
+	aim = aim / length;
+
 
 	double vel = GetKey("vel");
 
-	vx *= vel;
-	vy *= vel;
+	aim = aim * vel;
 
 	std::vector<Argument> args = {
-	  Argument(vx, "xv"),
-	  Argument(vy, "yv"),
+	  Argument(aim.x, "xv"),
+	  Argument(aim.y, "yv"),
 	  Argument(parent->Hull().Middle().x, "x"),
 	  Argument(parent->Hull().Middle().y, "y"),
 	  Argument(GetKey("dmg"), "dmg"),

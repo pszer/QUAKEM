@@ -463,10 +463,10 @@ std::string _play_wav(const std::vector<Argument>& args) {
 	if (args.size() < 1) return USE_MSG;
 	std::string chunk_str = args.at(0).ToString();
 
-	auto chunk = Media.GetChunk(chunk_str);
-	if (chunk == nullptr) return "sfx chunk \"" + chunk_str + "\" not found";
-
-	Mix_PlayChannel(-1, chunk, 0);
+	//auto chunk = Media.GetChunk(chunk_str);
+	//if (chunk == nullptr) return "sfx chunk \"" + chunk_str + "\" not found";
+	//Mix_PlayChannel(-1, chunk, 0);
+	Sound::PlaySound(chunk_str);
 
 	return "";
 }

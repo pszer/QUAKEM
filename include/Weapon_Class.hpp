@@ -15,8 +15,7 @@ public:
 
 	virtual void Update() { ; }
 
-	virtual bool Fire(double angle) = 0;
-	virtual bool Fire(Vec2 aim);
+	virtual bool Fire(Vec2 aim) = 0;
 	
 	void SetKey(const std::string& s, double d) {
 		keys[s] = d;

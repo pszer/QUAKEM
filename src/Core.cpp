@@ -5,6 +5,7 @@ struct Core Core;
 int Core::Init(InitParameters init) {
 	World::Init();
 	Commands::Init();
+	Sound::Init();
 	Game.Init();
 	Keys.DefaultBindings();
 	
@@ -84,11 +85,11 @@ void Core::MainLoop() {
 		HandleEvents();
 
 		Game.Update();
-
 		Console.Update();
 
 		MainRender();
 
+		Sound::Update();
 		Event.Update();
 
 		FrameLimit.FrameEnd();

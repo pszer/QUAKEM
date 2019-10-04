@@ -1,6 +1,15 @@
 #include "ent/Bullet.hpp"
 
+#include "Sound.hpp"
+
 namespace Ents {
+
+Bullet::Bullet(): Entity(ENT_BULLET,
+	  Vec2(0.0,0.0), Vec2(16.0,16.0), Vec2(0.0,0.0), TEAM_NULL, true, false)
+{
+	timer.Start();
+	Sound::PlaySound("flyby.wav", 0.3, Sound::_ent_pos_update, UNIQUE_ID);
+}
 
 void Bullet::Update() {
 	if (timer.GetSeconds() > lifetime) destroy = true;

@@ -12,6 +12,17 @@
 #define PLAYER_JUMP  "+jump"
 #define PLAYER_FIRE  "+fire"
 
+#define PLAYER_WEP0 "+slot0"
+#define PLAYER_WEP1 "+slot1"
+#define PLAYER_WEP2 "+slot2"
+#define PLAYER_WEP3 "+slot3"
+#define PLAYER_WEP4 "+slot4"
+#define PLAYER_WEP5 "+slot5"
+#define PLAYER_WEP6 "+slot6"
+#define PLAYER_WEP7 "+slot7"
+#define PLAYER_WEP8 "+slot8"
+#define PLAYER_WEP9 "+slot9"
+
 extern struct Keys {
 	void DefaultBindings();
 

@@ -5,9 +5,7 @@
 namespace Ents {
 
 struct Bullet : public Entity {
-	Bullet(): Entity(ENT_BULLET,
-	  Vec2(0.0,0.0), Vec2(16.0,16.0), Vec2(0.0,0.0), TEAM_NULL, true, false)
-	{ timer.Start(); }
+	Bullet();
 
 	void Update();
 	void Render();
