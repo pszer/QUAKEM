@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <utility>
 
 #include "Render.hpp"
 #include "Cmd.hpp"
@@ -11,8 +12,12 @@
 #include "World.hpp"
 #include "Weapons.hpp"
 
-enum Entity_Type { ENT_NULL , ENT_PLAYER , ENT_MEDPACK , ENT_BULLET , ENT_ENEMY_WALKER };
+enum Entity_Type { ENT_NULL , ENT_PLAYER , ENT_MEDPACK , ENT_BULLET , ENT_ROCKET ,
+	ENT_EXPLOSION , ENT_ENEMY_WALKER };
 enum Entity_Team { TEAM_NULL , TEAM_PLAYER , TEAM_ENEMY , TEAM_OBJECT };
+
+std::string TeamToStr(Entity_Team);
+Entity_Team StrToTeam(const std::string&);
 
 struct Entity {
 	Entity(Entity_Type _type, Vec2 _pos=Vec2(0.0,0.0), Vec2 _size=Vec2(0.0,0.0),
@@ -51,6 +56,7 @@ struct Entity {
 	int hitpoints=1, max_hitpoints=1;
 
 	void UpdatePos();
+	void Push(Vec2 push);
 
 	bool collide = true, physics = true;
 

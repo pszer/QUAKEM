@@ -12,7 +12,9 @@ struct Player : public Entity {
 		hitpoints = 100; max_hitpoints = 100;
 
 		AddWeapon(WEP_PISTOL, {
-		  {"dmg", 10.0}, {"rate", 0.12}, {"vel", 1500.0}, {"life", 0.35} }); 
+		  {"dmg", 10.0}, {"rate", 0.12}, {"vel", 1500.0}, {"life", 0.35  } }); 
+		AddWeapon(WEP_ROCKETL, {
+		  {"dmg", 75.0}, {"rate", 0.6 }, {"vel", 700.0 }, {"rad", 100.0} });
 	}
 
 	std::unique_ptr<Weapon> weapons[9];

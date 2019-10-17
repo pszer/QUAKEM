@@ -3,6 +3,21 @@
 
 unsigned long Entity::ID_COUNT = 0;
 
+const std::pair<std::string, Entity_Team> __TEAMSTRS[4] =
+  {{"NULL",TEAM_NULL},{"PLAYER",TEAM_PLAYER},
+   {"ENEMY",TEAM_ENEMY},{"OBJECT",TEAM_OBJECT}};
+std::string TeamToStr(Entity_Team t) {
+	for (int i = 0; i < 4; ++i)
+		if (__TEAMSTRS[i].second == t) return __TEAMSTRS[i].first;
+	return "NULL";
+}
+
+Entity_Team StrToTeam(const std::string& str) {
+	for (int i = 0; i < 4; ++i)
+		if (__TEAMSTRS[i].first == str) return __TEAMSTRS[i].second;
+	return TEAM_NULL;
+}
+
 void Entity::ResetFlags() {
 	on_ground = false;
 	on_ceiling = false;
@@ -18,6 +33,10 @@ void Entity::Heal(int amount) {
 
 void Entity::UpdatePos() {
 	pos = pos + (vel * FrameLimit.deltatime);
+}
+
+void Entity::Push(Vec2 push) {
+	vel = vel + push;
 }
 
 void Entity::AddWeapon(WEAPON_TYPE type, std::map<std::string, double> keys, int slot) {

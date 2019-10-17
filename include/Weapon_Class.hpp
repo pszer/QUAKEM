@@ -7,7 +7,7 @@
 
 class Entity;
 
-enum WEAPON_TYPE { WEP_PISTOL };
+enum WEAPON_TYPE { WEP_PISTOL , WEP_ROCKETL };
 
 class Weapon {
 public:

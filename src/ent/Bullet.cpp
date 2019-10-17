@@ -1,9 +1,11 @@
 #include "ent/Bullet.hpp"
 
 #include "Sound.hpp"
+#include "Game.hpp"
 
 namespace Ents {
 
+// bullet
 Bullet::Bullet(): Entity(ENT_BULLET,
 	  Vec2(0.0,0.0), Vec2(16.0,16.0), Vec2(0.0,0.0), TEAM_NULL, true, false)
 {
@@ -36,10 +38,7 @@ int Bullet::Construct(const std::vector<Argument>& args) {
 		else if (arg.label=="yv")   vel.y = arg.ToFloat();
 		else if (arg.label=="dmg")  damage = arg.ToInt();
 		else if (arg.label=="life") lifetime = arg.ToFloat();
-		else if (arg.label=="team") {
-			if (arg.ToString() == "player") team = TEAM_PLAYER;
-			else if (arg.ToString() == "enemy") team = TEAM_ENEMY;
-		}
+		else if (arg.label=="team") team = StrToTeam(arg.ToString());
 	}
 
 	return 1;
@@ -61,6 +60,76 @@ void Bullet::EntityCollision(Entity * entity) {
 std::string Bullet::Info() {
 	  return "x:" + std::to_string(pos.x) + "[" + std::to_string(vel.x) + "] y:" + std::to_string(pos.y) +
 		  "[" + std::to_string(vel.y) + "]";
+}
+
+
+
+
+// Rocket
+Rocket::Rocket(): Entity(ENT_ROCKET,
+	  Vec2(0.0,0.0), Vec2(20.0,20.0), Vec2(0.0,0.0), TEAM_NULL, true, false)
+{ }
+
+void Rocket::Update() {
+}
+
+void Rocket::Render() {	
+	Renderer.RenderFillRect(Hitbox(), {0xFF,0x10,0x10,0xFF});
+}
+
+Rect Rocket::Hull() {
+	return Hitbox();
+}
+
+Rect Rocket::Hitbox() {
+	return Rect(pos.x,pos.y,size.x,size.y);
+}
+
+const std::string Rocket::CONSTRUCT_MSG = "x y xv yv dmg rad team";
+int Rocket::Construct(const std::vector<Argument>& args) {
+	for (auto arg : args) {
+		if      (arg.label=="x")    pos.x = arg.ToFloat() - size.x/2.0;
+		else if (arg.label=="y")    pos.y = arg.ToFloat() - size.y/2.0;
+		else if (arg.label=="xv")   vel.x = arg.ToFloat();
+		else if (arg.label=="yv")   vel.y = arg.ToFloat();
+		else if (arg.label=="dmg")  damage = arg.ToInt();
+		else if (arg.label=="rad")  radius = arg.ToFloat();
+		else if (arg.label=="team") team = StrToTeam(arg.ToString());
+	}
+
+	return 1;
+}
+
+void Rocket::BrushCollision(Brush * brush) {
+	if (brush->type == BRUSH_SOLID)	{
+		if (!destroy) SpawnExplosion();
+		destroy = true;
+	}
+}
+
+void Rocket::EntityCollision(Entity * entity) {
+	if (team != entity->team && entity->team != TEAM_NULL) {
+		if (!destroy) SpawnExplosion();
+		destroy = true;
+	}
+}
+
+void Rocket::SpawnExplosion() {
+	std::vector<Argument> args = {
+		Argument(Hull().Middle().x, "x"),
+		Argument(Hull().Middle().y, "y"),
+		Argument((long long)damage, "dmg"),
+		Argument(radius, "rad"),
+		Argument(ARG_STRING, TeamToStr(team), "team")
+	};
+
+	Game.CreateEntity(ENT_EXPLOSION, args);
+}
+
+std::string Rocket::Info() {
+	  return "x:" + std::to_string(pos.x) + "[" + std::to_string(vel.x) + "] y:" + std::to_string(pos.y) +
+		  "[" + std::to_string(vel.y) + "]";
+
 }
 
 }
