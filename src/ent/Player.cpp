@@ -1,13 +1,14 @@
 #include "ent/Player.hpp"
 #include "Game.hpp"
+#include "HUD.hpp"
 
 namespace Ents {
 
 const std::string Player::CONSTRUCT_MSG = "x y hp";
 
 void Player::Update() {
-	if (weapons[active_weapon] != nullptr)
-		weapons[active_weapon]->Update();
+	if (ActiveWeapon() != nullptr)
+		ActiveWeapon()->Update();
 
 	if (!move_left || !move_right) {
 		double speed = GetCVarFloat("player_speed");
@@ -47,6 +48,16 @@ void Player::HandleInput() {
 	if ((k == KEY_DOWN || k == KEY_HELD) && Keys.GetKeyDuration(PLAYER_JUMP) <= 0.2)
 		Jump();
 
+	// weapon switch
+	for (int i = 0; i <= 9; ++i) {
+		std::string str = "+slot";
+		str += (char)('0'+i);
+		k = Keys.GetKeyState(str);
+
+		if (k == KEY_DOWN)
+			SwitchWeapon(i);
+	}
+
 	k = Keys.GetKeyState(PLAYER_FIRE);
 	if (k == KEY_DOWN) Fire();
 	else if (k == KEY_HELD) {
@@ -79,39 +90,6 @@ void Player::Jump() {
 	else    vel.y += jump;
 }
 
-void Player::SpawnBullets() {
-	if (shot) {
-		if (shot_counter == shot_burst) {
-			shot_counter = 0;
-			shot = false;
-			return;
-		}
-
-		if (!shot_counter || burst_timer.GetSeconds() > shot_delay) {
-			burst_timer.Reset();
-			++shot_counter;
-		} else return;
-
-		Vec2 b_vel = Renderer.ReverseTransformVec2(Vec2(Event.mouse_x, Event.mouse_y)) - Hull().Middle() ;
-		b_vel = b_vel / std::sqrt(b_vel.x*b_vel.x + b_vel.y*b_vel.y); // normalize vector
-		b_vel = b_vel * 1000.0; // speed
-		b_vel = b_vel + vel / 4.0; // add on parent player velocity
-		Vec2 b_pos = pos + (Hull().Size()/2.0) - Vec2();
-
-		std::vector<Argument> args = {
-		  Argument(b_vel.x, "xv"),
-		  Argument(b_vel.y, "yv"),
-		  Argument(b_pos.x, "x"),
-		  Argument(b_pos.y, "y"),
-		  Argument(10ll, "dmg"),
-		  Argument(0.8, "life"),
-		  Argument(ARG_STRING, "player", "team"),
-		};
-
-		Game.CreateEntity(ENT_BULLET, args);
-	}
-}
-
 void Player::Fire() {
 	if (ActiveWeapon() == nullptr) return;
 
@@ -129,6 +107,9 @@ int Player::Construct(const std::vector<Argument>& args) {
 			max_hitpoints = hitpoints;
 		}
 	}
+
+	HUD.Add(std::make_unique<HUD_Elements::HP_Bar>(pos, Vec2(60.0,10.0), UNIQUE_ID));
+
 	return 1;
 }
 

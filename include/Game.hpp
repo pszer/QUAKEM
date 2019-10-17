@@ -8,6 +8,7 @@
 #include "Entity.hpp"
 #include "World.hpp"
 #include "Sound.hpp"
+#include "HUD.hpp"
 
 extern struct Game {
 	void Init();
@@ -54,6 +55,7 @@ extern struct Game {
 	void CameraDefault();
 	void CameraFollowEntity(unsigned long ID, double zoom = 1.0);
 	void CameraFollowPlayer(double zoom = 1.0);
+	void CameraFindPlayer();
 	void CameraStatic(Vec2 pos, double zoom = 1.0);
 	void CameraPath(Vec2 start, Vec2 end, double duration, double zoom = 1.0);
 

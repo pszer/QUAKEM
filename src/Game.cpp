@@ -9,6 +9,10 @@ void Game::Update() {
 	World.CollideWithEntities();
 	World.Update();
 	CameraWheelScroll();
+	HUD.Update();
+
+	if (camera_mode == GAME_CAMERA_FOLLOW_PLAYER)
+		CameraFindPlayer();
 }
 
 void Game::Render() {
@@ -17,6 +21,7 @@ void Game::Render() {
 	World.RenderMiddle();
 	RenderEntities();
 	World.RenderForeground();
+	HUD.Render();
 }
 
 void Game::CameraUpdate() {
@@ -81,7 +86,17 @@ void Game::CameraFollowPlayer(double zoom) {
 			return;
 		}
 	}
-	CameraDefault();
+
+	CameraFollowEntity(-1, zoom);
+}
+
+void Game::CameraFindPlayer() {
+	for (auto ent = Entities.begin(); ent != Entities.end(); ++ent) {
+		if ((*ent)->type == ENT_PLAYER) {
+			camera.id_follow = (*ent)->UNIQUE_ID;
+			return;
+		}
+	}
 }
 
 void Game::CameraStatic(Vec2 pos, double zoom) {

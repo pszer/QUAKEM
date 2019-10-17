@@ -30,7 +30,5 @@ void Entity::AddWeapon(WEAPON_TYPE type, std::map<std::string, double> keys, int
 }
 
 void Entity::SwitchWeapon(int slot) {
-	if (weapons.size() >= slot) return;
-	if (weapons.at(slot) == nullptr) return;
 	active_weapon = slot;
 }
