@@ -23,6 +23,21 @@ public:
 	Timer timer;
 };
 
+// WEP_ROCKETL
+// KEY    / DESCRIPTION
+// dmg    - damage
+// vel    - rocket velocity
+// rad    - explosion radius
+// rate   - cooldown between shots
+class RocketLauncher : public Weapon {
+public:
+	RocketLauncher(std::map<std::string, double> k, Entity * p):
+	 Weapon(k,p) { timer.Start(); }
+	bool Fire(Vec2 aim);
+
+	Timer timer;
+};
+
 // WEP_MACHINEGUN
 // KEY    / DESCRIPTION
 //  dmg   -  damage per bullet

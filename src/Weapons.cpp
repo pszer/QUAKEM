@@ -19,7 +19,6 @@ bool Pistol::Fire(Vec2 aim) {
 	if (length == 0.0) return false;
 	aim = aim / length;
 
-
 	double vel = GetKey("vel");
 
 	aim = aim * vel;
@@ -37,6 +36,23 @@ bool Pistol::Fire(Vec2 aim) {
 	Game.CreateEntity(ENT_BULLET, args);
 
 	return true;
+}
+
+bool RocketLauncher::Fire(Vec2 aim) {
+	if (timer.GetSeconds() < GetKey("rate")) return false;
+	timer.Reset();
+
+	double length = std::sqrt(aim.x*aim.x + aim.y*aim.y);
+	if (length == 0.0) return false;
+	aim = aim / length;
+
+	double vel = GetKey("vel");
+
+	aim = aim * vel;
+
+	std::vector<Argument> args = {
+		Argument(aim.x`);
+	};
 }
 
 };
