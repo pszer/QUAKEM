@@ -42,8 +42,8 @@ bool CheckCollision(const Line& _a, const Line& _b) {
 	if (!CheckCollision(P,Q)) return false;
 
 	// check overlapping points
-	if ((a == c) || (a == d) || (b == c) || (b == d))
-		return true;
+	//if ((a == c) || (a == d) || (b == c) || (b == d))
+	//	return true;
 
 	// check parallel
 	if ( ((a.x - b.x) * (c.y - d.y) + (a.y - b.y) * (d.x - c.x) == 0.0) && 

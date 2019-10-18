@@ -2,6 +2,7 @@
 
 #include "Media.hpp"
 
+#define CHANNELS 16
 
 namespace Sound {
 	struct SoundInstance {

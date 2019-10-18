@@ -7,7 +7,6 @@ namespace Ents {
 Explosion::Explosion(): Entity(ENT_EXPLOSION,
 	  Vec2(0.0,0.0), Vec2(20.0,20.0), Vec2(0.0,0.0), TEAM_NULL, true, false)
 {
-	Sound::PlaySound("explode.wav", 0.5, Sound::_ent_pos_update, UNIQUE_ID);
 }
 
 void Explosion::Update() {
@@ -41,6 +40,8 @@ int Explosion::Construct(const std::vector<Argument>& args) {
 	pos.y -= radius;
 	size.x = radius*2;
 	size.y = radius*2;
+
+	Sound::PlaySound("explode.wav", 0.5, Sound::_ent_pos_update, UNIQUE_ID);
 
 	return 1;
 }

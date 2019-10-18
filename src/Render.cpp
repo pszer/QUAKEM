@@ -209,7 +209,7 @@ void Renderer::RenderTiledTexture(const std::string& tex_name, Rect _rect, Vec2 
 	SDL_Rect viewport = TransformRect(rect).ToSDLRect();
 	SDL_RenderSetViewport(renderer, &viewport);
 
-	Rect draw_rect = { 0, 0, (int)(zoom * tile_w), (int)(zoom * tile_h) };
+	Rect draw_rect = { 0, 0, (int)(zoom * tile_w + 0.5), (int)(zoom * tile_h + 0.5) };
 
 	for (double x = offset.x; x < rect.w; x += tile_w) {
 		for (double y = offset.y; y < rect.h; y += tile_h) {

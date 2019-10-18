@@ -37,6 +37,9 @@ int Core::Init(InitParameters init) {
 		return -1;
 	}
 
+
+	Mix_AllocateChannels(CHANNELS);
+
 	window = SDL_CreateWindow(init.win_title.c_str(), SDL_WINDOWPOS_UNDEFINED,
 	  SDL_WINDOWPOS_UNDEFINED, init.win_w, init.win_h, init.win_flags);
 	if (window == nullptr) {

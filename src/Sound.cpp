@@ -10,15 +10,21 @@ void Init() {
 	Mix_ChannelFinished(ChannelFinished);
 }
 
+static int CHANNEL = 0;
 void PlaySound(const std::string& fname, double volume, void (*update)(int,int), int reg) {
 	Mix_Chunk * chunk = Media.GetChunk(fname);
 	if (chunk == nullptr) return;
 
-	int ch = Mix_PlayChannel(-1, chunk, 0);
-	if (ch == -1) return;
+	if (Mix_Playing(CHANNEL)) return;
 
-	Mix_Volume(ch, static_cast<int>(volume * MIX_MAX_VOLUME));
-	PlayingSounds.emplace_back(chunk, ch, update, reg);
+	Mix_Volume(CHANNEL, static_cast<int>(volume * MIX_MAX_VOLUME));
+	PlayingSounds.emplace_back(chunk, CHANNEL, update, reg);
+	auto& s = PlayingSounds.front();
+	if (s.update) s.update(s.channel, s.reg);
+
+	int ch = Mix_PlayChannel(CHANNEL, chunk, 0);
+	if (ch == -1) PlayingSounds.erase(PlayingSounds.end()-1);
+	if (++CHANNEL >= CHANNELS) CHANNEL = 0;
 }
 
 void Update() {
