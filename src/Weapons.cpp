@@ -21,14 +21,24 @@ bool Pistol::Fire(Vec2 aim) {
 	aim = aim / length;
 
 	double vel = GetKey("vel");
+	double spread = GetKey("spread");
 
-	aim = aim * vel;
+	double rand;
+	rand = spread * ((std::rand()%101)/100.0-0.5);
+	double COS = std::cos(rand);
+	double SIN = std::sin(rand);
+
+	Vec2 new_aim;
+	new_aim.x = COS * aim.x - SIN * aim.y;
+	new_aim.y = SIN * aim.x + COS * aim.y;	
+
+	new_aim = new_aim * vel;
 
 	std::string team = TeamToStr(parent->team);
 
 	std::vector<Argument> args = {
-	  Argument(aim.x, "xv"),
-	  Argument(aim.y, "yv"),
+	  Argument(new_aim.x, "xv"),
+	  Argument(new_aim.y, "yv"),
 	  Argument(parent->Hull().Middle().x, "x"),
 	  Argument(parent->Hull().Middle().y, "y"),
 	  Argument(GetKey("dmg"), "dmg"),

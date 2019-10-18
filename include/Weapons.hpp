@@ -9,11 +9,12 @@ namespace Weapons {
 std::unique_ptr<Weapon> CreateWeapon(WEAPON_TYPE type, std::map<std::string, double>, Entity* p);
 
 // WEP_PISTOL
-// KEY    / DESCRIPTION
-//  dmg   -  damage per bullet
-//  rate  -  cooldown between shots
-//  vel   -  bullet velocity
-//  life  -  bullet lifetime
+// KEY     / DESCRIPTION
+//  dmg    -  damage per bullet
+//  rate   -  cooldown between shots
+//  vel    -  bullet velocity
+//  life   -  bullet lifetime
+//  spread -  random spread (in radians)
 class Pistol : public Weapon {
 public:
 	Pistol(std::map<std::string, double> k, Entity * p):

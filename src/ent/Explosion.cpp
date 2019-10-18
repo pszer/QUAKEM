@@ -51,7 +51,6 @@ void Explosion::EntityCollision(Entity * entity) {
 	}
 	if (entity->team != TEAM_NULL) {
 		Vec2 diff = entity->Hull().Middle() - Hull().Middle();
-		std::cout << diff.x << " " << diff.y << std::endl;
 		double length = std::sqrt(diff.x*diff.x + diff.y*diff.y);;
 		entity->Push((diff / (length + 1.0)) * 9.0 * damage);
 	}
