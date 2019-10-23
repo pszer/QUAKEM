@@ -5,3 +5,4 @@
 #include "ent/Bullet.hpp"
 #include "ent/Explosion.hpp"
 #include "ent/Enemy.hpp"
+#include "ent/Spawner.hpp"

@@ -49,12 +49,12 @@ void HP_Bar::Update() {
 }
 
 void HP_Bar::Render() {
-	Vec2 tr = Vec2(pos.x, pos.y);
+	Vec2 tr = Vec2(pos.x - size.x/2, pos.y - size.y);
 	tr = Renderer.TransformVec2(tr);
 
 	Rect rect;
-	rect.x = tr.x * Renderer.zoom - size.x/2;
-	rect.y = tr.y * Renderer.zoom - size.y;
+	rect.x = reverse.x;
+	rect.y = reverse.y;
 	//rect.x = pos.x - size.x/2;
 	//rect.y = pos.y - size.y;
 
@@ -69,10 +69,10 @@ void HP_Bar::Render() {
 	
 	SDL_Color c = Renderer.HSLToRGB(ratio/3.0, 1.0, 0.5);
 
-	Renderer.CameraStop();
+	Renderer.CameraStopScale();
 	Renderer.RenderFillRect(    rect, {0x40,0x00,0x00,0xff});
 	Renderer.RenderFillRect(top_rect, c);
-	Renderer.CameraUpdate();
+	Renderer.CameraStartScale();
 }
 
 };

@@ -638,13 +638,23 @@ std::string _export(const std::vector<Argument>& args) {
 	if (args.size() == 0) return USE_MSG;
 	fname = "maps/"+args.at(0).ToString();
 
+	std::string result = "Exported map " + fname;
+	if (std::filesystem::exists(std::filesystem::path(fname))) {
+		bool write = (bool)GetCVarInt("overwrite");
+		if (!write) {
+			return "Map already exists, set cvar 'overwrite' to 1 to overwrite";
+		}
+
+		result += " (overwrite)";
+		CVARS["overwrite"] = Argument(0ll);
+	}
 	std::ofstream out(fname);
 	if (!out) return "Failed to open file \"" + fname + "\" for writing";
 	std::string str = Game.World.Export();
 	out << str;
 	out.close();
 
-	return "";
+	return result;
 }
 
 std::string _map(const std::vector<Argument>& args) {

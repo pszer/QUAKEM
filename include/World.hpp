@@ -3,6 +3,7 @@
 #include <memory>
 #include <map>
 #include <vector>
+#include <sstream>
 
 #include "Vec2.hpp"
 #include "Render.hpp"

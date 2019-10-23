@@ -13,11 +13,14 @@
 #include "Weapons.hpp"
 
 enum Entity_Type { ENT_NULL , ENT_PLAYER , ENT_MEDPACK , ENT_BULLET , ENT_ROCKET ,
-	ENT_EXPLOSION , ENT_ENEMY_WALKER };
+	ENT_EXPLOSION , ENT_SPAWNER , ENT_ENEMY_WALKER };
 enum Entity_Team { TEAM_NULL , TEAM_PLAYER , TEAM_ENEMY , TEAM_OBJECT };
 
 std::string TeamToStr(Entity_Team);
 Entity_Team StrToTeam(const std::string&);
+
+std::string EntToStr(Entity_Type);
+Entity_Type StrToEnt(const std::string&);
 
 struct Entity {
 	Entity(Entity_Type _type, Vec2 _pos=Vec2(0.0,0.0), Vec2 _size=Vec2(0.0,0.0),

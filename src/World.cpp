@@ -70,24 +70,30 @@ void World::Clear() {
 	Brushes.clear();
 }
 
+std::string __DoubleConvert(double d) {
+	std::ostringstream s;
+	s << std::noshowpoint << d;
+	return s.str();
+}
+
 std::string World::Export() {
 	std::string result = "";
 
 	for (auto B = Brushes.begin(); B != Brushes.end(); ++B) {
 		auto& b = *B;
 		std::string line = "brush_create " + b->TypeString() + " " +
-		 std::to_string(b->rect.x) + " " +
-		 std::to_string(b->rect.y) + " " +
-		 std::to_string(b->rect.w) + " " +
-		 std::to_string(b->rect.h) + " " +
+		 __DoubleConvert(b->rect.x) + " " +
+		 __DoubleConvert(b->rect.y) + " " +
+		 __DoubleConvert(b->rect.w) + " " +
+		 __DoubleConvert(b->rect.h) + " " +
 		 '"' + b->texture + "\" " +
-		 std::to_string(b->texture_scale.x) + " " +
-		 std::to_string(b->texture_scale.y) + " " +
-		 std::to_string(b->texture_offset.x) + " " +
-		 std::to_string(b->texture_offset.y) + " ";
+		 __DoubleConvert(b->texture_scale.x) + " " +
+		 __DoubleConvert(b->texture_scale.y) + " " +
+		 __DoubleConvert(b->texture_offset.x) + " " +
+		 __DoubleConvert(b->texture_offset.y) + " ";
 
 		for (auto p : b->keys) {
-			line += (p.first + ":" + std::to_string(p.second) + " ");
+			line += (p.first + ":" + __DoubleConvert(p.second) + " ");
 		}
 
 		result += (line + '\n');

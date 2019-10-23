@@ -45,7 +45,7 @@ void Game::CameraUpdate() {
 }
 
 void Game::CameraWheelScroll() {
-	scroll_count += Event.wheel_y * 0.035;
+	scroll_count += Event.wheel_y * 0.03;
 
 	double d = scroll_count * std::min(FrameLimit.deltatime * 8.0, 0.2);
 	scroll_change += d;
@@ -59,8 +59,8 @@ void Game::CameraWheelScroll() {
 		scroll_timer.Start();
 	}
 
-	if (scroll_timer.GetSeconds() > 0.4) {
-		scroll_change -= (scroll_change - 1.0)*std::min(FrameLimit.deltatime*2.0, 0.2);
+	if (scroll_timer.GetSeconds() > 0.9) {
+		scroll_change -= (scroll_change - 1.0)*std::min(FrameLimit.deltatime*0.5, 0.05);
 		if (scroll_change < 1.005 && scroll_change > 0.995) {
 			scroll_count = 0.0;
 			scroll_change = 1.0;
@@ -68,6 +68,12 @@ void Game::CameraWheelScroll() {
 	}
 
 	camera.zoom = camera_zoom * scroll_change;
+	if      (camera.zoom > 2.0) {
+		camera.zoom = 2.0;
+	}
+	else if (camera.zoom < 0.5) {
+		camera.zoom = 0.5;
+	}
 }
 
 void Game::CameraDefault() {
@@ -196,6 +202,7 @@ void Game::Init() {
 	STR_TO_ENT_TYPE["ENT_BULLET"] = ENT_BULLET;
 	STR_TO_ENT_TYPE["ENT_ROCKET"] = ENT_ROCKET;
 	STR_TO_ENT_TYPE["ENT_EXPLOSION"] = ENT_EXPLOSION;
+	STR_TO_ENT_TYPE["ENT_SPAWNER"] = ENT_SPAWNER;
 	STR_TO_ENT_TYPE["ENT_ENEMY_WALKER"] = ENT_ENEMY_WALKER;
 
 	ENT_CONSTRUCT_MSG[ENT_PLAYER] = Ents::Player::CONSTRUCT_MSG;
@@ -203,6 +210,7 @@ void Game::Init() {
 	ENT_CONSTRUCT_MSG[ENT_BULLET] = Ents::Bullet::CONSTRUCT_MSG;
 	ENT_CONSTRUCT_MSG[ENT_ROCKET] = Ents::Rocket::CONSTRUCT_MSG;
 	ENT_CONSTRUCT_MSG[ENT_EXPLOSION] = Ents::Explosion::CONSTRUCT_MSG;
+	ENT_CONSTRUCT_MSG[ENT_SPAWNER] = Ents::Spawner::CONSTRUCT_MSG;
 	ENT_CONSTRUCT_MSG[ENT_ENEMY_WALKER] = Ents::Walker::CONSTRUCT_MSG;
 
 	CVARS["followspeed"] = Argument(3.5);
@@ -228,6 +236,7 @@ int Game::CreateEntity(Entity_Type ent_type, std::vector<Argument>& args) {
 	case ENT_BULLET: ent = std::make_unique<Ents::Bullet>(); break;
 	case ENT_ROCKET: ent = std::make_unique<Ents::Rocket>(); break;
 	case ENT_EXPLOSION: ent = std::make_unique<Ents::Explosion>(); break;
+	case ENT_SPAWNER: ent = std::make_unique<Ents::Spawner>(); break;
 	case ENT_ENEMY_WALKER: ent = std::make_unique<Ents::Walker>(); break;
 
 	default: return 0;
@@ -242,11 +251,17 @@ bool Game::EntityExists(unsigned long ID) {
 	for (auto e = Entities.begin(); e != Entities.end(); ++e) {
 		if ((*e)->UNIQUE_ID == ID) return true;
 	}
+	for (auto e = Entities_Queue.begin(); e != Entities_Queue.end(); ++e) {
+		if ((*e)->UNIQUE_ID == ID) return true;
+	}
 	return false;
 }
 
 Entity* Game::GetEntityByID(unsigned long ID) {
 	for (auto e = Entities.begin(); e != Entities.end(); ++e) {
+		if ((*e)->UNIQUE_ID == ID) return e->get();
+	}
+	for (auto e = Entities_Queue.begin(); e != Entities_Queue.end(); ++e) {
 		if ((*e)->UNIQUE_ID == ID) return e->get();
 	}
 	return nullptr;

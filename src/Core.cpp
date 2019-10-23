@@ -60,6 +60,8 @@ int Core::Init(InitParameters init) {
 	Media.LoadMedia();
 	Event.Init();
 
+	CVARS["overwrite"] = Argument(0ll);
+
 	return 0;
 }
 

@@ -22,6 +22,9 @@ extern struct Renderer {
 	void Clear(const SDL_Color c = {0x00,0x00,0x00,0xff});
 	void Update();
 
+	void CameraStopScale();
+	void CameraStartScale();
+
 	Vec2 TransformVec2(const Vec2& vec);
 	Line TransformLine(const Line& line);
 	Rect TransformRect(const Rect& rect);

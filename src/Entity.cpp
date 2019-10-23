@@ -1,5 +1,6 @@
 #include "Entity.hpp"
 #include "Hitreg.hpp"
+#include "Game.hpp"
 
 unsigned long Entity::ID_COUNT = 0;
 
@@ -16,6 +17,19 @@ Entity_Team StrToTeam(const std::string& str) {
 	for (int i = 0; i < 4; ++i)
 		if (__TEAMSTRS[i].first == str) return __TEAMSTRS[i].second;
 	return TEAM_NULL;
+}
+
+std::string EntToStr(Entity_Type t) {
+	for (auto& p : Game.STR_TO_ENT_TYPE) {
+		if (p.second == t) return p.first;
+	}
+	return "ENT_NULL";
+}
+
+Entity_Type StrToEnt(const std::string& str) {
+	auto f = Game.STR_TO_ENT_TYPE.find(str);
+	if (f == Game.STR_TO_ENT_TYPE.end()) return ENT_NULL;
+	return f->second;
 }
 
 void Entity::ResetFlags() {

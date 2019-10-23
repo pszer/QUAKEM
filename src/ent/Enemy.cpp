@@ -41,10 +41,13 @@ void Walker::Update() {
 		for (auto ent = Game.Entities.end()-1;; --ent) {
 			if ((*ent)->UNIQUE_ID < player_id) break;
 			else if ((*ent)->UNIQUE_ID == player_id) {
-				if ((*ent)->pos.x < pos.x)
-					vel.x = -200.0;
-				else
-					vel.x = 200.0;
+				if ((*ent)->pos.x < pos.x) {
+					if (vel.x > -400.0)
+						vel.x -= 9000.0 * FrameLimit.deltatime;
+				} else {
+					if (vel.x < 400.0)
+						vel.x += 9000.0 * FrameLimit.deltatime;
+				}
 			}
 
 			if (ent == Game.Entities.begin()) break;
@@ -87,17 +90,23 @@ void Walker::EntityCollision(Entity * entity) {
 	
 const std::string Walker::CONSTRUCT_MSG = "x y hp dmg rate";
 int Walker::Construct(const std::vector<Argument>& args) {
+	int hp_bar = 0;
 	for (auto arg : args) {
 		if      (arg.label=="x")  pos.x = arg.ToFloat();
 		else if (arg.label=="y")  pos.y = arg.ToFloat();
 		else if (arg.label=="hp") {
 			hitpoints = arg.ToInt();
 			max_hitpoints = hitpoints;
-		}else if(arg.label=="dmg")
-			damage = arg.ToInt();
-		else if (arg.label=="rate")
-			rate = arg.ToFloat();
+		}
+		else if(arg.label=="dmg") damage = arg.ToInt();
+		else if (arg.label=="rate") rate = arg.ToFloat();
+		else if (arg.label=="hpbar") hp_bar = arg.ToInt();
 	}
+
+	if (hp_bar) {
+		HUD.Add(std::make_unique<HUD_Elements::HP_Bar>(pos, Vec2(60.0,10.0), UNIQUE_ID));
+	}
+
 	return 1;
 }
 

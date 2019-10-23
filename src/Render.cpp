@@ -31,6 +31,14 @@ void Renderer::CameraStop() {
 	zoom = 1.0;
 }
 
+void Renderer::CameraStopScale() {
+	SDL_RenderSetScale(renderer, 1.0f, 1.0f);
+}
+
+void Renderer::CameraStartScale() {
+	SDL_RenderSetScale(renderer, camera->zoom, camera->zoom);
+}
+
 void Renderer::Clear(const SDL_Color c) {
 	SetColor(c);
 	SDL_RenderClear(renderer);

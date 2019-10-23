@@ -1,0 +1,1 @@
+ent_create ENT_SPAWNER ent_:"ENT_ENEMY_WALKER" rate_:0.25 quantity_:25 hpbar:1 hp:100 dmg:10 

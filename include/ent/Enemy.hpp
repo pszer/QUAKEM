@@ -39,7 +39,7 @@ protected:
 // test enemy, if it sees the player it rushes him
 class Walker : public EnemyBase {
 public:
-	Walker(): EnemyBase(ENT_ENEMY_WALKER, Vec2(0.0,0.0), Vec2(48.0, 82.0)) {
+	Walker(): EnemyBase(ENT_ENEMY_WALKER, Vec2(0.0,0.0), Vec2(32.0, 64.0)) {
 		rate_timer.Start();
 	}
 
