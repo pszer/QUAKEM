@@ -179,6 +179,8 @@ void Renderer::RenderTexture(const std::string& img_name, Rect* src, Rect* dest,
 }
 
 void Renderer::RenderTiledTexture(const std::string& tex_name, Rect _rect, Vec2 scale, Vec2 offset) {
+	int win_w, win_h;
+
 	auto texture = Media.GetTexture(tex_name);
 	if (texture == nullptr) return;
 
@@ -209,12 +211,18 @@ void Renderer::RenderTiledTexture(const std::string& tex_name, Rect _rect, Vec2 
 
 	// wrap offset around and make negative
 	offset.x = std::fmod(offset.x, tile_w);
-	offset.x -= tile_w;
+	if (offset.x != 0.0)
+		offset.x -= tile_w;
 
 	offset.y = std::fmod(offset.y, tile_h);
-	offset.y -= tile_h;
+	if (offset.y != 0.0)
+		offset.y -= tile_h;
 
 	SDL_Rect viewport = TransformRect(rect).ToSDLRect();
+	if (viewport.y + viewport.h > win_h)
+		viewport.h = viewport.y + viewport.h - win_h;
+	if (viewport.x + viewport.w > win_w)
+		viewport.w = viewport.x + viewport.w - win_w;
 	SDL_RenderSetViewport(renderer, &viewport);
 
 	Rect draw_rect = { 0, 0, (int)(zoom * tile_w + 0.5), (int)(zoom * tile_h + 0.5) };
@@ -228,7 +236,21 @@ void Renderer::RenderTiledTexture(const std::string& tex_name, Rect _rect, Vec2 
 			if (std::fmod(draw_rect.x,1.0) && x != offset.x) r.w+=1;
 			if (std::fmod(draw_rect.y,1.0) && y != offset.y) r.h+=1;
 
-			SDL_RenderCopyEx(renderer, texture, nullptr, &r,
+			SDL_Rect src = {0,0,tex_w, tex_h};
+			if (x < 0.0) {
+				src.x = -x;
+				src.w += x;
+				r.x = 0;
+				r.w += x;
+			}
+			if (y < 0.0) {
+				src.y = -y;
+				src.h += y;
+				r.y = 0;
+				r.h += y;
+			}
+
+			SDL_RenderCopyEx(renderer, texture, &src, &r,
 			  0.0, nullptr, flip);
 		}
 	}

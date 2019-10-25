@@ -33,7 +33,7 @@ Rect Spawner::Hitbox() {
 const std::string Spawner::CONSTRUCT_MSG = "ent_ rate_ quantity_ (...entity args...)";
 int Spawner::Construct(const std::vector<Argument>& args) {
 	for (auto arg : args) {
-		if      (arg.label=="ent_") pos.x = StrToEnt(arg.ToString());
+		if      (arg.label=="ent_") type = StrToEnt(arg.ToString());
 		else if (arg.label=="rate_") rate = arg.ToFloat();
 		else if (arg.label=="quantity_") quantity = arg.ToInt();
 		else {
