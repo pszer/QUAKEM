@@ -1,1 +1,0 @@
-ent_create ENT_SPAWNER ent_:"ENT_ROCKET" rate_:0.01 quantity_:500 yv:50 xv:0 rad:500 dmg:100

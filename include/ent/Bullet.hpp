@@ -54,4 +54,31 @@ struct Rocket : public Entity {
 	~Rocket() { }
 };
 
+struct Grenade : public Entity {
+	Grenade();
+
+	void Update();
+	void Render();
+	Rect Hitbox();
+	Rect Hull();
+
+	static const std::string CONSTRUCT_MSG;
+	int Construct(const std::vector<Argument>& args);
+
+	void BrushCollision(Brush * brush);
+	void EntityCollision(Entity * entity);
+
+	void SpawnExplosion();
+
+	std::string Info();
+
+	int damage = 20;
+	double radius = 50.0;
+	double lifetime = 3;
+
+	Timer timer;
+	
+	~Grenade() { }
+};
+
 }

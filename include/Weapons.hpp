@@ -1,6 +1,9 @@
 #pragma once
 
 #include <memory>
+#include <cstdlib>
+
+enum WEAPON_TYPE { WEP_PISTOL , WEP_ROCKETL , WEP_GRENADEL };
 
 #include "Weapon_Class.hpp"
 
@@ -39,15 +42,21 @@ public:
 	Timer timer;
 };
 
-// WEP_MACHINEGUN
-// KEY    / DESCRIPTION
-//  dmg   -  damage per bullet
-//  rate  -  cooldown between shots
-//  vel   -  bullet velocity
-//  life  -  bullet lifetime/
-/*class MachineGun : public Weapon {
+// WEP_GRENADEL
+// KEY     / DESCRIPTION
+// dmg     - dmg
+// vel     - grenade velocity
+// rad     - explosion radius
+// burst   - grenade burst count
+class GrenadeLauncher : public Weapon {
+public:
+	GrenadeLauncher(std::map<std::string, double> k, Entity * p):
+	  Weapon(k,p) { timer.Start(); }
+	bool Fire(Vec2 aim);
 
-};*/
+	Timer timer;
+
+};
 
 };
 

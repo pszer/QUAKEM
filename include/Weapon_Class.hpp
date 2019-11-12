@@ -7,8 +7,6 @@
 
 class Entity;
 
-enum WEAPON_TYPE { WEP_PISTOL , WEP_ROCKETL };
-
 class Weapon {
 public:
 	Weapon(std::map<std::string, double> k, Entity * p): keys(k), parent(p) { }

@@ -133,4 +133,77 @@ std::string Rocket::Info() {
 
 }
 
+// Grenade
+Grenade::Grenade(): Entity(ENT_GRENADE,
+	  Vec2(0.0,0.0), Vec2(15.0,20.0), Vec2(0.0,0.0), TEAM_NULL, true, true)
+{
+	bounce = 0.4;
+	timer.Start();
+}
+
+void Grenade::Update() {
+	if (lifetime > 0.0) {
+		if (timer.GetSeconds() > lifetime) {
+			destroy = true;
+			SpawnExplosion();
+		}
+	}
+}
+
+void Grenade::Render() {	
+	Renderer.RenderFillRect(Hitbox(), {0x10,0xA0,0x10,0xFF});
+}
+
+Rect Grenade::Hull() {
+	return Hitbox();
+}
+
+Rect Grenade::Hitbox() {
+	return Rect(pos.x,pos.y,size.x,size.y);
+}
+
+const std::string Grenade::CONSTRUCT_MSG = "x y xv yv dmg rad life team";
+int Grenade::Construct(const std::vector<Argument>& args) {
+	for (auto arg : args) {
+		if      (arg.label=="x")    pos.x = arg.ToFloat() - size.x/2.0;
+		else if (arg.label=="y")    pos.y = arg.ToFloat() - size.y/2.0;
+		else if (arg.label=="xv")   vel.x = arg.ToFloat();
+		else if (arg.label=="yv")   vel.y = arg.ToFloat();
+		else if (arg.label=="dmg")  damage = arg.ToInt();
+		else if (arg.label=="rad")  radius = arg.ToFloat();
+		else if (arg.label=="life") lifetime = arg.ToFloat();
+		else if (arg.label=="team") team = StrToTeam(arg.ToString());
+	}
+
+	return 1;
+}
+
+void Grenade::BrushCollision(Brush * brush) {
+}
+
+void Grenade::EntityCollision(Entity * entity) {
+	if (team != entity->team && entity->team != TEAM_NULL) {
+		if (!destroy) SpawnExplosion();
+		destroy = true;
+	}
+}
+
+void Grenade::SpawnExplosion() {
+	std::vector<Argument> args = {
+		Argument(Hull().Middle().x, "x"),
+		Argument(Hull().Middle().y, "y"),
+		Argument((long long)damage, "dmg"),
+		Argument(radius, "rad"),
+		Argument(ARG_STRING, TeamToStr(team), "team")
+	};
+
+	Game.CreateEntity(ENT_EXPLOSION, args);
+}
+
+std::string Grenade::Info() {
+	  return "x:" + std::to_string(pos.x) + "[" + std::to_string(vel.x) + "] y:" + std::to_string(pos.y) +
+		  "[" + std::to_string(vel.y) + "]";
+
+}
+
 }
