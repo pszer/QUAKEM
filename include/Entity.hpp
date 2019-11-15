@@ -79,6 +79,7 @@ struct Entity {
 		return active_weapon < weapons.size()
 		  ? weapons[active_weapon].get() : nullptr; }
 	void SwitchWeapon(int slot);
+	Weapon * GetWeapon(int slot);
 
 	void AddWeapon(WEAPON_TYPE type, std::map<std::string, double> keys, int slot=-1);
 

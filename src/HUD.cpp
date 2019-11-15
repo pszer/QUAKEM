@@ -1,7 +1,15 @@
 #include "HUD.hpp"
 #include "Game.hpp"
+#include "Core.hpp"
 
 struct HUD HUD;
+
+// transforms position coordinates from (0.0-1.0, 0.0-1.0) to screen coordinates
+Vec2 PosToScreen(Vec2 pos) {
+	int w,h;
+	SDL_GetWindowSize(Core.window, &w, &h);
+	return Vec2(pos.x * (double)w, pos.y * (double)h);
+}
 
 void HUD::Update() {
 	for (auto h = elements.begin(); h != elements.end(); ++h) {
@@ -73,6 +81,46 @@ void HP_Bar::Render() {
 	Renderer.RenderFillRect(    rect, {0x40,0x00,0x00,0xff});
 	Renderer.RenderFillRect(top_rect, c);
 	Renderer.CameraUpdate();
+}
+
+void Ammo_Counter::Update() {
+	// count = -2 flag = render blank counter
+	auto ent = Game.GetEntityByID(ENT_ID);
+	if (ent == nullptr) {
+		count = -2;
+		return;
+	}
+
+	auto wep = ent->GetWeapon(SLOT);
+	if (wep == nullptr) {
+		count = -2;
+	}
+
+	int ammo = (int)wep->GetKey("ammo");
+	if (ammo < 0)
+		count = -1;
+	else
+		count = ammo;
+}
+
+void Ammo_Counter::Render() {
+	const SDL_Color bg = {54,54,54,0xff};
+	const SDL_Color fg = {0xff,0xff,0xff,0xff};
+
+	Rect rect;
+	Vec2 p = PosToScreen(pos);
+	rect.x = p.x + offset.x;
+	rect.y = p.y + offset.y;
+	rect.w = size.x;
+	rect.h = size.y;
+
+	Rect icon_rect;
+	icon_rect.x = rect.x + 8;
+	icon_rect.y = rect.y + 8;
+	icon_rect.w = 48;
+	icon_rect.h = 48;
+
+	Renderer.RenderFillRect(rect, bg);
 }
 
 };
