@@ -14,12 +14,12 @@ struct Player : public Entity {
 		AddWeapon(WEP_PISTOL, {
 				{"ammo",-1}, {"dmg", 10.0}, {"rate", 0.12}, {"vel", 2500.0}, {"life", 0.35}, {"spread",0.0} }); 
 		AddWeapon(WEP_PISTOL, {
-		  {"ammo",-1}, {"dmg", 4.0}, {"rate", 0.05}, {"vel", 1800.0}, {"life", 0.25}, {"spread",0.2},
+		  {"ammo",100}, {"dmg", 4.0}, {"rate", 0.05}, {"vel", 1800.0}, {"life", 0.25}, {"spread",0.2},
 		  {"autofire", 1.0} });
 		AddWeapon(WEP_ROCKETL, {
-		  {"ammo",-1}, {"dmg", 65.0}, {"rate", 0.42 }, {"vel", 1000.0 }, {"rad", 100.0} });
+		  {"ammo",10}, {"dmg", 65.0}, {"rate", 0.42 }, {"vel", 1000.0 }, {"rad", 100.0} });
 		AddWeapon(WEP_GRENADEL, {
-		  {"ammo",-1}, {"dmg", 65.0}, {"rate", 0.42 }, {"vel", 1000.0 }, {"rad", 100.0}, {"burst", 3.0} });
+		  {"ammo",8}, {"dmg", 65.0}, {"rate", 0.42 }, {"vel", 1000.0 }, {"rad", 100.0}, {"burst", 3.0} });
 	}
 
 	std::unique_ptr<Weapon> weapons[9];

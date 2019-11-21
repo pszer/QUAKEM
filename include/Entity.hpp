@@ -12,8 +12,8 @@
 #include "World.hpp"
 #include "Weapons.hpp"
 
-enum Entity_Type { ENT_NULL , ENT_PLAYER , ENT_MEDPACK , ENT_BULLET , ENT_ROCKET ,
-	ENT_GRENADE , ENT_EXPLOSION , ENT_SPAWNER , ENT_ENEMY_WALKER };
+enum Entity_Type { ENT_NULL , ENT_PLAYER , ENT_MEDPACK , ENT_AMMOPACK , ENT_BULLET ,
+	ENT_ROCKET , ENT_GRENADE , ENT_EXPLOSION , ENT_SPAWNER , ENT_ENEMY_WALKER };
 enum Entity_Team { TEAM_NULL , TEAM_PLAYER , TEAM_ENEMY , TEAM_OBJECT };
 
 std::string TeamToStr(Entity_Team);

@@ -3,6 +3,9 @@
 
 namespace Weapons {
 
+std::string SLOT_TO_ICON[] = {"icon_pistol.png","icon_mg.png",
+	"icon_rocket.png","icon_grenade.png",""};
+
 std::unique_ptr<Weapon> CreateWeapon(WEAPON_TYPE type, std::map<std::string, double> keys, Entity* p) {
 	switch (type) {
 	case WEP_PISTOL:  return std::make_unique<Pistol>(keys, p);

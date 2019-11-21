@@ -88,6 +88,14 @@ void Ammo_Counter::Update() {
 	auto ent = Game.GetEntityByID(ENT_ID);
 	if (ent == nullptr) {
 		count = -2;
+
+		for (auto e = Game.Entities.begin(); e != Game.Entities.end(); ++e) {
+			if ((*e)->type == ENT_PLAYER) {
+				ENT_ID = (*e)->UNIQUE_ID;
+				return;
+			}
+		}
+
 		return;
 	}
 
@@ -107,6 +115,8 @@ void Ammo_Counter::Render() {
 	const SDL_Color bg = {54,54,54,0xff};
 	const SDL_Color fg = {0xff,0xff,0xff,0xff};
 
+	Renderer.CameraStop();
+
 	Rect rect;
 	Vec2 p = PosToScreen(pos);
 	rect.x = p.x + offset.x;
@@ -114,13 +124,30 @@ void Ammo_Counter::Render() {
 	rect.w = size.x;
 	rect.h = size.y;
 
+	Renderer.RenderFillRect(rect, bg);
+
 	Rect icon_rect;
 	icon_rect.x = rect.x + 8;
 	icon_rect.y = rect.y + 8;
-	icon_rect.w = 48;
-	icon_rect.h = 48;
+	icon_rect.w = 32;
+	icon_rect.h = 32;
 
-	Renderer.RenderFillRect(rect, bg);
+	Renderer.RenderTexture(icon, nullptr, &icon_rect);
+
+	if (count == -1) {
+		icon_rect.x += 32.0;
+		Renderer.RenderTexture("icon_infinite.png", nullptr, &icon_rect);
+	} else {
+		std::string txt = "-";
+		if (count != -2) {
+			txt = std::to_string(count);
+		}
+
+		Renderer.RenderText("inconsolata.ttf",txt,rect.x+63,rect.y+4,FONT_P32,
+			{0xff,0xff,0xff,0xff},ALIGN_MIDDLE);
+	}
+
+	Renderer.CameraUpdate();
 }
 
 };

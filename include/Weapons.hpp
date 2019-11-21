@@ -9,6 +9,8 @@ enum WEAPON_TYPE { WEP_PISTOL , WEP_ROCKETL , WEP_GRENADEL };
 
 namespace Weapons {
 
+extern std::string SLOT_TO_ICON[];
+
 std::unique_ptr<Weapon> CreateWeapon(WEAPON_TYPE type, std::map<std::string, double>, Entity* p);
 
 // WEP_PISTOL

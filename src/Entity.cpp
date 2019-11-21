@@ -64,7 +64,7 @@ void Entity::AddWeapon(WEAPON_TYPE type, std::map<std::string, double> keys, int
 
 Weapon * Entity::GetWeapon(int slot) {
 	if (slot >= -1 && slot < weapons.size() && weapons.at(slot) != nullptr)
-		return weapons.at(slot);
+		return weapons.at(slot).get();
 	return nullptr;
 	
 }

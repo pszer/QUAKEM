@@ -199,6 +199,7 @@ void Game::RenderEntities() {
 void Game::Init() {
 	STR_TO_ENT_TYPE["ENT_PLAYER"] = ENT_PLAYER;
 	STR_TO_ENT_TYPE["ENT_MEDPACK"] = ENT_MEDPACK;
+	STR_TO_ENT_TYPE["ENT_AMMOPACK"] = ENT_AMMOPACK;
 	STR_TO_ENT_TYPE["ENT_BULLET"] = ENT_BULLET;
 	STR_TO_ENT_TYPE["ENT_ROCKET"] = ENT_ROCKET;
 	STR_TO_ENT_TYPE["ENT_GRENADE"] = ENT_GRENADE;
@@ -208,6 +209,7 @@ void Game::Init() {
 
 	ENT_CONSTRUCT_MSG[ENT_PLAYER] = Ents::Player::CONSTRUCT_MSG;
 	ENT_CONSTRUCT_MSG[ENT_MEDPACK] = Ents::Medpack::CONSTRUCT_MSG;
+	ENT_CONSTRUCT_MSG[ENT_AMMOPACK] = Ents::Ammopack::CONSTRUCT_MSG;
 	ENT_CONSTRUCT_MSG[ENT_BULLET] = Ents::Bullet::CONSTRUCT_MSG;
 	ENT_CONSTRUCT_MSG[ENT_ROCKET] = Ents::Rocket::CONSTRUCT_MSG;
 	ENT_CONSTRUCT_MSG[ENT_GRENADE] = Ents::Grenade::CONSTRUCT_MSG;
@@ -223,6 +225,15 @@ void Game::Init() {
 	CVARS["player_jump"] = Argument(800.0);
 	CVARS["timescale"] = Argument(1.0);
 
+	HUD.Add(std::make_unique<HUD_Elements::Ammo_Counter>(
+	  Vec2(0.0,0.0),Vec2(0.0,0.0),0,"icon_pistol.png"));
+	HUD.Add(std::make_unique<HUD_Elements::Ammo_Counter>(
+	  Vec2(0.0,0.0),Vec2(86.0,0.0),1,"icon_mg.png"));
+	HUD.Add(std::make_unique<HUD_Elements::Ammo_Counter>(
+	  Vec2(0.0,0.0),Vec2(172.0,0.0),2,"icon_rocket.png"));
+	HUD.Add(std::make_unique<HUD_Elements::Ammo_Counter>(
+	  Vec2(0.0,0.0),Vec2(258.0,0.0),3,"icon_grenade.png"));
+
 	CameraUpdate();
 }
 
@@ -235,6 +246,7 @@ int Game::CreateEntity(Entity_Type ent_type, std::vector<Argument>& args) {
 	switch (ent_type) {
 	case ENT_PLAYER: ent = std::make_unique<Ents::Player>(); break;
 	case ENT_MEDPACK: ent = std::make_unique<Ents::Medpack>(); break;
+	case ENT_AMMOPACK: ent = std::make_unique<Ents::Ammopack>(); break;
 	case ENT_BULLET: ent = std::make_unique<Ents::Bullet>(); break;
 	case ENT_ROCKET: ent = std::make_unique<Ents::Rocket>(); break;
 	case ENT_EXPLOSION: ent = std::make_unique<Ents::Explosion>(); break;

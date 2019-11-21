@@ -42,8 +42,8 @@ struct HP_Bar : public HUD_Element {
 };
 
 struct Ammo_Counter : public HUD_Element {
-	Ammo_Counter(Vec2 p, Vec2 off, int ID, int _SLOT, std::string _icon):
-		Ammo_Counter(p,Vec2(86.0,64.0),s), ENT_ID(ID), SLOT(_SLOT),
+	Ammo_Counter(Vec2 p, Vec2 off, int _SLOT, std::string _icon):
+		HUD_Element(p,off,Vec2(86.0,48.0)), SLOT(_SLOT),
 		icon(_icon) { ; }
 
 	void Update();
@@ -51,7 +51,7 @@ struct Ammo_Counter : public HUD_Element {
 
 	int count = 0;
 
-	int ENT_ID, SLOT;
+	int ENT_ID=-1, SLOT;
 	std::string icon;
 };
 
