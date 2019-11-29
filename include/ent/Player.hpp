@@ -22,8 +22,6 @@ struct Player : public Entity {
 		  {"ammo",8}, {"dmg", 65.0}, {"rate", 0.42 }, {"vel", 1000.0 }, {"rad", 100.0}, {"burst", 3.0} });
 	}
 
-	std::unique_ptr<Weapon> weapons[9];
-
 	void Update();
 	void Render();
 	Rect Hitbox();

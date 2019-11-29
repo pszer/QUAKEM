@@ -9,7 +9,10 @@ class Entity;
 
 class Weapon {
 public:
-	Weapon(std::map<std::string, double> k, Entity * p): keys(k), parent(p) { }
+	Weapon(std::map<std::string, double> k, Entity * p): keys(k), parent(p) {
+		if (keys.find("ammo") == keys.end())
+			SetKey("ammo", -1.0);
+	}
 
 	virtual void Update() { ; }
 

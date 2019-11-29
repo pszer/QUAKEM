@@ -128,4 +128,8 @@ namespace Commands {
 	// loads map file : synonymous with exec maps/"filename"
 	// map filename
 	std::string _map(const std::vector<Argument>&);
+
+
+	// gives 1000 ammo for all weapons
+	std::string _dem_gunmad(const std::vector<Argument>&);
 };

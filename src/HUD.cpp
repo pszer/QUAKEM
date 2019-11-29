@@ -138,13 +138,30 @@ void Ammo_Counter::Render() {
 		icon_rect.x += 32.0;
 		Renderer.RenderTexture("icon_infinite.png", nullptr, &icon_rect);
 	} else {
+		SDL_Color c = {0xff,0xff,0xff,0xff};
+
 		std::string txt = "-";
 		if (count != -2) {
-			txt = std::to_string(count);
+			if (count < 999) {
+				txt = std::to_string(count);
+			} else {
+				txt = "999";
+				c = Renderer.HSLToRGB((SDL_GetTicks()%2000)/2000.0, 1.0, 0.5);
+			}
 		}
 
 		Renderer.RenderText("inconsolata.ttf",txt,rect.x+63,rect.y+4,FONT_P32,
-			{0xff,0xff,0xff,0xff},ALIGN_MIDDLE);
+			c,ALIGN_MIDDLE);
+	}
+
+	auto ent = Game.GetEntityByID(ENT_ID);
+	if (ent) {
+		if (ent->active_weapon == SLOT) {
+			rect.y += rect.h;
+			rect.h  = 5.0;
+
+			Renderer.RenderFillRect(rect, {0xff,0xff,0x00,0xff});
+		}
 	}
 
 	Renderer.CameraUpdate();

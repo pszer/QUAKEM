@@ -41,6 +41,7 @@ void Commands::Init() {
 	COMMANDS["exec"] = _exec;
 	COMMANDS["export"] = _export;
 	COMMANDS["map"] = _map;
+	COMMANDS["dem_gunmad"] = _dem_gunmad;
 }
 
 CMD_FUNC Commands::GetCommand(const std::string& id) {
@@ -670,6 +671,19 @@ std::string _map(const std::vector<Argument>& args) {
 	} else {
 		return "Map file \"" + path + "\" not found";
 	}
+}
+
+std::string _dem_gunmad(const std::vector<Argument>& args) {
+	for (auto e = Game.Entities.begin(); e != Game.Entities.end(); ++e) {
+		if ((*e)->type == ENT_PLAYER) {
+			for (auto w =(*e)->weapons.begin(); w != (*e)->weapons.end(); ++w) {
+				if (*w == nullptr) continue;
+				if ((*w)->GetKey("ammo") < 0.0) continue;
+				(*w)->SetKey("ammo", (*w)->GetKey("ammo") + 1000.0);
+			}
+		}
+	}
+	return "";
 }
 
 }

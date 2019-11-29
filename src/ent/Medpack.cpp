@@ -44,6 +44,10 @@ void Ents::Ammopack::Render() {
 	Renderer.RenderTexture("ammopack.png", nullptr, &r);
 
 	std::string s = Weapons::SLOT_TO_ICON[slot];
+	r.x += 4;
+	r.y += 4;
+	r.w -= 8;
+	r.h -= 8;
 	Renderer.RenderTexture(s, nullptr, &r);
 }
 
