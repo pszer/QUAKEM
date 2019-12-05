@@ -45,6 +45,7 @@ void Commands::Init() {
 	COMMANDS["wave"] = _wave;
 	COMMANDS["delay"] = _delay;
 	COMMANDS["dem_gunmad"] = _dem_gunmad;
+	COMMANDS["bomboclat"] = _bomboclat;
 }
 
 CMD_FUNC Commands::GetCommand(const std::string& id) {
@@ -707,6 +708,18 @@ std::string _dem_gunmad(const std::vector<Argument>& args) {
 				if ((*w)->GetKey("ammo") < 0.0) continue;
 				(*w)->SetKey("ammo", (*w)->GetKey("ammo") + 1000.0);
 			}
+		}
+	}
+	return "";
+}
+
+std::string _bomboclat(const std::vector<Argument>&) {
+	for (auto e = Game.Entities.begin(); e != Game.Entities.end(); ++e) {
+		if ((*e)->type == ENT_PLAYER) {
+			(*e)->weapons[1] = Weapons::CreateWeapon(WEP_PISTOL, {
+			  {"ammo",-1}, {"dmg", 6.0}, {"rate", 0.001}, {"vel", 1800.0}, {"life", 5.0}, {"spread",0.2},
+			  {"autofire", 1.0} }, e->get());
+
 		}
 	}
 	return "";

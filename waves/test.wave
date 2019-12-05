@@ -1,3 +1,17 @@
-ent_create ENT_ENEMY_WALKER x:627 y:-108
-delay 3000
-ent_create ENT_MEDPACK x:627 y:-108
+ent_create ENT_SPAWNER quantity_:10 rate_:1.0 ent_:"ENT_ENEMY_WALKER" x:-280 y:-800 hpbar:1 hp:50 dmg:10
+ent_create ENT_SPAWNER quantity_:10 rate_:1.0 ent_:"ENT_ENEMY_WALKER" x:2100 y:-800 hpbar:1 hp:50 dmg:10
+delay 13000
+ent_create ENT_AMMOPACK slot:1 ammo:50 x:559 y:-1300
+ent_create ENT_AMMOPACK slot:2 ammo:3 x:1100 y:-1500
+delay 300
+ent_create ENT_AMMOPACK slot:3 ammo:3 x:1060 y:-1500
+delay 2100
+ent_create ENT_SPAWNER quantity_:10 rate_:0.1 ent_:"ENT_ENEMY_WALKER" x:-280 y:-800 hpbar:1 hp:50 dmg:10
+ent_create ENT_SPAWNER quantity_:10 rate_:0.1 ent_:"ENT_ENEMY_WALKER" x:2100 y:-800 hpbar:1 hp:50 dmg:10
+delay 2000
+ent_create ENT_SPAWNER quantity_:10 rate_:0.1 ent_:"ENT_ENEMY_WALKER" x:-280 y:-800 hpbar:1 hp:50 dmg:10
+ent_create ENT_SPAWNER quantity_:10 rate_:0.1 ent_:"ENT_ENEMY_WALKER" x:2100 y:-800 hpbar:1 hp:50 dmg:10
+delay 2000
+ent_create ENT_SPAWNER quantity_:10 rate_:0.1 ent_:"ENT_ENEMY_WALKER" x:-280 y:-800 hpbar:1 hp:50 dmg:10
+ent_create ENT_SPAWNER quantity_:10 rate_:0.1 ent_:"ENT_ENEMY_WALKER" x:2100 y:-800 hpbar:1 hp:50 dmg:10
+delay 2000

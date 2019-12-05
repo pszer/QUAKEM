@@ -139,4 +139,7 @@ namespace Commands {
 
 	// gives 1000 ammo for all weapons
 	std::string _dem_gunmad(const std::vector<Argument>&);
+
+	// gives super machine gun
+	std::string _bomboclat(const std::vector<Argument>&);
 };
