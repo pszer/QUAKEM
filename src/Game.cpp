@@ -207,6 +207,7 @@ void Game::Init() {
 	STR_TO_ENT_TYPE["ENT_EXPLOSION"] = ENT_EXPLOSION;
 	STR_TO_ENT_TYPE["ENT_SPAWNER"] = ENT_SPAWNER;
 	STR_TO_ENT_TYPE["ENT_ENEMY_WALKER"] = ENT_ENEMY_WALKER;
+	STR_TO_ENT_TYPE["ENT_ENEMY_GUNMAN"] = ENT_ENEMY_GUNMAN;
 
 	ENT_CONSTRUCT_MSG[ENT_PLAYER] = Ents::Player::CONSTRUCT_MSG;
 	ENT_CONSTRUCT_MSG[ENT_MEDPACK] = Ents::Medpack::CONSTRUCT_MSG;
@@ -217,6 +218,7 @@ void Game::Init() {
 	ENT_CONSTRUCT_MSG[ENT_EXPLOSION] = Ents::Explosion::CONSTRUCT_MSG;
 	ENT_CONSTRUCT_MSG[ENT_SPAWNER] = Ents::Spawner::CONSTRUCT_MSG;
 	ENT_CONSTRUCT_MSG[ENT_ENEMY_WALKER] = Ents::Walker::CONSTRUCT_MSG;
+	ENT_CONSTRUCT_MSG[ENT_ENEMY_GUNMAN] = Ents::Walker::CONSTRUCT_MSG;
 
 	CVARS["followspeed"] = Argument(3.5);
 	CVARS["gravity"] = Argument(1800.0);
@@ -254,6 +256,7 @@ int Game::CreateEntity(Entity_Type ent_type, std::vector<Argument>& args) {
 	case ENT_GRENADE: ent = std::make_unique<Ents::Grenade>(); break;
 	case ENT_SPAWNER: ent = std::make_unique<Ents::Spawner>(); break;
 	case ENT_ENEMY_WALKER: ent = std::make_unique<Ents::Walker>(); break;
+	case ENT_ENEMY_GUNMAN: ent = std::make_unique<Ents::Gunman>(); break;
 
 	default: return 0;
 	}

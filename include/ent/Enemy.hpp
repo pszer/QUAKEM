@@ -36,10 +36,10 @@ protected:
 	int player_id=0;
 };
 
-// test enemy, if it sees the player it rushes him
+// rushes player and deals contact damage
 class Walker : public EnemyBase {
 public:
-	Walker(): EnemyBase(ENT_ENEMY_WALKER, Vec2(0.0,0.0), Vec2(32.0, 64.0)) {
+	Walker(): EnemyBase(ENT_ENEMY_WALKER, Vec2(0.0,0.0), Vec2(32.0, 48.0)) {
 		rate_timer.Start();
 	}
 
@@ -55,6 +55,30 @@ public:
 
 	int damage = 10;
 	double rate = 0.5;
+	Timer rate_timer;
+private:
+};
+
+class Gunman : public EnemyBase {
+public:
+	Gunman(): EnemyBase(ENT_ENEMY_GUNMAN, Vec2(0.0,0.0), Vec2(40.0, 40.0)) {
+		rate_timer.Start();
+		AddWeapon(WEP_PISTOL, {
+		{"ammo",-1}, {"dmg", 15.0}, {"rate", 1.0}, {"vel", 2000.0}, {"life", 0.35},
+		{"spread",0.0} });
+	}
+
+	void Update();
+	void Render();
+
+	void EntityCollision(Entity * entity);
+
+	static const std::string CONSTRUCT_MSG;
+	int Construct(const std::vector<Argument>& args);
+
+	int damage = 20;
+	double rate   = 1.0;
+	double spread = 0.1;
 	Timer rate_timer;
 private:
 };

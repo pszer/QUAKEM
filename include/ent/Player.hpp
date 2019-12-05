@@ -12,9 +12,9 @@ struct Player : public Entity {
 		hitpoints = 100; max_hitpoints = 100;
 
 		AddWeapon(WEP_PISTOL, {
-				{"ammo",-1}, {"dmg", 10.0}, {"rate", 0.12}, {"vel", 2500.0}, {"life", 0.35}, {"spread",0.0} }); 
+				{"ammo",-1}, {"dmg", 15.0}, {"rate", 0.12}, {"vel", 2500.0}, {"life", 0.35}, {"spread",0.0} }); 
 		AddWeapon(WEP_PISTOL, {
-		  {"ammo",100}, {"dmg", 4.0}, {"rate", 0.05}, {"vel", 1800.0}, {"life", 0.25}, {"spread",0.2},
+		  {"ammo",100}, {"dmg", 7.0}, {"rate", 0.05}, {"vel", 1800.0}, {"life", 0.25}, {"spread",0.2},
 		  {"autofire", 1.0} });
 		AddWeapon(WEP_ROCKETL, {
 		  {"ammo",5}, {"dmg", 65.0}, {"rate", 0.42 }, {"vel", 1000.0 }, {"rad", 100.0} });
