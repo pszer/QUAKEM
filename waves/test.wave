@@ -1,0 +1,3 @@
+ent_create ENT_ENEMY_WALKER x:627 y:-108
+delay 3000
+ent_create ENT_MEDPACK x:627 y:-108

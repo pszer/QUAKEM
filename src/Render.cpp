@@ -283,7 +283,21 @@ void Renderer::RenderText(const std::string& font_name, const std::string& text,
 		SDL_FreeSurface(surface);
 		SDL_DestroyTexture(t);
 	} else {
-	
+		SDL_SetTextureColorMod(font->glyph, c.r, c.g, c.b);
+
+		int w,h;
+		SDL_QueryTexture(font->glyph, NULL, NULL, &w, &h);
+
+		Rect r = TransformRect(Rect(x,y,h,h));
+
+		for (char c : text) {
+			SDL_Rect src  = { h*c, 0, h, h };
+			SDL_Rect dest = r.ToSDLRect();
+
+			SDL_RenderCopy(renderer, font->glyph, &src, &dest);
+
+			r.x += r.w;
+		}
 	}
 }
 

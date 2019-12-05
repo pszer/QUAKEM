@@ -129,6 +129,13 @@ namespace Commands {
 	// map filename
 	std::string _map(const std::vector<Argument>&);
 
+	// loads wave file in waves/ folder
+	// wave filename
+	std::string _wave(const std::vector<Argument>&);
+
+	// delays sequential wave commands
+	// delay ms
+	std::string _delay(const std::vector<Argument>&);
 
 	// gives 1000 ammo for all weapons
 	std::string _dem_gunmad(const std::vector<Argument>&);

@@ -4,6 +4,7 @@
 struct Game Game;
 
 void Game::Update() {
+	Wave::Update();
 	UpdateEntities();
 	UpdatePhysics();
 	World.CollideWithEntities();

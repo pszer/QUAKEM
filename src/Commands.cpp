@@ -5,6 +5,7 @@
 #include "Core.hpp"
 #include "Game.hpp"
 #include "Keys.hpp"
+#include "Wave.hpp"
 
 using namespace Commands;
 
@@ -41,6 +42,8 @@ void Commands::Init() {
 	COMMANDS["exec"] = _exec;
 	COMMANDS["export"] = _export;
 	COMMANDS["map"] = _map;
+	COMMANDS["wave"] = _wave;
+	COMMANDS["delay"] = _delay;
 	COMMANDS["dem_gunmad"] = _dem_gunmad;
 }
 
@@ -671,6 +674,29 @@ std::string _map(const std::vector<Argument>& args) {
 	} else {
 		return "Map file \"" + path + "\" not found";
 	}
+}
+
+std::string _wave(const std::vector<Argument>& args) {
+	const std::string USE_MSG = "wave filename";
+	std::string path;
+	if (args.size() == 0) return USE_MSG;
+	path = "waves/" + args.at(0).ToString();
+
+	if (std::filesystem::is_regular_file(std::filesystem::path(path))) {
+		Wave::LoadWave(path);
+	} else {
+		return "Map file \"" + path + "\" not found";
+	}
+	return "";
+}
+
+std::string _delay(const std::vector<Argument>& args) {
+	const std::string USE_MSG = "delay ms";
+	if (args.size() == 0) return USE_MSG;
+
+	int ms = args.at(0).ToInt();
+	Wave::Delay = ms;
+	return "";
 }
 
 std::string _dem_gunmad(const std::vector<Argument>& args) {
