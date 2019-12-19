@@ -60,6 +60,14 @@ namespace Commands {
 	// ent_del unique_id
 	std::string _ent_del(const std::vector<Argument>&);
 
+	// sets players weapons key at a specified slot
+	// wep_setkey slot key value
+	std::string _wep_setkey(const std::vector<Argument>&);
+
+	// gets players weapons key at a specified slot
+	// wep_getkey slot key
+	std::string _wep_getkey(const std::vector<Argument>&);
+
 	// set camera mode
 	// camera [static pos zoom] [player zoom] [ent id zoom] [path start end dur zoom]
 	std::string _camera(const std::vector<Argument>&);

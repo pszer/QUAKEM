@@ -23,6 +23,8 @@ void Commands::Init() {
 	COMMANDS["ent_args"] = _ent_args;
 	COMMANDS["ent_list"] = _ent_list;
 	COMMANDS["ent_del"] = _ent_del;
+	COMMANDS["wep_setkey"] = _wep_setkey;
+	COMMANDS["wep_getkey"] = _wep_getkey;
 	COMMANDS["brush_create"] = _brush_create;
 	COMMANDS["brush_list"] = _brush_list;
 	COMMANDS["brush_del"] = _brush_del;
@@ -226,6 +228,61 @@ std::string _ent_del(const std::vector<Argument>& args) {
 	}
 
 	return "No entity with ID " + std::to_string(ID);
+}
+
+std::string _wep_setkey(const std::vector<Argument>& args) {
+	const std::string USE_MSG = "wep_setkey slot key value";
+	if (args.size() < 3) return USE_MSG;
+
+	int        slot = args.at(0).ToInt();
+	std::string key = args.at(1).ToString();
+	double      val = args.at(2).ToFloat();
+
+	if (key.empty()) return "empty key";
+	if (slot < 0)    return "bad slot";
+
+
+	for (auto e = Game.Entities.begin(); e != Game.Entities.end(); ++e) {
+		if ((*e)->type == ENT_PLAYER) {
+			auto wep = (*e)->GetWeapon(slot);
+			if (!wep) return "bad slot";
+			else wep->SetKey(key, val); 
+		}
+	}
+	return "";
+}
+
+std::string _wep_getkey(const std::vector<Argument>& args) {
+	const std::string USE_MSG = "wep_getkey slot [key]";
+	if (args.size() < 1) return USE_MSG;
+	bool printall = args.size() == 1;
+
+	int        slot = args.at(0).ToInt();
+	std::string key = (printall ? "" : args.at(1).ToString());
+
+	if (slot < 0)    return "bad slot";
+	if (key.empty() && !printall) return "empty key";
+
+	for (auto e = Game.Entities.begin(); e != Game.Entities.end(); ++e) {
+		if ((*e)->type == ENT_PLAYER) {
+			auto wep = (*e)->GetWeapon(slot);
+			if (!wep) {
+				return "bad slot";
+			} else if (!printall) {
+				return std::to_string(wep->GetKey(key));
+			} else {
+				std::string result = "";
+				for (auto k : wep->keys) {
+					result +=
+						"[" + k.first + "] "+
+						std::to_string(k.second) +
+						"\n";
+				}
+				return result;
+			}
+		}
+	}
+	return "";
 }
 
 

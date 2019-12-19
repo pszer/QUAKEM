@@ -6,8 +6,8 @@
 #include "Vec2.hpp"
 
 struct HUD_Element {
-	HUD_Element(Vec2 p, Vec2 off, Vec2 s): pos(p), offset(off), size(s) { ; }
-
+	HUD_Element(Vec2 p, Vec2 off, Vec2 s):
+		pos(p), offset(off), size(s) { ; }
 	virtual void Update() = 0;
 	virtual void Render() = 0;
 

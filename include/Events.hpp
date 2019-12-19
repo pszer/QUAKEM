@@ -55,3 +55,6 @@ extern struct Event {
 	void DisableTextInput();
 
 } Event;
+
+// transforms position coordinates from (0.0-1.0, 0.0-1.0) to screen coordinates
+Vec2 PosToScreen(Vec2 pos);

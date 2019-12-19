@@ -171,3 +171,10 @@ void Event::HandleMouseWheelEvent() {
 void Event::HandleTextInputEvent() {
 	Core.Console.TextInput(std::string(event.text.text));
 }
+
+// transforms position coordinates from (0.0-1.0, 0.0-1.0) to screen coordinates
+Vec2 PosToScreen(Vec2 pos) {
+	int& w = Event.win_w,
+	   & h = Event.win_h;
+	return Vec2(pos.x * (double)w, pos.y * (double)h);
+}

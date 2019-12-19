@@ -1,15 +1,9 @@
 #include "HUD.hpp"
 #include "Game.hpp"
 #include "Core.hpp"
+#include "Events.hpp"
 
 struct HUD HUD;
-
-// transforms position coordinates from (0.0-1.0, 0.0-1.0) to screen coordinates
-Vec2 PosToScreen(Vec2 pos) {
-	int w,h;
-	SDL_GetWindowSize(Core.window, &w, &h);
-	return Vec2(pos.x * (double)w, pos.y * (double)h);
-}
 
 void HUD::Update() {
 	for (auto h = elements.begin(); h != elements.end(); ++h) {
