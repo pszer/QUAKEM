@@ -19,7 +19,7 @@ struct Player : public Entity {
 		AddWeapon(WEP_ROCKETL, {
 		  {"ammo",5}, {"dmg", 65.0}, {"rate", 0.42 }, {"vel", 1000.0 }, {"rad", 100.0} });
 		AddWeapon(WEP_GRENADEL, {
-		  {"ammo",3}, {"dmg", 65.0}, {"rate", 0.42 }, {"vel", 1000.0 }, {"rad", 100.0}, {"burst", 3.0} });
+		  {"ammo",3}, {"dmg", 65.0}, {"rate", 0.42 }, {"vel", 1000.0 }, {"rad", 100.0}, {"burst", 100.0} });
 	}
 
 	void Update();

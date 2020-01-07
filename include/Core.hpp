@@ -11,6 +11,7 @@
 #include "Music.hpp"
 #include "Config.hpp"
 #include "Game.hpp"
+#include "Menu.hpp"
 
 #define DEF_WIN_W 800
 #define DEF_WIN_H 600
@@ -27,6 +28,8 @@ struct InitParameters {
 	SDL_RendererFlags render_flags = DEF_RENDER_FLAG;
 };
 
+enum { GAMESTATE_MENU , GAMESTATE_GAME };
+
 extern struct Core {
 	Core() { ; }
 
@@ -40,6 +43,8 @@ extern struct Core {
 	bool going = true; // set to false to exit game main loop
 
 	SDL_Window * window   = nullptr;
+
+	Menu core_menu;
 
 	// CONSOLE
 	struct Console {

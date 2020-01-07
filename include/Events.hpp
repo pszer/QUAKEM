@@ -4,6 +4,7 @@
 
 #include <vector>
 
+#include "Vec2.hpp"
 #include "Timer.hpp"
 
 //                  not pressed
