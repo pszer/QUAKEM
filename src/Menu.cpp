@@ -1,8 +1,7 @@
 #include "Menu.hpp"
 #include "Events.hpp"
 #include "Hitreg.hpp"
-
-struct Menu Menu;
+#include "Render.hpp"
 
 Rect Menu_Element::GetRect() {
 	Rect result = Rect(0.0, 0.0, size.x, size.y);
@@ -26,9 +25,11 @@ void Menu_Screen::Update() {
 }
 
 void Menu_Screen::Render() {
+	Renderer.CameraStop();
 	for (auto h = elements.begin(); h != elements.end(); ++h) {
 		(*h)->Render();
 	}
+	Renderer.CameraUpdate();
 }
 
 void Menu_Screen::Add(std::unique_ptr<Menu_Element> element) {
@@ -76,13 +77,39 @@ Menu_Screen* Menu::GetActiveScreen() {
 }
 
 void CreateCoreMenu(Menu * menu) {
+	Menu_Screen main_screen;
+	main_screen.Add(std::make_unique<Menu_Elements::Decal>(
+		Vec2(0.5,0.2), Vec2(-297.5,-48), Vec2(595,96), std::string("title.png")));
 
+	menu->AddScreen("main", main_screen);
+
+	menu->active_menu = "main";
 }
 
 namespace Menu_Elements {
 
-void Decal::Update();
-void Decal::Render();
+void Decal::Update() { ; }
 void Decal::Click(Menu * m, int button, Keypress_State state, Vec2 mpos) { ; }
+void Decal::Render() {
+	Rect r = GetRect();
+	Renderer.RenderTexture(img, nullptr, &r);
+}
+
+void ImgButton::Update() {
+	Rect r = GetRect();
+	if (CheckCollision(r, Vec2(Event.mouse_x, Event.mouse_y))) {
+		hovered = 1;
+	} else hovered = 0;
+}
+void ImgButton::Render() {
+	Rect r = GetRect();
+	if (hovered)
+		Renderer.RenderTexture(img_hover, nullptr, &r);
+	else
+		Renderer.RenderTexture(img, nullptr, &r);
+}
+void ImgButton::Click(Menu * m, int button, Keypress_State state, Vec2 mpos) {
+	if (Function) Function();
+}
 
 };

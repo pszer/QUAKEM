@@ -28,7 +28,7 @@ struct InitParameters {
 	SDL_RendererFlags render_flags = DEF_RENDER_FLAG;
 };
 
-enum { GAMESTATE_MENU , GAMESTATE_GAME };
+enum CORE_GAMESTATE { GAMESTATE_MENU , GAMESTATE_GAME };
 
 extern struct Core {
 	Core() { ; }
@@ -38,12 +38,14 @@ extern struct Core {
 
 	void HandleEvents();
 	void MainLoop();
+	void MainUpdate();
 	void MainRender();
 
 	bool going = true; // set to false to exit game main loop
 
 	SDL_Window * window   = nullptr;
 
+	CORE_GAMESTATE gamestate = GAMESTATE_MENU;
 	Menu core_menu;
 
 	// CONSOLE

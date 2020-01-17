@@ -60,6 +60,8 @@ int Core::Init(InitParameters init) {
 	Media.LoadMedia();
 	Event.Init();
 
+	CreateCoreMenu(&core_menu);
+
 	CVARS["overwrite"] = Argument(0ll);
 
 	return 0;
@@ -89,13 +91,8 @@ void Core::MainLoop() {
 		Event.HandleEvents();
 		HandleEvents();
 
-		Game.Update();
-		Console.Update();
-
+		MainUpdate();
 		MainRender();
-
-		Sound::Update();
-		Event.Update();
 
 		FrameLimit.FrameEnd();
 		FrameLimit.Sleep();
@@ -105,12 +102,34 @@ void Core::MainLoop() {
 void Core::MainRender() {
 	Renderer.Clear();
 
-	Game.Render();
+	switch (gamestate) {
+	case GAMESTATE_MENU:
+		core_menu.Render();
+		break;
+	case GAMESTATE_GAME:
+		Game.Render();
+		break;
+	}
 
 	Console.Render();
 	RenderFPS();
 
 	Renderer.Update();
+}
+
+void Core::MainUpdate() {
+	switch (gamestate) {
+	case GAMESTATE_MENU:
+		core_menu.Update();
+		break;
+	case GAMESTATE_GAME:
+		Game.Update();
+		break;
+	}
+
+	Console.Update();
+	Sound::Update();
+	Event.Update();
 }
 
 void Core::HandleEvents() {

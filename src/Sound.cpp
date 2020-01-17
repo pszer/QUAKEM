@@ -45,7 +45,6 @@ void ChannelFinished(int channel) {
 	for (auto s = PlayingSounds.begin(); s != PlayingSounds.end(); ++s) {
 		if (s->channel == channel) {
 			s->del = true;
-			//PlayingSounds.erase(s);
 			return;
 		}
 	}
