@@ -81,6 +81,7 @@ Menu_Screen* Menu::GetActiveScreen() {
 
 void __PlayButton(Menu * menu) {
 	Core.SetGamestate(GAMESTATE_GAME);
+	Commands::CallCommand("map test");
 }
 
 void CreateCoreMenu(Menu * menu) {
@@ -94,7 +95,6 @@ void CreateCoreMenu(Menu * menu) {
 		FONT_P32, (SDL_Color){0xff,0xff,0xff,0xff}, __PlayButton));
 
 	menu->AddScreen("main", main_screen);
-
 	menu->active_menu = "main";
 }
 

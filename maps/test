@@ -14,3 +14,4 @@ brush_create BRUSH_SOLID 2240 -1464 192 2048 "64.png" 1 1 -256 -632
 
 ent_create ENT_PLAYER x:0 y:0
 camera player 1
+play_mus "Squarepusher - Vic Acid.ogg" 1.0

@@ -3,6 +3,8 @@
 struct Music Music;
 
 int Music::Play(const std::string& name, int loops) {
+	Log::Log("Playing song \"" + name + "\" (" + std::to_string(loops) + " loops)");
+
 	auto mus = Media.GetMusic(name);
 	if (mus == nullptr) {
 		Log::Error("Music file \"" + name + "\" not found");

@@ -62,9 +62,9 @@ int Core::Init(InitParameters init) {
 
 	CreateCoreMenu(&core_menu);
 
-	CVARS["overwrite"] = Argument(0ll);
-
 	SetGamestate(GAMESTATE_MENU);
+
+	CVARS["overwrite"] = Argument(0ll);
 
 	return 0;
 }
