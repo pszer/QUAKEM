@@ -13,3 +13,6 @@ brush_create BRUSH_SOLID 896 -24 384 32 "64.png" 1.0 1.0 320 -24
 brush_create BRUSH_FOREGROUND 526 368 224 24 "fence.png" 1 1 526 368
 
 brush_create BRUSH_PUSH -300 0 200 200 "scrung.jpg" 0.2 0.2 -300 0 xforce:0.0 yforce:-1000.0
+
+ent_create ENT_PLAYER
+camera player 1.0

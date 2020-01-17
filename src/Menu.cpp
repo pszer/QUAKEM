@@ -1,7 +1,5 @@
 #include "Menu.hpp"
-#include "Events.hpp"
-#include "Hitreg.hpp"
-#include "Render.hpp"
+#include "Core.hpp"
 
 Rect Menu_Element::GetRect() {
 	Rect result = Rect(0.0, 0.0, size.x, size.y);
@@ -47,7 +45,12 @@ void Menu_Screen::Click(Menu * m, int button, Keypress_State state, Vec2 mpos) {
 void Menu::Update() {
 	auto scr = GetActiveScreen();
 	if (!scr) return;
+
 	scr->Update(this);
+	Keypress_State state = Event.GetKey(MOUSE1);
+	if (state == KEY_UP) {
+		Click(MOUSE1, state, Vec2(Event.mouse_x, Event.mouse_y));
+	}
 }
 
 void Menu::Render() {
@@ -76,10 +79,20 @@ Menu_Screen* Menu::GetActiveScreen() {
 		return &find->second;
 }
 
+void __PlayButton(Menu * menu) {
+	Core.SetGamestate(GAMESTATE_GAME);
+}
+
 void CreateCoreMenu(Menu * menu) {
 	Menu_Screen main_screen;
 	main_screen.Add(std::make_unique<Menu_Elements::Decal>(
 		Vec2(0.5,0.2), Vec2(-297.5,-48), Vec2(595,96), std::string("title.png")));
+
+	SDL_Color C = {0xff,0xff,0xff,0xff};
+	main_screen.Add(std::make_unique<Menu_Elements::Button>(
+		Vec2(0.5, 0.5), Vec2(-75,-25), Vec2(150,50), std::string(""), std::string(""),
+		std::string("Quakem"), std::string("inconsolata.ttf"),
+		FONT_P32, (SDL_Color){0xff,0xff,0xff,0xff}, __PlayButton));
 
 	menu->AddScreen("main", main_screen);
 

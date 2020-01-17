@@ -69,7 +69,7 @@ namespace Menu_Elements {
 
 	struct Button : public Menu_Element {
 		Button(Vec2 p, Vec2 off, Vec2 s,
-			const std::string& _img, std::string& _img_hover,
+			const std::string& _img, const std::string& _img_hover,
 			const std::string& _str, const std::string& _font, FONT_SIZE f_size, SDL_Color f_col,
 			void (*func)(Menu *)):
 			Menu_Element(p, off, s), img(_img), img_hover(_img_hover), Function(func),

@@ -45,6 +45,7 @@ extern struct Core {
 
 	SDL_Window * window   = nullptr;
 
+	void SetGamestate(CORE_GAMESTATE gs);
 	CORE_GAMESTATE gamestate = GAMESTATE_MENU;
 	Menu core_menu;
 

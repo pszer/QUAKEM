@@ -4,11 +4,4 @@ set $console 1
 set $renderscalequality 1
 set $followspeed 3.0
 
-ent_create ENT_PLAYER
-
 bind Mouse1 "+fire"
-
-map test
-
-camera player 1.0
-

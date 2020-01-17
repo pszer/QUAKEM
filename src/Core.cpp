@@ -6,7 +6,7 @@ int Core::Init(InitParameters init) {
 	World::Init();
 	Commands::Init();
 	Sound::Init();
-	Game.Init();
+	//Game.Init();
 	Keys.DefaultBindings();
 	
 	if (!Config::ExecFile(CONFIG_PATH)) {
@@ -64,6 +64,8 @@ int Core::Init(InitParameters init) {
 
 	CVARS["overwrite"] = Argument(0ll);
 
+	SetGamestate(GAMESTATE_MENU);
+
 	return 0;
 }
 
@@ -115,6 +117,17 @@ void Core::MainRender() {
 	RenderFPS();
 
 	Renderer.Update();
+}
+
+void Core::SetGamestate(CORE_GAMESTATE gs) {
+	gamestate = gs;
+	switch (gs) {
+	case GAMESTATE_MENU:
+		break;
+	case GAMESTATE_GAME:
+		Game.Init();
+		break;
+	}
 }
 
 void Core::MainUpdate() {
