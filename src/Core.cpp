@@ -92,6 +92,7 @@ void Core::MainLoop() {
 
 		Event.HandleEvents();
 		HandleEvents();
+		Console.Update();
 
 		MainUpdate();
 		MainRender();
@@ -140,7 +141,6 @@ void Core::MainUpdate() {
 		break;
 	}
 
-	Console.Update();
 	Sound::Update();
 	Event.Update();
 }

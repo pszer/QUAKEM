@@ -88,10 +88,9 @@ void CreateCoreMenu(Menu * menu) {
 	main_screen.Add(std::make_unique<Menu_Elements::Decal>(
 		Vec2(0.5,0.2), Vec2(-297.5,-48), Vec2(595,96), std::string("title.png")));
 
-	SDL_Color C = {0xff,0xff,0xff,0xff};
 	main_screen.Add(std::make_unique<Menu_Elements::Button>(
-		Vec2(0.5, 0.5), Vec2(-75,-25), Vec2(150,50), std::string(""), std::string(""),
-		std::string("Quakem"), std::string("inconsolata.ttf"),
+		Vec2(0.5, 0.5), Vec2(-75,-25), Vec2(200,45), std::string("button.png"), std::string("button_hover.png"),
+		std::string("Quakem"), std::string("DooM.ttf"),
 		FONT_P32, (SDL_Color){0xff,0xff,0xff,0xff}, __PlayButton));
 
 	menu->AddScreen("main", main_screen);
@@ -121,7 +120,7 @@ void Button::Render() {
 	} else {
 		Renderer.RenderTexture(img, nullptr, &r);
 	}
-	Renderer.RenderText(font, str, r.x+r.w/2, r.y+r.h/2, font_size, font_color, ALIGN_MIDDLE);
+	Renderer.RenderText(font, str, r.x+r.w/2, r.y, font_size, font_color, ALIGN_MIDDLE);
 }
 void Button::Click(Menu * m, int button, Keypress_State state, Vec2 mpos) {
 	if (Function) Function(m);

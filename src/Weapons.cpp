@@ -132,6 +132,8 @@ bool GrenadeLauncher::Fire(Vec2 aim) {
 
 		new_aim = new_aim * rand_vel;
 
+		double life = 1.5 + 1.0 + (std::rand()/(double)0xffffffff);
+
 		std::vector<Argument> args = {
 			Argument(new_aim.x, "xv"),
 			Argument(new_aim.y, "yv"),
@@ -139,9 +141,9 @@ bool GrenadeLauncher::Fire(Vec2 aim) {
 			Argument(parent->Hull().Middle().y, "y"),
 		  	Argument(GetKey("dmg"), "dmg"),
 			Argument(GetKey("rad"), "rad"),
-		  	Argument(ARG_STRING, team, "team")
+		  	Argument(ARG_STRING, team, "team"),
+			Argument(life, "life")
 		};
-
 
 		Game.CreateEntity(ENT_GRENADE, args);
 	}
