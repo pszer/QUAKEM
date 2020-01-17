@@ -12,9 +12,9 @@ Rect Menu_Element::GetRect() {
 	return result;
 }
 
-void Menu_Screen::Update() {
+void Menu_Screen::Update(Menu * m) {
 	for (auto h = elements.begin(); h != elements.end(); ++h) {
-		(*h)->Update();
+		(*h)->Update(m);
 	}
 
 	for (auto h = elements.begin(); h != elements.end();) {
@@ -47,7 +47,7 @@ void Menu_Screen::Click(Menu * m, int button, Keypress_State state, Vec2 mpos) {
 void Menu::Update() {
 	auto scr = GetActiveScreen();
 	if (!scr) return;
-	scr->Update();
+	scr->Update(this);
 }
 
 void Menu::Render() {
@@ -88,28 +88,30 @@ void CreateCoreMenu(Menu * menu) {
 
 namespace Menu_Elements {
 
-void Decal::Update() { ; }
+void Decal::Update(Menu * m) { ; }
 void Decal::Click(Menu * m, int button, Keypress_State state, Vec2 mpos) { ; }
 void Decal::Render() {
 	Rect r = GetRect();
 	Renderer.RenderTexture(img, nullptr, &r);
 }
 
-void ImgButton::Update() {
+void Button::Update(Menu * m) {
 	Rect r = GetRect();
 	if (CheckCollision(r, Vec2(Event.mouse_x, Event.mouse_y))) {
 		hovered = 1;
 	} else hovered = 0;
 }
-void ImgButton::Render() {
+void Button::Render() {
 	Rect r = GetRect();
-	if (hovered)
+	if (hovered) {
 		Renderer.RenderTexture(img_hover, nullptr, &r);
-	else
+	} else {
 		Renderer.RenderTexture(img, nullptr, &r);
+	}
+	Renderer.RenderText(font, str, r.x+r.w/2, r.y+r.h/2, font_size, font_color, ALIGN_MIDDLE);
 }
-void ImgButton::Click(Menu * m, int button, Keypress_State state, Vec2 mpos) {
-	if (Function) Function();
+void Button::Click(Menu * m, int button, Keypress_State state, Vec2 mpos) {
+	if (Function) Function(m);
 }
 
 };

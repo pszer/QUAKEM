@@ -3,6 +3,7 @@
 #include <vector>
 #include <map>
 
+#include "Font.hpp"
 #include "Vec2.hpp"
 #include "Events.hpp"
 
@@ -14,7 +15,7 @@ struct Menu_Element {
 	Menu_Element(Vec2 p, Vec2 off, Vec2 s):
 		pos(p), offset(off), size(s) { ; }
 
-	virtual void Update() = 0;
+	virtual void Update(Menu * m) = 0;
 	virtual void Render() = 0;
 	// Click() called when clicked by user.
 	//                 MOUSE1/2/3  KEY_DOWN/HELD/UP
@@ -31,7 +32,7 @@ struct Menu_Element {
 struct Menu_Screen {
 	std::vector<std::unique_ptr<Menu_Element>> elements;
 
-	void Update();
+	void Update(Menu * m);
 	void Render();
 	void Click(Menu * m, int button, Keypress_State state, Vec2 mpos);
 
@@ -61,33 +62,28 @@ namespace Menu_Elements {
 			Menu_Element(p, off, s), img(_img) { ; }
 		std::string img;
 
-		void Update();
+		void Update(Menu * m);
 		void Render();
 		void Click(Menu * m, int button, Keypress_State state, Vec2 mpos); 
 	};
 
-	struct ImgButton : public Menu_Element {
-		ImgButton(Vec2 p, Vec2 off, Vec2 s, const std::string& _img, std::string& _img_hover,
+	struct Button : public Menu_Element {
+		Button(Vec2 p, Vec2 off, Vec2 s,
+			const std::string& _img, std::string& _img_hover,
+			const std::string& _str, const std::string& _font, FONT_SIZE f_size, SDL_Color f_col,
 			void (*func)(Menu *)):
-			Menu_Element(p, off, s), img(_img), img_hover(_img_hover), Function(func) { ; }
+			Menu_Element(p, off, s), img(_img), img_hover(_img_hover), Function(func),
+			str(_str), font(_font), font_size(f_size), font_color(f_col) { ; }
 		std::string img, img_hover;
+		std::string str, font;
+		FONT_SIZE font_size;
+		SDL_Color font_color;
 		void (*Function)(Menu * m);
 
 		int hovered=0;
 
-		void Update();
+		void Update(Menu * m);
 		void Render();
-		void Click(Menu * m, int button, Keypress_State state, Vec2 mpos) { ; }
-	};
-
-	struct TextButton : public Menu_Element {
-		TextButton(Vec2 p, Vec2 off, Vec2 s, const std::string& _str, void (*func)(Menu *)):
-			Menu_Element(p, off, s), str(_str), Function(func) { ; }
-		std::string str;
-		void (*Function)(Menu * m);
-
-		void Update();
-		void Render();
-		void Click(Menu * m, int button, Keypress_State state, Vec2 mpos) { ; }
+		void Click(Menu * m, int button, Keypress_State state, Vec2 mpos);
 	};
 };
