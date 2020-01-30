@@ -84,21 +84,62 @@ void __PlayButton(Menu * menu) {
 	Commands::CallCommand("map test");
 }
 
+void __QuitButton(Menu * menu) {
+	Commands::CallCommand("quit");
+}
+
+void __KeyConfigScreenButton(Menu * menu) {
+	menu->active_menu = "key_config";
+}
+
+void __MainScreenButton(Menu * menu) {
+	menu->active_menu = "main";
+}
+
 void CreateCoreMenu(Menu * menu) {
 	Menu_Screen main_screen;
 	main_screen.Add(std::make_unique<Menu_Elements::Decal>(
 		Vec2(0.5,0.2), Vec2(-297.5,-48), Vec2(595,96), std::string("title.png")));
 
 	main_screen.Add(std::make_unique<Menu_Elements::Button>(
-		Vec2(0.5, 0.5), Vec2(-75,-25), Vec2(200,45), std::string("button.png"), std::string("button_hover.png"),
+		Vec2(0.5, 0.45), Vec2(-125,-22), Vec2(250,45), std::string("button.png"), std::string("button_hover.png"),
 		std::string("Quakem"), std::string("DooM.ttf"),
 		FONT_P32, (SDL_Color){0xff,0xff,0xff,0xff}, __PlayButton));
+	main_screen.Add(std::make_unique<Menu_Elements::Button>(
+		Vec2(0.5, 0.6), Vec2(-125,-22), Vec2(250,45), std::string("button.png"), std::string("button_hover.png"),
+		std::string("Options"), std::string("DooM.ttf"),
+		FONT_P32, (SDL_Color){0xff,0xff,0xff,0xff}, __KeyConfigScreenButton));
+	main_screen.Add(std::make_unique<Menu_Elements::Button>(
+		Vec2(0.5, 0.75), Vec2(-125,-22), Vec2(250,45), std::string("button.png"), std::string("button_hover.png"),
+		std::string("Wuss Out"), std::string("DooM.ttf"),
+		FONT_P32, (SDL_Color){0xff,0xff,0xff,0xff}, __QuitButton));
+
+	Menu_Screen key_config;
+	key_config.Add(std::make_unique<Menu_Elements::Button>(Vec2(0.0, 0.0), Vec2(25, 25), Vec2(200,45),
+		std::string("button.png"), std::string("button_hover.png"),
+		std::string("Back"), std::string("DooM.ttf"),
+		FONT_P32, (SDL_Color){0xff,0xff,0xff,0xff}, __MainScreenButton));
+
+	key_config.Add(std::make_unique<Menu_Elements::Label>(Vec2(0.25, 0.5), Vec2(-10, -300), 
+		std::string("Move Left"), std::string("inconsolata.ttf"), FONT_P32, ALIGN_RIGHT,
+		(SDL_Color){0xff,0xff,0xff,0xff}));
+	key_config.Add(std::make_unique<Menu_Elements::KeyConfigButton>(Vec2(0.25, 0.5), Vec2(10, -300), Vec2(200, 45),
+		std::string("button.png"), std::string("button_hover.png"), std::string("+left"),
+		std::string("inconsolata.ttf"), FONT_P32, (SDL_Color){0xff,0xff,0xff,0xff}, nullptr,
+		std::string(PLAYER_LEFT)));
 
 	menu->AddScreen("main", main_screen);
+	menu->AddScreen("key_config", key_config);
 	menu->active_menu = "main";
 }
 
 namespace Menu_Elements {
+
+void Label::Update(Menu * m) { ; }
+void Label::Render() {
+	Rect r = GetRect();
+	Renderer.RenderText(font, text, r.x, r.y, font_size, text_colour, text_align);
+}
 
 void Decal::Update(Menu * m) { ; }
 void Decal::Click(Menu * m, int button, Keypress_State state, Vec2 mpos) { ; }
@@ -124,6 +165,38 @@ void Button::Render() {
 }
 void Button::Click(Menu * m, int button, Keypress_State state, Vec2 mpos) {
 	if (Function) Function(m);
+}
+
+void KeyConfigButton:: Update(Menu * m) {
+	Rect r = GetRect();
+	if (CheckCollision(r, Vec2(Event.mouse_x, Event.mouse_y))) {
+		hovered = 1;
+	} else hovered = 0;
+
+	if (clicked) {
+		if (!Event.Keypresses.empty()) {
+			auto i = Event.Keypresses.begin();
+			for (; i < Event.Keypresses.end(); ++i) {
+				if (i->code == SDLK_BACKSPACE) {
+					clicked = false;
+					return;
+				}
+
+				if (i->state == KEY_DOWN) break;
+			}
+
+			if (i == Event.Keypresses.end()) return;
+			Keys.SetBoundKey(bind, i->code);
+			clicked = false;
+		}
+	} else {
+		str = Keys.GetStringFromKey(Keys.GetBoundKey(bind)); 
+	}
+}
+
+void KeyConfigButton::Click(Menu * m, int button, Keypress_State state, Vec2 mpos) {
+	if (Function) Function(m);
+	clicked = true;
 }
 
 };

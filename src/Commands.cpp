@@ -93,6 +93,9 @@ std::string _clear(const std::vector<Argument>& args) {
 
 std::string _quit(const std::vector<Argument>& args) {
 	Core.going = false;
+	//SDL_Event ev;
+	//ev.type = SDL_QUIT;
+	//SDL_PushEvent(&ev);
 	return "Quitting";
 }
 

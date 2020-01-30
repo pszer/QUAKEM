@@ -169,6 +169,7 @@ void Event::HandleMouseWheelEvent() {
 }
 
 void Event::HandleTextInputEvent() {
+	//std::cout << event.text.text << std::endl;
 	Core.Console.TextInput(std::string(event.text.text));
 }
 
