@@ -120,13 +120,65 @@ void CreateCoreMenu(Menu * menu) {
 		std::string("Back"), std::string("DooM.ttf"),
 		FONT_P32, (SDL_Color){0xff,0xff,0xff,0xff}, __MainScreenButton));
 
-	key_config.Add(std::make_unique<Menu_Elements::Label>(Vec2(0.25, 0.5), Vec2(-10, -300), 
+	// move left key
+	key_config.Add(std::make_unique<Menu_Elements::Label>(Vec2(0.25, 0.5), Vec2(-10, -100), 
 		std::string("Move Left"), std::string("inconsolata.ttf"), FONT_P32, ALIGN_RIGHT,
 		(SDL_Color){0xff,0xff,0xff,0xff}));
-	key_config.Add(std::make_unique<Menu_Elements::KeyConfigButton>(Vec2(0.25, 0.5), Vec2(10, -300), Vec2(200, 45),
-		std::string("button.png"), std::string("button_hover.png"), std::string("+left"),
+	key_config.Add(std::make_unique<Menu_Elements::KeyConfigButton>(Vec2(0.25, 0.5), Vec2(10, -100), Vec2(175, 40),
+		std::string("button.png"), std::string("button_hover.png"), std::string("-"),
 		std::string("inconsolata.ttf"), FONT_P32, (SDL_Color){0xff,0xff,0xff,0xff}, nullptr,
 		std::string(PLAYER_LEFT)));
+
+	// move right key
+	key_config.Add(std::make_unique<Menu_Elements::Label>(Vec2(0.25, 0.5), Vec2(-10, -50), 
+		std::string("Move Right"), std::string("inconsolata.ttf"), FONT_P32, ALIGN_RIGHT,
+		(SDL_Color){0xff,0xff,0xff,0xff}));
+	key_config.Add(std::make_unique<Menu_Elements::KeyConfigButton>(Vec2(0.25, 0.5), Vec2(10, -50), Vec2(175, 40),
+		std::string("button.png"), std::string("button_hover.png"), std::string("-"),
+		std::string("inconsolata.ttf"), FONT_P32, (SDL_Color){0xff,0xff,0xff,0xff}, nullptr,
+		std::string(PLAYER_RIGHT)));
+
+	// jump key
+	key_config.Add(std::make_unique<Menu_Elements::Label>(Vec2(0.25, 0.5), Vec2(-10, 0), 
+		std::string("Jump"), std::string("inconsolata.ttf"), FONT_P32, ALIGN_RIGHT,
+		(SDL_Color){0xff,0xff,0xff,0xff}));
+	key_config.Add(std::make_unique<Menu_Elements::KeyConfigButton>(Vec2(0.25, 0.5), Vec2(10, 0), Vec2(175, 40),
+		std::string("button.png"), std::string("button_hover.png"), std::string("-"),
+		std::string("inconsolata.ttf"), FONT_P32, (SDL_Color){0xff,0xff,0xff,0xff}, nullptr,
+		std::string(PLAYER_JUMP)));
+
+	// pistol
+	key_config.Add(std::make_unique<Menu_Elements::Label>(Vec2(0.75, 0.5), Vec2(10, -200), 
+		std::string("Pistol"), std::string("inconsolata.ttf"), FONT_P32, ALIGN_LEFT,
+		(SDL_Color){0xff,0xff,0xff,0xff}));
+	key_config.Add(std::make_unique<Menu_Elements::KeyConfigButton>(Vec2(0.75, 0.5), Vec2(-185, -200), Vec2(175, 40),
+		std::string("button.png"), std::string("button_hover.png"), std::string("-"),
+		std::string("inconsolata.ttf"), FONT_P32, (SDL_Color){0xff,0xff,0xff,0xff}, nullptr,
+		std::string(PLAYER_WEP0)));
+	// machine gun
+	key_config.Add(std::make_unique<Menu_Elements::Label>(Vec2(0.75, 0.5), Vec2(10, -150), 
+		std::string("Machine Gun"), std::string("inconsolata.ttf"), FONT_P32, ALIGN_LEFT,
+		(SDL_Color){0xff,0xff,0xff,0xff}));
+	key_config.Add(std::make_unique<Menu_Elements::KeyConfigButton>(Vec2(0.75, 0.5), Vec2(-185, -150), Vec2(175, 40),
+		std::string("button.png"), std::string("button_hover.png"), std::string("-"),
+		std::string("inconsolata.ttf"), FONT_P32, (SDL_Color){0xff,0xff,0xff,0xff}, nullptr,
+		std::string(PLAYER_WEP1)));
+	// rocket launcher
+	key_config.Add(std::make_unique<Menu_Elements::Label>(Vec2(0.75, 0.5), Vec2(10, -100), 
+		std::string("Rockets"), std::string("inconsolata.ttf"), FONT_P32, ALIGN_LEFT,
+		(SDL_Color){0xff,0xff,0xff,0xff}));
+	key_config.Add(std::make_unique<Menu_Elements::KeyConfigButton>(Vec2(0.75, 0.5), Vec2(-185, -100), Vec2(175, 40),
+		std::string("button.png"), std::string("button_hover.png"), std::string("-"),
+		std::string("inconsolata.ttf"), FONT_P32, (SDL_Color){0xff,0xff,0xff,0xff}, nullptr,
+		std::string(PLAYER_WEP2)));
+	// grenades
+	key_config.Add(std::make_unique<Menu_Elements::Label>(Vec2(0.75, 0.5), Vec2(10, -50), 
+		std::string("Grenades"), std::string("inconsolata.ttf"), FONT_P32, ALIGN_LEFT,
+		(SDL_Color){0xff,0xff,0xff,0xff}));
+	key_config.Add(std::make_unique<Menu_Elements::KeyConfigButton>(Vec2(0.75, 0.5), Vec2(-185, -50), Vec2(175, 40),
+		std::string("button.png"), std::string("button_hover.png"), std::string("-"),
+		std::string("inconsolata.ttf"), FONT_P32, (SDL_Color){0xff,0xff,0xff,0xff}, nullptr,
+		std::string(PLAYER_WEP3)));
 
 	menu->AddScreen("main", main_screen);
 	menu->AddScreen("key_config", key_config);
@@ -167,7 +219,7 @@ void Button::Click(Menu * m, int button, Keypress_State state, Vec2 mpos) {
 	if (Function) Function(m);
 }
 
-void KeyConfigButton:: Update(Menu * m) {
+void KeyConfigButton::Update(Menu * m) {
 	Rect r = GetRect();
 	if (CheckCollision(r, Vec2(Event.mouse_x, Event.mouse_y))) {
 		hovered = 1;
@@ -192,6 +244,17 @@ void KeyConfigButton:: Update(Menu * m) {
 	} else {
 		str = Keys.GetStringFromKey(Keys.GetBoundKey(bind)); 
 	}
+}
+
+void KeyConfigButton::Render() {
+	Rect r = GetRect();
+	if (hovered || clicked) {
+		Renderer.RenderTexture(img_hover, nullptr, &r);
+	} else {
+		Renderer.RenderTexture(img, nullptr, &r);
+	}
+	Renderer.RenderText(font, str, r.x+r.w/2, r.y, font_size, font_color, ALIGN_MIDDLE);
+	
 }
 
 void KeyConfigButton::Click(Menu * m, int button, Keypress_State state, Vec2 mpos) {
