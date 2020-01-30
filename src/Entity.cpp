@@ -43,6 +43,14 @@ void Entity::ResetFlags() {
 void Entity::Heal(int amount) {
 	hitpoints += amount;
 	if (hitpoints > max_hitpoints) hitpoints = max_hitpoints;
+
+	// damage indicator
+	if (amount < 0) {
+		HUD.Add(std::make_unique<HUD_Elements::Damage_Indicator>(
+			pos + Vec2(Hull().w/2, 0) + Vec2(0, -16),
+			Vec2(0,-100), 0.75, std::to_string(amount), "inconsolata.ttf",
+			FONT_P48, (SDL_Color){0xff,0x00,0x00,0xff}));
+	}
 }
 
 void Entity::UpdatePos() {

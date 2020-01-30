@@ -4,6 +4,8 @@
 #include <memory>
 
 #include "Vec2.hpp"
+#include "Timer.hpp"
+#include "Font.hpp"
 
 struct HUD_Element {
 	HUD_Element(Vec2 p, Vec2 off, Vec2 s):
@@ -53,6 +55,22 @@ struct Ammo_Counter : public HUD_Element {
 
 	int ENT_ID=-1, SLOT;
 	std::string icon;
+};
+
+struct Damage_Indicator : public HUD_Element {
+	Damage_Indicator(Vec2 p, Vec2 vel, double lifetime,
+		std::string str, std::string font_name, FONT_SIZE size, SDL_Color col);
+
+	Timer life_timer;
+	std::string font;
+	FONT_SIZE font_size;
+	std::string text;
+	double lifespan;
+	Vec2 velocity;
+	SDL_Color colour;
+
+	void Update();
+	void Render();
 };
 
 };

@@ -53,7 +53,8 @@ void Bullet::EntityCollision(Entity * entity) {
 	if ((team == TEAM_PLAYER && entity->team == TEAM_ENEMY) ||
 	    (team == TEAM_ENEMY && entity->team == TEAM_PLAYER))
 	{
-		entity->hitpoints -= damage;
+		entity->Heal(-damage);
+		//entity->hitpoints -= damage;
 		destroy = true;
 	}
 }

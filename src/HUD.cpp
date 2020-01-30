@@ -161,4 +161,31 @@ void Ammo_Counter::Render() {
 	Renderer.CameraUpdate();
 }
 
+Damage_Indicator::Damage_Indicator(Vec2 p, Vec2 vel, double lifetime,
+		std::string str, std::string font_name, FONT_SIZE size, SDL_Color col):
+	HUD_Element(p, Vec2(0,0), Vec2(0,0)), font_size(size),
+	text(str), font(font_name), colour(col), velocity(vel), lifespan(lifetime)
+{
+	life_timer.Start();
+}
+
+void Damage_Indicator::Update() {
+	if (life_timer.GetSeconds() > lifespan) {
+		destroy = true;
+		return;
+	} else {
+		colour.a = 0xff - 0xff * (life_timer.GetSeconds() / lifespan);
+	}
+
+	pos = pos + velocity * FrameLimit.deltatime;
+}
+
+void Damage_Indicator::Render() {
+	//Renderer.CameraStop();
+	//Vec2 p = PosToScreen(pos);
+	Vec2 p = pos;
+	Renderer.RenderText(font, text, p.x, p.y, font_size, colour, ALIGN_MIDDLE);
+	//Renderer.CameraUpdate();
+}
+
 };
