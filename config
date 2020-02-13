@@ -1,7 +1,20 @@
-set $maxfps 121
-set $showfps 1
-set $console 1
-set $renderscalequality 1
-set $followspeed 3.0
-
 bind Mouse1 "+fire"
+bind Space "+jump"
+bind A "+left"
+bind D "+right"
+bind 1 "+slot0"
+bind 2 "+slot1"
+bind 3 "+slot2"
+bind 4 "+slot3"
+bind 5 "+slot4"
+bind 6 "+slot5"
+bind 7 "+slot6"
+bind 8 "+slot7"
+bind 9 "+slot8"
+bind 0 "+slot9"
+set $console 1
+set $followspeed 3.000000
+set $maxfps 121
+set $overwrite 0
+set $renderscalequality 1
+set $showfps 1
