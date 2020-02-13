@@ -15,12 +15,12 @@ void Core::Console::Render() {
 
 
 	Font * font_struct = Media.GetFont(font);
-	if (font_struct == nullptr || font_struct->type != FONT_TTF) return;
-	TTF_Font * font = font_struct->GetTTFSize(FONT_P16);
+	if (font_struct == nullptr) return;
+	TTF_Font * ttf_font = font_struct->GetTTFSize(FONT_P16);
 
 	Rect bg_rect = { 0 , 0 , Event.win_w , Event.win_h - bottom_offset };
 	SDL_Rect rect = { 5, Event.win_h - bottom_offset, 0, 0 };
-	TTF_SizeText(font, " ", &rect.w, &rect.h);
+	TTF_SizeText(ttf_font, " ", &rect.w, &rect.h);
 	rect.y -= rect.h*2 + 5;
 
 	Renderer.CameraStop();
@@ -35,9 +35,9 @@ void Core::Console::Render() {
 	while (rect.y >= 0 && i >= 0) {
 		const std::string& str = Log::History.at(i);
 
-		TTF_SizeText(font, str.c_str(), &rect.w, &rect.h);
-
-		Renderer.RenderText(font, str, rect.x, rect.y, fg);
+		SDL_Rect r = Renderer.RenderText(font, str, rect.x, rect.y, FONT_P16, fg, ALIGN_LEFT);
+		rect.w = r.w;
+		rect.h = r.h;
 
 		rect.y -= (rect.h+1);
 		--i;
@@ -45,11 +45,11 @@ void Core::Console::Render() {
 
 	int width;
 	// render text being typed
-	TTF_SizeText(font, text.c_str(), &rect.w, &rect.h);
-	TTF_SizeText(font, "H", &width, nullptr);
+	TTF_SizeText(ttf_font, text.c_str(), &rect.w, &rect.h);
+	TTF_SizeText(ttf_font, "H", &width, nullptr);
 	rect.x = 2;
 	rect.y = Event.win_h - bottom_offset - rect.h - 2;
-	Renderer.RenderText(font, text, rect.x, rect.y, fg);
+	Renderer.RenderText(ttf_font, text, rect.x, rect.y, fg);
 
 	rect.x += (cursor) * width + 1;
 	rect.w = 2;

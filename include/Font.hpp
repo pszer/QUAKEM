@@ -24,11 +24,6 @@ struct Font_Cache {
 };
 
 struct Font {
-	const static int CACHE_SIZE = 128;
-
-	Font_Cache * cache = nullptr;
-	std::size_t cache_count=0, cache_front=0;
-
 	Font(TTF_Font ** _ttfs)
 	  : type(FONT_TTF), ttfs(_ttfs), cache(new Font_Cache[CACHE_SIZE]) {}
 	Font(SDL_Texture * _glyph)
@@ -42,6 +37,9 @@ struct Font {
 
 	TTF_Font * GetTTFSize(FONT_SIZE size);
 
+	const static int CACHE_SIZE = 128;
+	Font_Cache * cache = nullptr;
+	std::size_t cache_count=0, cache_front=0;
 	SDL_Texture * CacheLookup(FONT_SIZE fsize, const std::string& str);
 	void CacheInsert(FONT_SIZE fsize, const std::string& str, SDL_Texture * tex);
 

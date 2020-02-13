@@ -258,28 +258,31 @@ void Renderer::RenderTiledTexture(const std::string& tex_name, Rect _rect, Vec2 
 	SDL_RenderSetViewport(renderer, nullptr);
 }
 
-void Renderer::RenderText(const std::string& font_name, const std::string& text, int x, int y, 
+SDL_Rect Renderer::RenderText(const std::string& font_name, const std::string& text, int x, int y,
   FONT_SIZE size, SDL_Color c, TEXT_ALIGN align)
 {
 	auto font = Media.GetFont(font_name);
-	if (font == nullptr) return;
+	if (font == nullptr) return {0,0,0,0};
 
 	if (font->type == FONT_TTF) {
 		SDL_Texture * t;
 
 		SDL_Texture * lookup = font->CacheLookup(size, text);
 		if (lookup) {
-			std::cout << text << std::endl;
 			t = lookup;
 		} else {
 			SDL_Surface * surface = TTF_RenderUTF8_Blended(font->GetTTFSize(size),
-				text.c_str(), c);
+				text.c_str(), {0xff,0xff,0xff,0xff});
 			t = SDL_CreateTextureFromSurface(renderer, surface);
 			SDL_FreeSurface(surface);
 		}
 
+		SDL_SetTextureColorMod(t, c.r, c.g, c.b);
+		SDL_SetTextureAlphaMod(t, c.a);
+
 		int w,h;
-		TTF_SizeText(font->GetTTFSize(size), text.c_str(), &w, &h);
+		//TTF_SizeText(font->GetTTFSize(size), text.c_str(), &w, &h);
+		SDL_QueryTexture(t, NULL, NULL, &w, &h);
 
 		SDL_Rect r = TransformRect(Rect(x,y,w,h)).ToSDLRect();
 
@@ -293,6 +296,8 @@ void Renderer::RenderText(const std::string& font_name, const std::string& text,
 		if (!lookup) {
 			font->CacheInsert(size, text, t);
 		}
+
+		return r;
 	} else {
 		SDL_SetTextureColorMod(font->glyph, c.r, c.g, c.b);
 
@@ -309,6 +314,8 @@ void Renderer::RenderText(const std::string& font_name, const std::string& text,
 
 			r.x += r.w;
 		}
+
+		return {0,0,0,0};
 	}
 }
 

@@ -13,8 +13,14 @@ bind 8 "+slot7"
 bind 9 "+slot8"
 bind 0 "+slot9"
 set $console 1
-set $followspeed 3.000000
+set $followspeed 3.500000
+set $friction 25.000000
+set $gravity 1800.000000
+set $max_speed 3500.000000
 set $maxfps 121
 set $overwrite 0
+set $player_jump 800.000000
+set $player_speed 420.000000
 set $renderscalequality 1
 set $showfps 1
+set $timescale 1.000000

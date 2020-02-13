@@ -56,7 +56,7 @@ extern struct Renderer {
 
 	void RenderTiledTexture(const std::string& tex_name, Rect rect, Vec2 scale, Vec2 offset);
 
-	void RenderText(const std::string& font_name, const std::string& text, int x, int y,
+	SDL_Rect RenderText(const std::string& font_name, const std::string& text, int x, int y,
 	  FONT_SIZE, SDL_Color, TEXT_ALIGN align=ALIGN_LEFT);
 	void RenderText(TTF_Font * font, const std::string& text, int x, int y, SDL_Color);
 } Renderer;
