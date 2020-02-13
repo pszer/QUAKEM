@@ -265,8 +265,18 @@ void Renderer::RenderText(const std::string& font_name, const std::string& text,
 	if (font == nullptr) return;
 
 	if (font->type == FONT_TTF) {
-		SDL_Surface * surface = TTF_RenderUTF8_Blended(font->GetTTFSize(size), text.c_str(), c);
-		SDL_Texture * t = SDL_CreateTextureFromSurface(renderer, surface);
+		SDL_Texture * t;
+
+		SDL_Texture * lookup = font->CacheLookup(size, text);
+		if (lookup) {
+			std::cout << text << std::endl;
+			t = lookup;
+		} else {
+			SDL_Surface * surface = TTF_RenderUTF8_Blended(font->GetTTFSize(size),
+				text.c_str(), c);
+			t = SDL_CreateTextureFromSurface(renderer, surface);
+			SDL_FreeSurface(surface);
+		}
 
 		int w,h;
 		TTF_SizeText(font->GetTTFSize(size), text.c_str(), &w, &h);
@@ -280,8 +290,9 @@ void Renderer::RenderText(const std::string& font_name, const std::string& text,
 
 		SDL_RenderCopy(renderer, t, nullptr, &r);
 
-		SDL_FreeSurface(surface);
-		SDL_DestroyTexture(t);
+		if (!lookup) {
+			font->CacheInsert(size, text, t);
+		}
 	} else {
 		SDL_SetTextureColorMod(font->glyph, c.r, c.g, c.b);
 
