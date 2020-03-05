@@ -162,7 +162,7 @@ std::string _set(const std::vector<Argument>& args) {
 
 std::string _bind(const std::vector<Argument>& args) {
 	const std::string USE_MSG = "bind keyname action";
-	if (args.size() < 2) return USE_MSG;
+	TEST(2, 2, return USE_MSG, IS_STRING(0), IS_STRING(1));
 	std::string keyname = args.at(0).ToString(),
 	            action = args.at(1).ToString();
 	if (!Keys.SetBoundKeyFromString(action, keyname)) {
@@ -174,8 +174,8 @@ std::string _bind(const std::vector<Argument>& args) {
 
 std::string _unbind(const std::vector<Argument>& args) {
 	const std::string USE_MSG = " unbind keyname";
+	TEST(1, 1, return USE_MSG, IS_STRING(0));
 	std::string keyname;
-	if (args.size() == 0) return USE_MSG;
 	keyname = args.at(0).ToString();
 	if (!Keys.UnbindBoundKeyFromString(keyname)) {
 		return "Unknown key \"" + keyname + "\"";
@@ -185,7 +185,7 @@ std::string _unbind(const std::vector<Argument>& args) {
 
 std::string _ent_create(const std::vector<Argument>& args) {
 	const std::string USE_MSG = "ent_create ent_type {args}";
-	if (args.size() < 1) return USE_MSG;
+	TEST(1, 1, return USE_MSG, IS_STRING(0));
 
 	std::string ent_str = args.at(0).ToString();
 	auto f = Game.STR_TO_ENT_TYPE.find(ent_str);
@@ -203,7 +203,7 @@ std::string _ent_create(const std::vector<Argument>& args) {
 
 std::string _ent_args(const std::vector<Argument>& args) {
 	const std::string USE_MSG = "ent_args ent_type";
-	if (args.size() < 1) return USE_MSG;
+	TEST(1, 1, return USE_MSG, IS_STRING(0));
 
 	std::string ent_str = args.at(0).ToString();
 	auto f = Game.STR_TO_ENT_TYPE.find(ent_str);
@@ -265,7 +265,7 @@ std::string _ent_list(const std::vector<Argument>&) {
 
 std::string _ent_del(const std::vector<Argument>& args) {
 	const std::string USE_MSG = "ent_del unique_id";
-	if (args.size() < 1) return USE_MSG;
+	TEST(1, 1, return USE_MSG, IS_NUM(0));
 	int ID = args.at(0).ToInt();
 
 	for (auto e = Game.Entities.begin(); e != Game.Entities.end(); ++e) {
@@ -280,15 +280,13 @@ std::string _ent_del(const std::vector<Argument>& args) {
 
 std::string _wep_setkey(const std::vector<Argument>& args) {
 	const std::string USE_MSG = "wep_setkey slot key value";
-	if (args.size() < 3) return USE_MSG;
+	TEST(3, 3, IS_NUM_RANGE(0, 0, 999), IS_STRING(1), IS_STRING(2));
 
 	int        slot = args.at(0).ToInt();
 	std::string key = args.at(1).ToString();
 	double      val = args.at(2).ToFloat();
 
 	if (key.empty()) return "empty key";
-	if (slot < 0)    return "bad slot";
-
 
 	for (auto e = Game.Entities.begin(); e != Game.Entities.end(); ++e) {
 		if ((*e)->type == ENT_PLAYER) {
@@ -302,11 +300,11 @@ std::string _wep_setkey(const std::vector<Argument>& args) {
 
 std::string _wep_getkey(const std::vector<Argument>& args) {
 	const std::string USE_MSG = "wep_getkey slot [key]";
-	if (args.size() < 1) return USE_MSG;
+	TEST(1, 2, IS_NUM_RANGE(0, 0, 999), OPT_IS_STRING(1))
 	bool printall = args.size() == 1;
 
 	int        slot = args.at(0).ToInt();
-	std::string key = (printall ? "" : args.at(1).ToString());
+	std::string key = OPT_STRING(1, "");
 
 	if (slot < 0)    return "bad slot";
 	if (key.empty() && !printall) return "empty key";
@@ -336,8 +334,8 @@ std::string _wep_getkey(const std::vector<Argument>& args) {
 
 std::string _camera(const std::vector<Argument>& args) {
 	const std::string USE_MSG = "camera [default] [static] [player] [ent] [path]";
-
-	if (args.size() < 1) return USE_MSG;
+	TEST(1, 7, return USE_MSG, IS_STRING(0), OPT_IS_NUM(1), OPT_IS_NUM(2), OPT_IS_NUM(3),
+		OPT_IS_NUM(4), OPT_IS_NUM(5), OPT_IS_NUM(6));
 
 	std::string mode = args.at(0).ToString();
 
@@ -386,7 +384,8 @@ std::string _camera(const std::vector<Argument>& args) {
 std::string _brush_create(const std::vector<Argument>& args) {
 	const std::string USE_MSG = "brush_create brush_type x y w h"
 		" texture [scalex] [scaley] [offsetx] [offsety] {key:val}";
-	if (args.size() < 6) return USE_MSG;
+	TEST(6, 10, return USE_MSG, IS_STRING(0), IS_NUM(1), IS_NUM(2), IS_NUM(3), IS_NUM(4),
+		IS_STRING(5), OPT_IS_NUM(6), OPT_IS_NUM(7), OPT_IS_NUM(8), OPT_IS_NUM(9));
 	if (args.size() == 7 || args.size() == 9) return USE_MSG;
 
 	BRUSH_TYPE type;
@@ -474,7 +473,7 @@ std::string _brush_list(const std::vector<Argument>&) {
 
 std::string _brush_del(const std::vector<Argument>& args) {
 	const std::string USE_MSG = "brush_del index";
-	if (args.size() < 1) return USE_MSG;
+	TEST(1, 1, return USE_MSG, IS_NUM(0));
 	auto index = args.at(0).ToInt();
 	if (index < 0 || index >= Game.World.Brushes.size())
 		return "Invalid index";
@@ -484,6 +483,8 @@ std::string _brush_del(const std::vector<Argument>& args) {
 
 std::string _mouse_del(const std::vector<Argument>& args) {
 	const std::string USE_MSG = "mouse_del [ignore_brush/ignore_ent]";
+	const std::array<std::string, 2> flags = {"ignore_brush","ignore_ent"};
+	TEST(0, 2, OPT_IS_STRING_ELEMENT(0, flags), OPT_IS_STRING_ELEMENT(1, flags));
 
 	bool check_brush = true, check_ent = true;
 	for (auto a : args) {
@@ -519,7 +520,8 @@ std::string _mouse_del(const std::vector<Argument>& args) {
 
 std::string _mouse_move(const std::vector<Argument>& args) {
 	const std::string USE_MSG = "mouse_move x y [world/relative]";
-	if (args.size() < 2) return USE_MSG;
+	const std::array<std::string, 2> flags = {"world","relative"};
+	TEST(2, 3, return USE_MSG, IS_NUM(0), IS_NUM(1), OPT_IS_STRING_ELEMENT(2, flags));
 	Vec2 v = Vec2(args.at(0).ToFloat(), args.at(1).ToFloat());
 
 	bool relative = true;
@@ -569,13 +571,9 @@ std::string _mouse_pos(const std::vector<Argument>&) {
 
 std::string _play_wav(const std::vector<Argument>& args) {
 	const std::string USE_MSG = "play_wav chunkname";
-
-	if (args.size() < 1) return USE_MSG;
+	TEST(1, 1, return USE_MSG, IS_STRING(0));
 	std::string chunk_str = args.at(0).ToString();
 
-	//auto chunk = Media.GetChunk(chunk_str);
-	//if (chunk == nullptr) return "sfx chunk \"" + chunk_str + "\" not found";
-	//Mix_PlayChannel(-1, chunk, 0);
 	Sound::PlaySound(chunk_str);
 
 	return "";
@@ -583,28 +581,12 @@ std::string _play_wav(const std::vector<Argument>& args) {
 
 std::string _play_mus(const std::vector<Argument>& args) {
 	const std::string USE_MSG = "play_mus name [volume] [loops]";
+	TEST(1, 3, return USE_MSG, IS_STRING(0), OPT_IS_NUM_RANGE(1, 0.0, 1.0), OPT_IS_NUM(2));
 
 	std::string mus_str;
-	float volume = 1.0;
-	int loops = 1;
+	float volume = OPT_FLOAT(1, 1.0);
+	int loops = OPT_INT(2, 1);
 
-	if (args.size() < 1) return USE_MSG;
-
-	// volume arg
-	if (args.size() >= 2) {
-		if (args.at(1).type != ARG_NUMBER)
-			return USE_MSG;
-		else volume = args.at(1).ToFloat();
-	}
-
-	// loops args
-	if (args.size() >= 3) {
-		if (args.at(2).type != ARG_NUMBER)
-			 return USE_MSG;
-		else loops = args.at(2).ToInt();
-	}
-
-	if (volume < 0.0) volume = 0.0;
 	if (loops < 0) loops = 0;
 
 	mus_str = args.at(0).ToString();
@@ -646,37 +628,34 @@ std::string _stop_mus(const std::vector<Argument>&) {
 }
 
 std::string _list_tex(const std::vector<Argument>& args) {
-	std::string find = "";
-	if (args.size() != 0)
-		find = args.at(0).ToString();
+	TEST(0, 1, return "bad string", OPT_IS_STRING(0));
+	std::string find = OPT_STRING(0, "");
 	return __search__(Media.textures, find);
 }
 
 std::string _list_fnt(const std::vector<Argument>& args) {
-	std::string find = "";
-	if (args.size() != 0)
-		find = args.at(0).ToString();
+	TEST(0, 1, return "bad string", OPT_IS_STRING(0));
+	std::string find = OPT_STRING(0, "");
 	return __search__(Media.fonts, find);
 
 }
 
 std::string _list_wav(const std::vector<Argument>& args) {
-	std::string find = "";
-	if (args.size() != 0)
-		find = args.at(0).ToString();
+	TEST(0, 1, return "bad string", OPT_IS_STRING(0));
+	std::string find = OPT_STRING(0, "");
 	return __search__(Media.chunks, find);
 }
 
 std::string _list_mus(const std::vector<Argument>& args) {
-	std::string find = "";
-	if (args.size() != 0)
-		find = args.at(0).ToString();
+	TEST(0, 1, return "bad string", OPT_IS_STRING(0));
+	std::string find = OPT_STRING(0, "");
 	return __search__(Media.music, find);
 }
 
 std::string _list_cvars(const std::vector<Argument>& args) {
-	std::string str = "", find = "";
-	if (args.size() > 0) find = args.at(0).ToString();
+	TEST(0, 1, return "bad string", OPT_IS_STRING(0));
+	std::string find = OPT_STRING(0, "");
+	std::string str = "";
 	bool filter = !find.empty();
 
 	for (auto c : CVARS) {
@@ -702,8 +681,9 @@ std::string _list_cvars(const std::vector<Argument>& args) {
 }
 
 std::string _list_binds(const std::vector<Argument>& args) {
-	std::string str = "", find = "";
-	if (args.size() > 0) find = args.at(0).ToString();
+	TEST(0, 1, return "bad string", OPT_IS_STRING(0));
+	std::string find = OPT_STRING(0, "");
+	std::string str = "";
 	bool filter = !find.empty();
 
 	for (auto c : Keys.Bindings) {
@@ -731,10 +711,9 @@ std::string _list_binds(const std::vector<Argument>& args) {
 }
 
 std::string _exec(const std::vector<Argument>& args) {
-	const std::string USE_MSG = "exec [path]";
-	std::string path;
-	if (args.size() == 0) return USE_MSG;
-	path = args.at(0).ToString();
+	const std::string USE_MSG = "exec path";
+	TEST(1, 1, return USE_MSG, IS_STRING(0));
+	std::string path = args.at(0).ToString();
 
 	if (!Config::ExecFile(path))
 		return "Config file \"" + path + "\" not found";
@@ -744,9 +723,8 @@ std::string _exec(const std::vector<Argument>& args) {
 
 std::string _export(const std::vector<Argument>& args) {
 	const std::string USE_MSG = "export filename";
-	std::string fname;
-	if (args.size() == 0) return USE_MSG;
-	fname = "maps/"+args.at(0).ToString();
+	TEST(1, 1, return USE_MSG, IS_STRING(0));
+	std::string fname = "maps/"+args.at(0).ToString();
 
 	std::string result = "Exported map " + fname;
 	if (std::filesystem::exists(std::filesystem::path(fname))) {
@@ -769,9 +747,8 @@ std::string _export(const std::vector<Argument>& args) {
 
 std::string _map(const std::vector<Argument>& args) {
 	const std::string USE_MSG = "map filename";
-	std::string path;
-	if (args.size() == 0) return USE_MSG;
-	path = "maps/" + args.at(0).ToString();
+	TEST(1, 1, return USE_MSG, IS_STRING(0));
+	std::string path = "maps/" + args.at(0).ToString();
 
 	if (std::filesystem::is_regular_file(std::filesystem::path(path))) {
 		Game.World.Clear();
@@ -784,9 +761,8 @@ std::string _map(const std::vector<Argument>& args) {
 
 std::string _wave(const std::vector<Argument>& args) {
 	const std::string USE_MSG = "wave filename";
-	std::string path;
-	if (args.size() == 0) return USE_MSG;
-	path = "waves/" + args.at(0).ToString();
+	TEST(1, 1, return USE_MSG, IS_STRING(0));
+	std::string path = "waves/" + args.at(0).ToString();
 
 	if (std::filesystem::is_regular_file(std::filesystem::path(path))) {
 		Wave::LoadWave(path);
@@ -798,6 +774,7 @@ std::string _wave(const std::vector<Argument>& args) {
 
 std::string _delay(const std::vector<Argument>& args) {
 	const std::string USE_MSG = "delay ms";
+	TEST(1, 1, return USE_MSG, IS_NUM(0));
 	if (args.size() == 0) return USE_MSG;
 
 	int ms = args.at(0).ToInt();

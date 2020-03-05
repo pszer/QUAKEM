@@ -48,7 +48,14 @@ struct Argument {
 bool ArgIsNum(const Argument& arg);
 bool ArgIsNumRange(const Argument& arg, double low, double high);
 bool ArgIsString(const Argument& arg);
-bool ArgIsStringElement(const Argument& arg, const std::vector<std::string>& strs);
+template <typename T>
+bool ArgIsStringElement(const Argument& arg, const T& strs) { 
+	if (!ArgIsString(arg)) return false;
+	std::string str = arg.ToString();
+	for (auto i = strs.begin(); i != strs.end(); ++i)
+		if (*i == str) return true;
+	return false;
+}
 
 struct Command {
 	Command() { }

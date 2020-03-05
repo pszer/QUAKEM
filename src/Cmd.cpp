@@ -101,13 +101,13 @@ bool ArgIsString(const Argument& arg) {
 	}
 }
 
-bool ArgIsStringElement(const Argument& arg, const std::vector<std::string>& strs) { 
+/*bool ArgIsStringElement(const Argument& arg, const std::vector<std::string>& strs) { 
 	if (!ArgIsString(arg)) return false;
 	std::string str = arg.ToString();
 	for (auto i = strs.begin(); i != strs.end(); ++i)
 		if (*i == str) return true;
 	return false;
-}
+}*/
 
 using namespace Parser;
 
