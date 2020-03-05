@@ -13,7 +13,6 @@ void Core::Console::Update() {
 void Core::Console::Render() {
 	if (!open) return;
 
-
 	Font * font_struct = Media.GetFont(font);
 	if (font_struct == nullptr) return;
 	TTF_Font * ttf_font = font_struct->GetTTFSize(FONT_P16);

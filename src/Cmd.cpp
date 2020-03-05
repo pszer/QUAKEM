@@ -59,6 +59,56 @@ std::string Argument::ToString() const {
 		return std::to_string(num.__double__);
 }
 
+bool ArgIsNum(const Argument& arg) {
+	switch (arg.type) {
+	case ARG_NUMBER:
+		return true;
+	case ARG_STRING:
+		{
+		const char * c = arg.ToString().c_str();
+		char * endptr;
+		strtod(c, &endptr);
+		if (*endptr) return false;
+		return true;
+		}
+	case ARG_CVAR:
+		{
+		Argument * cvar_arg = GetCVar(arg.str);
+		if (!cvar_arg) return false;
+		return ArgIsNum(*cvar_arg);
+		}
+	default:
+		return false;
+	}
+}
+
+bool ArgIsNumRange(const Argument& arg, double low, double high) {
+	if (!ArgIsNum(arg)) return false;
+	double val = arg.ToFloat();
+	return val >= low && val <= high;
+}
+
+bool ArgIsString(const Argument& arg) {
+	switch (arg.type) {
+	case ARG_CVAR:
+		{
+		Argument * cvar_arg = GetCVar(arg.str);
+		if (!cvar_arg) return false;
+		return ArgIsString(*cvar_arg);
+		}
+	default:
+		return true;
+	}
+}
+
+bool ArgIsStringElement(const Argument& arg, const std::vector<std::string>& strs) { 
+	if (!ArgIsString(arg)) return false;
+	std::string str = arg.ToString();
+	for (auto i = strs.begin(); i != strs.end(); ++i)
+		if (*i == str) return true;
+	return false;
+}
+
 using namespace Parser;
 
 INumber Parser::l_number;

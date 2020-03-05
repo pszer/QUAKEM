@@ -22,5 +22,6 @@ set $overwrite 0
 set $player_jump 800.000000
 set $player_speed 420.000000
 set $renderscalequality 1
+set $show_fps 0
 set $showfps 1
 set $timescale 1.000000

@@ -30,7 +30,6 @@ SDL_Texture * Font::CacheLookup(FONT_SIZE fsize, const std::string& str) {
 	return nullptr;
 }
 
-
 void Font::CacheInsert(FONT_SIZE fsize, const std::string& str, SDL_Texture * tex) {
 	if (!tex) return;
 

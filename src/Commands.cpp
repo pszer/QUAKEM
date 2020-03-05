@@ -1,5 +1,6 @@
 #include <iostream>
 #include <filesystem>
+#include <stdarg.h>
 
 #include "Commands.hpp"
 #include "Core.hpp"
@@ -77,12 +78,39 @@ void Commands::CallCommand(const std::string& str) {
 
 namespace Commands {
 
+bool VAR_AND(int count, ...) {
+    va_list args;
+    va_start(args, count);
+
+    for (int i = 0; i < count; ++i) {
+        if (!va_arg(args, int)) return false;
+    }   
+
+    return true;
+}
+
+#define IS_NUM (x) ArgIsNumber(args.at(x))
+#define IS_NUM_RANGE (x, l, h) ArgIsNumber(args.at(x), l, h)
+#define IS_STRING (x) ArgIsString(args.at(x)) 
+#define IS_STRING_ELEMENT (x, els) ArgIsStringElement(args.at(x), els)
+#define OPT_IS_NUM (x) (args.length() <= x || IS_NUM(x))
+#define OPT_IS_NUM_RANGE (x, l, h) (args.length() <= x || IS_NUM_RANGE(x, l, h))
+#define OPT_IS_STRING (x) (args.length() <= x || IS_STRING(x))
+#define OPT_IS_STRING_ELEMENT (x, els) (args.length() <= x || IS_STRING_ELEMENT(x, els))
+
+#define TEST(len, n, err, ...) if (args.length() < len || !VAR_AND(n, __VA_ARGS__)) err;
+
 std::string _echo(const std::vector<Argument>& args) {
 	std::string str = "";
 	for (auto arg : args) {
 		str += arg.ToString();
 	}
 	return str;
+}
+
+std::string _test(const std::vector<Argument>& args) {
+	std::vector<std::string> strs = {"foo", "bar"};
+	TEST(4, 4, return "bad", IS_NUM(0), IS_STRING(1), IS_NUM_RANGE(2, 0.0, 2.0), IS_);
 }
 
 std::string _clear(const std::vector<Argument>& args) {

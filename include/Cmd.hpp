@@ -45,6 +45,11 @@ struct Argument {
 	std::string ToString() const;
 };
 
+bool ArgIsNum(const Argument& arg);
+bool ArgIsNumRange(const Argument& arg, double low, double high);
+bool ArgIsString(const Argument& arg);
+bool ArgIsStringElement(const Argument& arg, const std::vector<std::string>& strs);
+
 struct Command {
 	Command() { }
 	Command(const std::string& _command, const std::vector<Argument>& _args):

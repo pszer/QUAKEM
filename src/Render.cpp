@@ -258,6 +258,7 @@ void Renderer::RenderTiledTexture(const std::string& tex_name, Rect _rect, Vec2 
 	SDL_RenderSetViewport(renderer, nullptr);
 }
 
+#include <iostream>
 SDL_Rect Renderer::RenderText(const std::string& font_name, const std::string& text, int x, int y,
   FONT_SIZE size, SDL_Color c, TEXT_ALIGN align)
 {
@@ -281,7 +282,6 @@ SDL_Rect Renderer::RenderText(const std::string& font_name, const std::string& t
 		SDL_SetTextureAlphaMod(t, c.a);
 
 		int w,h;
-		//TTF_SizeText(font->GetTTFSize(size), text.c_str(), &w, &h);
 		SDL_QueryTexture(t, NULL, NULL, &w, &h);
 
 		SDL_Rect r = TransformRect(Rect(x,y,w,h)).ToSDLRect();
