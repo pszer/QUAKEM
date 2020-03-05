@@ -41,13 +41,13 @@ double INumber::ToFloat() const {
 long long Argument::ToInt() const {
 	if (type == ARG_NUMBER) return num.ToInt();
 	else if (type == ARG_CVAR) return GetCVarInt(str);
-	else return 0.0;
+	else return std::strtoll(str.c_str(), NULL, 10);
 }
 
 double Argument::ToFloat() const {
 	if (type == ARG_NUMBER) return num.ToFloat();
 	else if (type == ARG_CVAR) return GetCVarFloat(str);
-	else return 0.0;
+	else return std::strtod(str.c_str(), NULL);
 }
 
 std::string Argument::ToString() const {

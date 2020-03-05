@@ -12,8 +12,11 @@ using namespace Commands;
 
 std::map<std::string, CMD_FUNC> Commands::COMMANDS;
 
+std::string _test(const std::vector<Argument>& args);
+
 void Commands::Init() {
 	COMMANDS["echo"] = _echo;
+	COMMANDS["test"] = _test;
 	COMMANDS["clear"] = _clear;
 	COMMANDS["quit"] = _quit;
 	COMMANDS["help"] = _help;
@@ -76,8 +79,6 @@ void Commands::CallCommand(const std::string& str) {
 
 // COMMANDS
 
-namespace Commands {
-
 bool VAR_AND(int count, ...) {
     va_list args;
     va_start(args, count);
@@ -89,16 +90,37 @@ bool VAR_AND(int count, ...) {
     return true;
 }
 
-#define IS_NUM (x) ArgIsNumber(args.at(x))
-#define IS_NUM_RANGE (x, l, h) ArgIsNumber(args.at(x), l, h)
-#define IS_STRING (x) ArgIsString(args.at(x)) 
-#define IS_STRING_ELEMENT (x, els) ArgIsStringElement(args.at(x), els)
-#define OPT_IS_NUM (x) (args.length() <= x || IS_NUM(x))
-#define OPT_IS_NUM_RANGE (x, l, h) (args.length() <= x || IS_NUM_RANGE(x, l, h))
-#define OPT_IS_STRING (x) (args.length() <= x || IS_STRING(x))
-#define OPT_IS_STRING_ELEMENT (x, els) (args.length() <= x || IS_STRING_ELEMENT(x, els))
+#define IS_NUM(x) ArgIsNum(args.at(x))
+#define IS_NUM_RANGE(x, l, h) ArgIsNumRange(args.at(x), l, h)
+#define IS_STRING(x) ArgIsString(args.at(x)) 
+#define IS_STRING_ELEMENT(x, els) ArgIsStringElement(args.at(x), els)
+#define OPT_IS_NUM(x) (args.size() <= x || IS_NUM(x))
+#define OPT_IS_NUM_RANGE(x, l, h) (args.size() <= x || IS_NUM_RANGE(x, l, h))
+#define OPT_IS_STRING(x) (args.size() <= x || IS_STRING(x))
+#define OPT_IS_STRING_ELEMENT(x, els) (args.size() <= x || IS_STRING_ELEMENT(x, els))
 
-#define TEST(len, n, err, ...) if (args.length() < len || !VAR_AND(n, __VA_ARGS__)) err;
+#define TEST(len, n, err, ...) if (args.size() < len || !VAR_AND(n, __VA_ARGS__)) err;
+
+#define OPT_EXISTS(x) args.size() > x
+#define OPT_INT(x, def) OPT_EXISTS(x) ? args.at(x).ToInt() : def
+#define OPT_FLOAT(x, def) OPT_EXISTS(x) ? args.at(x).ToFloat() : def
+#define OPT_STRING(x, def) OPT_EXISTS(x) ? args.at(x).ToString() : def
+
+std::string _test(const std::vector<Argument>& args) {
+	std::vector<std::string> strs = {"foo", "bar"};
+	TEST(0, 4, return "bad", OPT_IS_NUM(0), OPT_IS_STRING(1), OPT_IS_NUM_RANGE(2, 0.0, 2.0), OPT_IS_STRING_ELEMENT(3, strs));
+
+	int a = OPT_INT(0, 1337);
+	std::string str1 = OPT_STRING(1, "defstr");
+	double b = OPT_FLOAT(2, 1.1);
+	std::string str2 = OPT_STRING(3, "nonexist");
+
+	std::stringstream ss;
+	ss << "result: " << a << " " << str1 << " " << b << " " << str2;
+	return ss.str();
+}
+
+namespace Commands {
 
 std::string _echo(const std::vector<Argument>& args) {
 	std::string str = "";
@@ -106,11 +128,6 @@ std::string _echo(const std::vector<Argument>& args) {
 		str += arg.ToString();
 	}
 	return str;
-}
-
-std::string _test(const std::vector<Argument>& args) {
-	std::vector<std::string> strs = {"foo", "bar"};
-	TEST(4, 4, return "bad", IS_NUM(0), IS_STRING(1), IS_NUM_RANGE(2, 0.0, 2.0), IS_);
 }
 
 std::string _clear(const std::vector<Argument>& args) {
